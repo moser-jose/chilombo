@@ -3,6 +3,7 @@ const secondary = '#000000';
 const tertiary = '#000000';
 const quaternary = '#000000';
 const quinary = '#000000';
+const inactiveIcon='rgba(89, 92, 97, 0.81)'
 
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
