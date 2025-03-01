@@ -123,9 +123,6 @@ export default function SignIn() {
                 }}
             />
 
-            
-
-
             <View style={[styles(isDark).contentContainer, { maxWidth: 500 }]}>
                 <Text style={[styles(isDark).headerText, { fontSize: width * 0.04 }]}>
                     Faça o login com o seu e-mail e senha

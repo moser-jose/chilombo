@@ -1,24 +1,31 @@
-import { Image, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable } from 'react-native';
+import { Image,TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable, useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Text, TouchableOpacity, View } from '@/src/components/Themed';
+import { Text,TouchableOpacity, View } from '@/src/components/Themed';
 import { FontSize } from '@/src/constants/FontSize';
 import { GoogleSVG } from '@/src/components/svg/GoogleSvg';
 import { FacebookSVG } from '@/src/components/svg/FacebookSVG';
 import empresa from '@/assets/images/empresa.jpg'
-import FastImage from 'react-native-fast-image'
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { useState, useEffect, useRef } from 'react';
 import Colors from '@/src/constants/Colors';
-import { TextInput} from '@/src/components/ui/TextInput';
 import { checkPasswordStrength, getPasswordRequirements, isStrongPassword } from '../../util/strenghPasswordForce';
+
+import {LinearGradient}  from 'react-native-linear-gradient';
+import { fontFamily } from '@/src/constants/FontFamily';
+
 const logoApp = Image.resolveAssetSource(empresa).uri
+
+
 export default function SignUp() {
     const {signIn, setActive, isLoaded} = useSignIn()
     const router = useRouter()
+    const theme = useColorScheme();
+    const isDark = theme === "dark";
     const { width, height } = useWindowDimensions();
-
+    const [fullName, setFullName] = useState('')
+    const [phone, setPhone] = useState('')
     const [emailAddress, setEmailAddress] = useState('')
     const [password, setPassword] = useState('')
     const [isSignIn, setIsSignIn] = useState(false)
@@ -26,6 +33,10 @@ export default function SignUp() {
     const requirements = getPasswordRequirements(password);
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordStrong, setIsPasswordStrong] = useState(false);
+    const [isFullNameFocused, setIsFullNameFocused] = useState(false);
+    const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+    const [isEmailFocused, setIsEmailFocused] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
     const translateY = useRef(new Animated.Value(0)).current;
 
@@ -62,12 +73,7 @@ export default function SignUp() {
         setIsPasswordStrong(isStrongPassword(password));
     }, [password]);
 
-    const logoSize = {
-        width: width * 0.6,
-        height: (width * 0.6) * 0.478, // Mantendo a proporção original (110/230)
-        maxWidth: 230,
-        maxHeight: 110
-    };
+
 
     const renderStrengthBar = () => {
         const barWidth = strength.score;
@@ -125,83 +131,136 @@ export default function SignUp() {
     );
 
     const renderPasswordIcon = () => (
-        <View style={{ flexDirection:'row', alignItems:'center', justifyContent:'center', gap:4}}>
-            
+        <View style={{backgroundColor:'transparent', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:4}}>
             {isPasswordStrong ? (
               <Ionicons 
                 name='checkmark-circle'
-                size={16} 
-                color={isPasswordStrong ? Colors.success : "rgba(50, 52, 55, 0.64)"}
+                size={16}
+                color={Colors.success}
             />
             ) : null}
             {password.length > 0 ? (
               <Ionicons 
                 name={showPassword ? "eye-off-outline" : "eye-outline"} 
                 size={22} 
-                color="rgba(50, 52, 55, 0.64)"
+                color={styles(isDark).colorIconInput.color}
               />
             ) : null}
         </View>
     );
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    
+    <TouchableWithoutFeedback  onPress={Keyboard.dismiss}>
+      
       <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{flex: 1, backgroundColor:'white'}}
+          style={[styles(isDark).container,{ height: height, flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background}]}
       >
         <Animated.View 
             style={[
-                styles.container,
-                {
+              styles(isDark).container,  {
                     transform: [{ translateY }],
-                    paddingVertical: height * 0.05
-                }
+                    paddingVertical: height * 0.05,
+                },
             ]}
         >
-            <Image
-                source={{
-                    uri: logoApp,
-                }}
-                resizeMode="contain"
-                style={{
-                    width: logoSize.width,
-                    height: logoSize.height,
-                    marginBottom: height * 0.02,
-                    maxWidth: logoSize.maxWidth,
-                    maxHeight: logoSize.maxHeight
-                }}
-            />
-            <View style={[styles.contentContainer, { maxWidth: 500 }]}>
-                <Text style={[styles.headerText, { fontSize: width * 0.04, textAlign:'center' }]}>
-                    Crie sua conta desfrute dos serviços que a chilombo oferece
+            
+
+            <View style={[styles(isDark).contentContainer, { maxWidth: 500 }]}>
+                <Text style={[styles(isDark).headerText, { fontSize: width * 0.05 }]}>
+                    Cria a sua conta e desfrute dos nossos serviços 
                 </Text>
 
-                
-                <View style={styles.input}>
+                <View style={[
+                    styles(isDark).input,
+                    isFullNameFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
+                ]}>
+                  <Ionicons 
+                    name="person-outline" 
+                    size={22} 
+                    color={styles(isDark).colorIconInput.color}
+                  />
                     <TextInput
-                        placeholder='Insira o e-mail ou o telefone'
-                        placeholderTextColor={'rgba(50, 52, 55, 0.64)'}
-                        
+                        placeholder='Insira o nome completo'
+                        placeholderTextColor={styles(isDark).colorIconInput.color}
+                        secureTextEntry={!showPassword}
+                        onChangeText={(text) => setFullName(text)}
+                        value={fullName}
                         numberOfLines={1}
-                        style={{flex:1,fontWeight:'300'}}
+                        style={[styles(isDark).textInput,{flex:1}]}
+                        onFocus={() => setIsFullNameFocused(true)}
+                        onBlur={() => setIsFullNameFocused(false)}
                     />
                 </View>
 
-                
+                <View style={[
+                    styles(isDark).input,
+                    isPhoneFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
+                ]}>
+                  <Ionicons 
+                    name="call-outline" 
+                    size={22} 
+                    color={styles(isDark).colorIconInput.color}
+                  />
                     <TextInput
-                        placeholderTextColor={'rgba(50, 52, 55, 0.64)'}
+                        placeholder='Insira o Telefone'
+                        placeholderTextColor={styles(isDark).colorIconInput.color}
+                        secureTextEntry={!showPassword}
+                        onChangeText={(text) => setPhone(text)}
+                        value={phone}
+                        numberOfLines={1}
+                        style={[styles(isDark).textInput,{flex:1}]}
+                        onFocus={() => setIsPhoneFocused(true)}
+                        onBlur={() => setIsPhoneFocused(false)}
+                    />
+                </View>
+                
+                
+                <View style={[
+                    styles(isDark).input,
+                    isEmailFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
+                ]}>
+                  <Ionicons 
+                    name="mail-outline" 
+                    size={22} 
+                    color={styles(isDark).colorIconInput.color}
+                  />
+                    <TextInput
+                        placeholder='Insira o e-mail'
+                        placeholderTextColor={styles(isDark).colorIconInput.color}
+                        keyboardType='email-address'
+                        numberOfLines={1}
+                        style={[styles(isDark).textInput,{flex:1, fontWeight:'300'}]}
+                        onFocus={() => setIsEmailFocused(true)}
+                        onBlur={() => setIsEmailFocused(false)}
+                    />
+                </View>
+
+                <View style={[
+                    styles(isDark).input,
+                    isPasswordFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
+                ]}>
+                  <Ionicons 
+                    name="key" 
+                    size={22} 
+                    color={styles(isDark).colorIconInput.color}
+                  />
+                    <TextInput
+                        placeholder='Insira a senha'
+                        placeholderTextColor={styles(isDark).colorIconInput.color}
                         secureTextEntry={!showPassword}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         numberOfLines={1}
-                        label='Insira a senha'
+                        style={[styles(isDark).textInput,{flex:1}]}
+                        onFocus={() => setIsPasswordFocused(true)}
+                        onBlur={() => setIsPasswordFocused(false)}
                     />
                     <Pressable onPress={() => setShowPassword(!showPassword)}>
                         {renderPasswordIcon()}
                     </Pressable>
-                
-
+                </View>
                 {
                   !isPasswordStrong && password.length > 0 ? (
                     <View style={{width: '100%', gap: 10, marginBottom: 10}}>
@@ -212,48 +271,57 @@ export default function SignUp() {
                 }
                 
 
-                <TouchableOpacity 
+                
+
+                <Pressable 
                     style={[
-                        styles.button,
+                        styles(isDark).button,
                         {
                             marginTop:30,
-                            backgroundColor: isPasswordStrong ? 'rgba(6,23,74,.8)' : 'rgba(6,23,74,.4)',
-                            borderWidth:0
+                            backgroundColor: (isPasswordStrong && !isDark) 
+                            ? Colors.light.primary : (!isPasswordStrong && !isDark)
+                            ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
+                            ? Colors.dark.secondary : Colors.dark.textMuted,
+                            //borderWidth:0
                         }
                     ]}
                     //disabled={!isPasswordStrong}
                 >
-                    <Text style={[styles.buttonText, {color:'white'}]}>Entrar</Text>
-                </TouchableOpacity>
-                <Text style={{
-                    color: 'rgba(50, 52, 55, 0.79)',
-                    fontWeight: '300',
-                    marginBottom: '3%',
-                    fontSize: width * 0.035
-                }}>
+                    <Text style={[styles(isDark).buttonText, 
+                      {color:(isPasswordStrong && !isDark) 
+                        ? Colors.light.background : (!isPasswordStrong && !isDark)
+                        ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
+                        ? Colors.dark.text : Colors.dark.textMuted}]}>
+                      Criar conta</Text>
+                </Pressable>
+
+
+                <Text style={styles(isDark).textEnd}>
                     Já possui uma conta?{' '}
-                    <Link
-                        href={'/(auth)'}
-                        style={{
-                            textDecorationLine: 'underline',
-                            color: Colors.primary
-                        }}
+                    <Pressable
+                        style={{ flexDirection:'row', alignItems:'center', justifyContent:'center'}}
+                        onPress={() => router.push('/(auth)')}
                     >
-                        Faça login
-                    </Link>
+                        <Text  style={{
+                            textDecorationLine: 'underline',
+                            color: isDark ? Colors.dark.secondary : Colors.light.primary,
+                            fontWeight: '400',
+                            alignItems:'center',
+                        }}>Faça o login</Text>
+                    </Pressable>
                 </Text>
             </View>
         </Animated.View>
+
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
+const styles = (isDark:boolean)=> StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100%',
   },
   contentContainer: {
@@ -262,39 +330,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
   },
   headerText: {
-    color: 'rgba(50, 52, 55, 0.79)',
     fontWeight: '300',
     marginBottom: '4%',
+    maxWidth: 300,
+    textAlign: 'center',
+    fontFamily: fontFamily.poppins.regular
+  },
+  textInput:{
+    padding: '.7%',
+    fontSize:16,
+    marginLeft:6,
+    fontFamily: fontFamily.poppins.regular,
+    color: isDark ? Colors.dark.text : Colors.light.text,
   },
   input:{
-    padding: '4.5%',
-    borderRadius: 14,
+    padding: '3.9%',
+    borderRadius: 16,
     width: '100%',
     flexDirection: 'row',
-    borderColor:'#ccc',
+    borderColor:isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+    alignItems:'center',
     borderWidth:1,
-    marginBottom:14
+    marginBottom:20,
+    backgroundColor: isDark ? Colors.dark.ImputBackgroundColors : Colors.light.ImputBackgroundColors,
   },
   button:{
-    //backgroundColor: 'red',
-    padding: '4.5%',
+    padding: '3.8%',
     borderRadius: 16,
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    borderColor:'#ccc',
-    borderWidth:1,
     gap: 10,
     marginBottom:14
   },
   buttonText:{
-    fontSize: FontSize.sm,
+    fontSize: FontSize.base,
+    fontFamily: fontFamily.poppins.regular,
+    letterSpacing: 0.5
   },
   title: {
     fontSize: 20,
-
-    fontWeight: 'bold',
+    fontFamily: fontFamily.poppins.regular
   },
   separator: {
     marginVertical: 30,
@@ -304,38 +381,34 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: '3%',
+    justifyContent:'center',
+    marginVertical: '4%',
     width: '100%',
   },
   dividerLine: {
     width: '6%',
     height: 1,
-    backgroundColor: '#ccc',
+    backgroundColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
   },
   dividerText: {
-    color: 'rgba(50, 52, 55, 0.79)',
+    color: isDark ? Colors.dark.text : Colors.light.text,
     fontWeight: '300',
-    paddingHorizontal: '2.5%',
+    paddingHorizontal: '1.5%',
+    fontFamily: fontFamily.poppins.regular
   },
-  strengthBarContainer: {
-    height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 1,
-    overflow: 'hidden',
+  textEnd: {
+      color: isDark ? Colors.dark.text : Colors.light.text,
+      fontWeight: '300',
+      marginVertical: '4%',
+      fontSize: 14,
+      flexDirection:'row',
+      alignItems:'center',
+      gap:4,
+      fontFamily: fontFamily.poppins.regular
   },
-  strengthBar: {
-    height: '100%',
-    borderRadius: 2,
-  },
-  strengthText: {
-    textAlign: 'center',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  requirementsContainer: {
-    gap: 8,
-  },
-  requirement: {
-    fontSize: 14,
-  },
+  colorIconInput:{
+    color: isDark ? Colors.dark.colorIconInput: Colors.light.colorIconInput.toString()
+  }
 });
+
+

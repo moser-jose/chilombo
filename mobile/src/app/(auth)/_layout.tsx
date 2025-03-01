@@ -9,23 +9,25 @@ export default function AuthLayout(){
   if(!isLoaded) return null
   if(isSignedIn) return <Redirect href="/(main)/home" />
 
+  const headerOptions = { 
+    headerShown: true, 
+    headerTitle: '', 
+    headerShadowVisible: false,
+    headerTransparent: false,
+    headerStyle: {
+      backgroundColor: isDark ? Colors.dark.background : Colors.light.background,
+    },
+    headerBackVisible: false,
+  }
+
   return (
     <Stack>
       <Stack.Screen 
         name="index" 
-        options={{ 
-          headerShown: true, 
-          headerTitle: '', 
-          headerShadowVisible: false,
-          headerTransparent: false,
-          headerStyle: {
-            backgroundColor: isDark ? Colors.dark.background : Colors.light.background,
-          },
-          headerBackVisible: false,
-        }} 
+        options={headerOptions} 
       />
-      <Stack.Screen name="sign-up" options={{ headerShown: false}} />
-      <Stack.Screen name="reset-password" options={{ headerShown: false }} />
+      <Stack.Screen name="sign-up" options={headerOptions} />
+      <Stack.Screen name="reset-password" options={headerOptions} />
     </Stack>
   )
 }
