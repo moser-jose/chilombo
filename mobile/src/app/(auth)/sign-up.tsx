@@ -1,12 +1,12 @@
-import { Image,TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable, useColorScheme } from 'react-native';
+import { Image,TextInput, StyleSheet,TouchableOpacity, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable, useColorScheme, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
-import { Text,TouchableOpacity, View } from '@/src/components/Themed';
+import * as Haptics from "expo-haptics";
+import { Text, View } from '@/src/components/Themed';
 import { FontSize } from '@/src/constants/FontSize';
 import { GoogleSVG } from '@/src/components/svg/GoogleSvg';
 import { FacebookSVG } from '@/src/components/svg/FacebookSVG';
 import empresa from '@/assets/images/empresa.jpg'
-import { useSignIn } from '@clerk/clerk-expo';
+import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import { useState, useEffect, useRef } from 'react';
 import Colors from '@/src/constants/Colors';
@@ -14,12 +14,13 @@ import { checkPasswordStrength, getPasswordRequirements, isStrongPassword } from
 
 import {LinearGradient}  from 'react-native-linear-gradient';
 import { fontFamily } from '@/src/constants/FontFamily';
+import { ClerkAPIError } from '@clerk/types';
 
 const logoApp = Image.resolveAssetSource(empresa).uri
 
 
 export default function SignUp() {
-    const {signIn, setActive, isLoaded} = useSignIn()
+    const { isLoaded, signUp, setActive } = useSignUp();
     const router = useRouter()
     const theme = useColorScheme();
     const isDark = theme === "dark";
@@ -28,7 +29,6 @@ export default function SignUp() {
     const [phone, setPhone] = useState('')
     const [emailAddress, setEmailAddress] = useState('')
     const [password, setPassword] = useState('')
-    const [isSignIn, setIsSignIn] = useState(false)
     const strength = checkPasswordStrength(password);
     const requirements = getPasswordRequirements(password);
     const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +37,11 @@ export default function SignUp() {
     const [isPhoneFocused, setIsPhoneFocused] = useState(false);
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+    const [pendingVerification, setPendingVerification] = useState(false);
+    const [code, setCode] = useState("");
+    const [errors, setErrors] = useState<ClerkAPIError[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const translateY = useRef(new Animated.Value(0)).current;
 
@@ -149,6 +154,140 @@ export default function SignUp() {
         </View>
     );
 
+
+
+    const onSignUpPress = async () => {
+        if (!isLoaded) return;
+        if (process.env.EXPO_OS === "ios") {
+          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
+        setIsLoading(true);
+        setErrors([]);
+    
+        try {
+          // Start sign-up process using email and password provided
+          await signUp.create({
+            emailAddress,
+            password,
+          });
+    
+          // Send user an email with verification code
+          await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+    
+          // Set 'pendingVerification' to true to display second form
+          // and capture OTP code
+          setPendingVerification(true);
+        } catch (err) {
+          if (isClerkAPIResponseError(err)) setErrors(err.errors);
+          console.error(JSON.stringify(err, null, 2));
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      const onVerifyPress = async () => {
+        if (!isLoaded) return;
+        if (process.env.EXPO_OS === "ios") {
+          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
+        setIsLoading(true);
+    
+        try {
+          // Use the code the user provided to attempt verification
+          const signUpAttempt = await signUp.attemptEmailAddressVerification({
+            code,
+          });
+    
+          // If verification was completed, set the session to active
+          // and redirect the user
+          if (signUpAttempt.status === "complete") {
+            await setActive({ session: signUpAttempt.createdSessionId });
+            router.replace("/(main)/home");
+          } else {
+            // If the status is not complete, check why. User may need to
+            // complete further steps.
+            console.error(JSON.stringify(signUpAttempt, null, 2));
+          }
+        } catch (err) {
+          // See https://clerk.com/docs/custom-flows/error-handling
+          // for more info on error handling
+          console.error(JSON.stringify(err, null, 2));
+          setErrors(err.errors);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+    if (pendingVerification) {
+      return (
+        <ScrollView contentContainerStyle={{ padding: 16 }}>
+
+                <View style={[
+                    styles(isDark).input,
+                    isFullNameFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
+                ]}>
+                  <Ionicons 
+                    name="person-outline" 
+                    size={22} 
+                    color={styles(isDark).colorIconInput.color}
+                  />
+                    <TextInput
+            value={code}
+            //label={`Enter the verification code we sent to ${emailAddress}`}
+            placeholder="Enter your verification code"
+            onChangeText={(code) => setCode(code)}
+            placeholderTextColor={styles(isDark).colorIconInput.color}
+            secureTextEntry={!showPassword}
+            numberOfLines={1}
+            style={[styles(isDark).textInput,{flex:1}]}
+            onFocus={() => setIsFullNameFocused(true)}
+            onBlur={() => setIsFullNameFocused(false)}
+          />
+                </View>
+          
+          {/* <TouchableOpacity
+            onPress={onVerifyPress}
+            disabled={!code || isLoading}
+            //loading={isLoading}
+          >
+            Verify
+          </TouchableOpacity> */}
+
+
+          <Pressable 
+                onPress={onVerifyPress}
+                    style={[
+                        styles(isDark).button,
+                        {
+                            marginTop:30,
+                            backgroundColor: (isPasswordStrong && !isDark) 
+                            ? Colors.light.primary : (!isPasswordStrong && !isDark)
+                            ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
+                            ? Colors.dark.secondary : Colors.dark.textMuted,
+                            //borderWidth:0
+                        }
+                    ]}
+                    //disabled={!isPasswordStrong}
+                >
+                    <Text style={[styles(isDark).buttonText, 
+                      {color:(isPasswordStrong && !isDark) 
+                        ? Colors.light.background : (!isPasswordStrong && !isDark)
+                        ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
+                        ? Colors.dark.text : Colors.dark.textMuted}]}>
+                      Verificar Código</Text>
+                </Pressable>
+
+
+
+          {errors.map((error) => (
+            <Text key={error.longMessage} style={{ color: "red" }}>
+              {error.longMessage}
+            </Text>
+          ))}
+        </ScrollView>
+      );
+    }
+
   return (
     
     <TouchableWithoutFeedback  onPress={Keyboard.dismiss}>
@@ -231,6 +370,8 @@ export default function SignUp() {
                         placeholderTextColor={styles(isDark).colorIconInput.color}
                         keyboardType='email-address'
                         numberOfLines={1}
+                        value={emailAddress}
+                        onChangeText={(text) => setEmailAddress(text)}
                         style={[styles(isDark).textInput,{flex:1, fontWeight:'300'}]}
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
@@ -270,10 +411,8 @@ export default function SignUp() {
                   ) : null
                 }
                 
-
-                
-
                 <Pressable 
+                onPress={onSignUpPress}
                     style={[
                         styles(isDark).button,
                         {
@@ -300,7 +439,7 @@ export default function SignUp() {
                     Já possui uma conta?{' '}
                     <Pressable
                         style={{ flexDirection:'row', alignItems:'center', justifyContent:'center'}}
-                        onPress={() => router.push('/(auth)')}
+                        onPress={() => router.replace('/(auth)')}
                     >
                         <Text  style={{
                             textDecorationLine: 'underline',
@@ -310,6 +449,12 @@ export default function SignUp() {
                         }}>Faça o login</Text>
                     </Pressable>
                 </Text>
+
+                {errors.map((error) => (
+                    <Text key={error.longMessage} style={{ color: "red" }}>
+                    {error.longMessage}
+                    </Text>
+                ))}
             </View>
         </Animated.View>
 
