@@ -5,12 +5,20 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
 import { useColorScheme } from '@/src/components/useColorScheme';
+import { tokenCache } from '@/cache';
+import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+
+const clerkPublicKey=process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
+
+if(!clerkPublicKey){
+  throw new Error('Missing Publishable ClerkKey')
+}
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -19,7 +27,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(auth)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -27,7 +35,12 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
+    //SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
+    PoppinsLight: Poppins_300Light, 
+    PoppinsRegular: Poppins_400Regular, 
+    PoppinsMedium: Poppins_500Medium, 
+    PoppinsSemiBold: Poppins_600SemiBold, 
+    PoppinsBold: Poppins_700Bold,
     ...FontAwesome.font,
   });
 
@@ -53,11 +66,18 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <ClerkProvider publishableKey={clerkPublicKey}
+    tokenCache={tokenCache}>
+     <ClerkLoaded>
+     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        {/* <Stack>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(main)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack> */}
+        <Slot />
+      </ThemeProvider>
+     </ClerkLoaded>
+    </ClerkProvider>
   );
 }

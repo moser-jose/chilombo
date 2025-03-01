@@ -3,7 +3,7 @@ import React from 'react'
 import { SVGProps } from '@/src/types/SVGProps'
 import Svg, { Path } from 'react-native-svg'
 
-export const HomeSVG: React.FC<SVGProps> = ({ color,style, width=22, height=22 }) => {
+export const HomeSVG: React.FC<SVGProps<SVGSVGElement>> = ({ color,style, width=22, height=22 }) => {
   return (
     <Svg style={style} width={width} height={height} viewBox="0 0 22 22">
       <Path d="M8 16.2498C7.58579 16.2498 7.25 16.5856 7.25 16.9998C7.25 17.414 7.58579 17.7498 8 17.7498H14C14.4142 17.7498 14.75 17.414 14.75 16.9998C14.75 16.5856 14.4142 16.2498 14 16.2498H8Z" fill={color}/>

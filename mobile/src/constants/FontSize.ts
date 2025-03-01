@@ -1,5 +1,4 @@
-
-export const fontSize = {
+export const FontSize = {
     xss: 10,
     xs: 12,
     sm: 16,
@@ -9,4 +8,5 @@ export const fontSize = {
     lg: 24,
     xl: 28,
     xxl: 30,
+    ck:'rgba(255,15,134,0.45)'
   }

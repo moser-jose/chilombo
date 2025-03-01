@@ -1,8 +1,15 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.js": "javascriptreact",
+    "*.jsx": "javascriptreact",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact"
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -15,8 +22,10 @@
   },
   "eslint.validate": [
     "javascript",
-    "javascriptreact",
     "typescript",
     "typescriptreact"
+  ],
+  "eslint.workingDirectories": [
+    { "directory": ".", "changeProcessCWD": true }
   ]
 }
