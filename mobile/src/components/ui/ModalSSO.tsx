@@ -6,13 +6,13 @@ import { fontFamily } from "@/src/constants/FontFamily";
 import { FontSize } from "@/src/constants/FontSize";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable } from "react-native";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ClerkAPIError } from "@clerk/types";
 import { router } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { isClerkAPIResponseError, useSignUp } from "@clerk/clerk-expo";
 import Button from "./Button";
-
+import { maskEmail } from "@/src/util/maskEmail";
 interface ModalSSOProps {
     openModal: boolean, 
     isDark: boolean,
@@ -85,7 +85,21 @@ export function ModalSSO({openModal, isDark, emailAddress,isPasswordStrong}: Mod
           }
           router.replace('/(auth)/sign-up')
     }
-
+    useEffect(() => {
+        let timeoutId: NodeJS.Timeout;
+        
+        if (errors.length > 0) {
+            timeoutId = setTimeout(() => {
+                setErrors([]);
+            }, 3000);
+        }
+        
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+        };
+    }, [errors]);
     
     return (
         <Modal
@@ -109,7 +123,7 @@ export function ModalSSO({openModal, isDark, emailAddress,isPasswordStrong}: Mod
                         left: 0,
                         right: 0,
                     }}>
-                        <View style={{width: '90%', backgroundColor: 'red', padding: 10, borderRadius: 8, marginBottom: 10}}>
+                        <View style={{width: '90%', backgroundColor: 'rgba(255, 0, 0, 0.4)', padding: 10, borderRadius: 12, marginBottom: 10}}>
                             <Text style={{ color: "white", fontFamily: fontFamily.poppins.regular }}>
                                 {error.longMessage}
                             </Text>
@@ -122,7 +136,7 @@ export function ModalSSO({openModal, isDark, emailAddress,isPasswordStrong}: Mod
                 <View style={styles(isDark).cardModal}>
                 
                     <Text style={styles(isDark).titleModal}>Insira o Código de verificação</Text>
-                    <Text style={styles(isDark).descModal}>Enviamos um código de verificação para o e-mail {emailAddress}</Text>
+                    <Text style={styles(isDark).descModal}>Enviamos um código de verificação para o e-mail <Text style={{fontFamily: fontFamily.poppins.bold}}>{maskEmail(emailAddress)}</Text></Text>
                     <View style={{flexDirection:'row',alignItems:'center', justifyContent:'center', gap:10}}>
                         <View style={[styles(isDark).inputVerify, isCodeOneFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }]}>
                             <TextInput
