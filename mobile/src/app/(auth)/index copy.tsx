@@ -1,51 +1,131 @@
 import { Image,TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable, useColorScheme } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Haptics from "expo-haptics";
-import { Text, View } from '@/src/components/Themed';
+
+import { Text,TouchableOpacity, View } from '@/src/components/Themed';
 import { FontSize } from '@/src/constants/FontSize';
+import { GoogleSVG } from '@/src/components/svg/GoogleSvg';
+import { FacebookSVG } from '@/src/components/svg/FacebookSVG';
 import empresa from '@/assets/images/empresa.jpg'
-import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo';
-import { useRouter } from 'expo-router';
-import { useState, useEffect, useRef } from 'react';
+import { useSignIn, useSSO,isClerkAPIResponseError } from '@clerk/clerk-expo';
+import { Link, useRouter,Href } from 'expo-router';
+import { useState, useEffect,useCallback, useRef } from 'react';
 import Colors from '@/src/constants/Colors';
 import { checkPasswordStrength, getPasswordRequirements, isStrongPassword } from '../../util/strenghPasswordForce';
-
+import {LinearGradient}  from 'react-native-linear-gradient';
 import { fontFamily } from '@/src/constants/FontFamily';
-import { ClerkAPIError } from '@clerk/types';
-import { ModalSSO } from '@/src/components/ui/ModalSSO';
+
+
+import * as Haptics from "expo-haptics";
+import * as WebBrowser from "expo-web-browser";
+import { useWarmUpBrowser } from "@/hooks/useWarmUpBrowser";
+import * as AuthSession from "expo-auth-session";
+import { ClerkAPIError } from "@clerk/types";
+import Landing from "@/components/Landing";
+import { ScrollView } from "react-native";
+// Handle any pending authentication sessions
+WebBrowser.maybeCompleteAuthSession();
 
 const logoApp = Image.resolveAssetSource(empresa).uri
 
-export default function SignUp() {
-    const { isLoaded, signUp, setActive } = useSignUp();
+
+export default function SignIn() {
+    const {signIn, setActive, isLoaded} = useSignIn()
     const router = useRouter()
     const theme = useColorScheme();
     const isDark = theme === "dark";
     const { width, height } = useWindowDimensions();
-    const [fullName, setFullName] = useState('')
-    const [phone, setPhone] = useState('')
     const [emailAddress, setEmailAddress] = useState('')
     const [password, setPassword] = useState('')
+    const [isSignIn, setIsSignIn] = useState(false)
     const strength = checkPasswordStrength(password);
     const requirements = getPasswordRequirements(password);
     const [showPassword, setShowPassword] = useState(false);
     const [isPasswordStrong, setIsPasswordStrong] = useState(false);
-    const [isFullNameFocused, setIsFullNameFocused] = useState(false);
-    const [isPhoneFocused, setIsPhoneFocused] = useState(false);
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-
-    const [pendingVerification, setPendingVerification] = useState(false);
-    const [errors, setErrors] = useState<ClerkAPIError[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [openModal, setOpenModal] = useState(false);
-    
-    
-    
+
     const translateY = useRef(new Animated.Value(0)).current;
 
-    // Add refs for each input
-    
+
+
+    useWarmUpBrowser();
+    const { startSSOFlow } = useSSO();
+    const [errors, setErrors] = useState<ClerkAPIError[]>([]);
+    const handleSignInWithGoogle = useCallback(async () => {
+      if (!isLoaded) return;
+      
+      if (process.env.EXPO_OS === "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+
+      setIsLoading(true);
+      setErrors([]);
+
+      try {
+        const { createdSessionId, setActive, signIn, signUp } = await startSSOFlow({
+          strategy: "oauth_google",
+          redirectUrl: AuthSession.makeRedirectUri(),
+        });
+
+        const handleAuthComplete = async (sessionId: string) => {
+          try {
+            await setActive!({ session: sessionId });
+            router.replace("/(main)/home");
+          } catch (error) {
+            console.error("Error setting active session:", error);
+            if (isClerkAPIResponseError(error)) setErrors(error.errors);
+          }
+        };
+
+        if (createdSessionId) {
+          await handleAuthComplete(createdSessionId);
+        } else if (signIn) {
+          const signInResult = await signIn.create({
+            strategy: "oauth_google",
+          });
+          
+          if (signInResult.status === "complete") {
+            await handleAuthComplete(signInResult.createdSessionId);
+          } else {
+            // Handle incomplete status
+            console.warn("Sign in incomplete:", signInResult.status);
+          }
+        } else if (signUp) {
+          const signUpResult = await signUp.create({
+            strategy: "oauth_google",
+          });
+          
+          if (signUpResult.status === "complete") {
+            await handleAuthComplete(signUpResult.createdSessionId);
+          } else {
+            // Handle incomplete status
+            console.warn("Sign up incomplete:", signUpResult.status);
+          }
+        }
+      } catch (err) {
+        if (isClerkAPIResponseError(err)) {
+          setErrors(err.errors);
+          console.error("Authentication Error:", err.errors.map(e => e.message).join(", "));
+        } else {
+          console.error("Unexpected error during authentication:", err);
+          setErrors([{ message: "An unexpected error occurred. Please try again." }]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }, [isLoaded, router]);
+
+    const onNavigatePress = useCallback(
+      (href: string) => {
+        if (process.env.EXPO_OS === "ios") {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
+        router.push(href as Href);
+      },
+      [router]
+    );
+
 
     useEffect(() => {
         const keyboardWillShow = Keyboard.addListener(
@@ -80,86 +160,15 @@ export default function SignUp() {
         setIsPasswordStrong(isStrongPassword(password));
     }, [password]);
 
-    useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
-        
-        if (errors.length > 0) {
-            timeoutId = setTimeout(() => {
-                setErrors([]);
-            }, 3000);
-        }
-        
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
-    }, [errors]);
-
-    const renderStrengthBar = () => {
-        const barWidth = strength.score;
-        let barColor = Colors.error;
-
-        if (strength.score > 75) barColor = Colors.success;
-        else if (strength.score > 50) barColor = Colors.warning;
-        else if (strength.score > 25) barColor = Colors.orange;
-
-        return (
-            <View style={styles(isDark).strengthBarContainer}>
-                <View 
-                    style={[
-                        styles(isDark).strengthBar, 
-                        { width: `${barWidth}%`, backgroundColor: barColor }
-                    ]} 
-                />
-            </View>
-        );
+    const logoSize = {
+        width: width * 0.6,
+        height: (width * 0.6) * 0.478,
+        maxWidth: 230,
+        maxHeight: 110
     };
 
-    const renderRequirements = () => (
-        <View style={styles(isDark).requirementsContainer}>
-            <Text style={[
-                styles(isDark).requirement,
-                { color: requirements.hasNumber ? Colors.success : Colors.error }
-            ]}>
-                • Pelo menos um número
-            </Text>
-            <Text style={[
-                styles(isDark).requirement,
-                { color: requirements.hasSymbol ? Colors.success : Colors.error }
-            ]}>
-                • Pelo menos um símbolo (!@#$%^&*...)
-            </Text>
-            <Text style={[
-                styles(isDark).requirement,
-                { color: requirements.hasUpperCase ? Colors.success : Colors.error }
-            ]}>
-                • Pelo menos uma letra maiúscula
-            </Text>
-            <Text style={[
-                styles(isDark).requirement,
-                { color: requirements.hasLowerCase ? Colors.success : Colors.error }
-            ]}>
-                • Pelo menos uma letra minúscula
-            </Text>
-            <Text style={[
-                styles(isDark).requirement,
-                { color: requirements.hasMinLength ? Colors.success : Colors.error }
-            ]}>
-                • Mínimo de 8 caracteres
-            </Text>
-        </View>
-    );
-
     const renderPasswordIcon = () => (
-        <View style={{backgroundColor:'transparent', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:4}}>
-            {isPasswordStrong ? (
-              <Ionicons 
-                name='checkmark-circle'
-                size={16}
-                color={Colors.success}
-            />
-            ) : null}
+        <View style={{ backgroundColor:'transparent', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:4}}>
             {password.length > 0 ? (
               <Ionicons 
                 name={showPassword ? "eye-off-outline" : "eye-outline"} 
@@ -170,43 +179,28 @@ export default function SignUp() {
         </View>
     );
 
-    const onSignUpPress = async () => {
-        if (!isLoaded) return;
-        if (process.env.EXPO_OS === "ios") {
-          await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        }
-        setIsLoading(true);
-        setErrors([]);
-    
-        try {
-          await signUp.create({
-            emailAddress,
-            password,
-          });
-    
-          await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-    
-          setPendingVerification(true);
-          setOpenModal(true);
-        } catch (err) {
-          if (isClerkAPIResponseError(err)) setErrors(err.errors);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-    
-    
-    if (pendingVerification) {
-      return <ModalSSO 
-      openModal={openModal} 
-      isDark={isDark} 
-      isPasswordStrong={isPasswordStrong} 
-      emailAddress={emailAddress}/>
-    }
+    return Platform.OS === "web" ? (
+      <ScrollView>
+        <Landing
+          onGoogleSignIn={handleSignInWithGoogle}
+          onEmailSignIn={() => onNavigatePress("/sign-in-email")}
+          onPrivacyPolicy={() => onNavigatePress("/privacy-policy")}
+          isLoading={isLoading}
+        />
+      </ScrollView>
+    ) : (
+      <Landing
+        onGoogleSignIn={handleSignInWithGoogle}
+        onEmailSignIn={() => onNavigatePress("/sign-in-email")}
+        onPrivacyPolicy={() => onNavigatePress("/privacy-policy")}
+        isLoading={isLoading}
+      />
+    );
 
-  return (
+  /* return (
     
     <TouchableWithoutFeedback  onPress={Keyboard.dismiss}>
+      
       <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={[styles(isDark).container,{ height: height, flex: 1, backgroundColor: isDark ? Colors.dark.background : Colors.light.background}]}
@@ -219,57 +213,26 @@ export default function SignUp() {
                 },
             ]}
         >
-            
+            <Image
+                source={{
+                    uri: logoApp,
+                }}
+                resizeMode="contain"
+                style={{
+                    width: logoSize.width,
+                    height: logoSize.height,
+                    marginBottom: height * 0.02,
+                    maxWidth: logoSize.maxWidth,
+                    maxHeight: logoSize.maxHeight
+                }}
+            />
 
             <View style={[styles(isDark).contentContainer, { maxWidth: 500 }]}>
-                <Text style={[styles(isDark).headerText, { fontSize: width * 0.05 }]}>
-                    Cria a sua conta e desfrute dos nossos serviços 
+                <Text style={[styles(isDark).headerText, { fontSize: width * 0.04 }]}>
+                    Faça o login com o seu e-mail e senha
                 </Text>
 
-                <View style={[
-                    styles(isDark).input,
-                    isFullNameFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
-                ]}>
-                  <Ionicons 
-                    name="person-outline" 
-                    size={22} 
-                    color={styles(isDark).colorIconInput.color}
-                  />
-                    <TextInput
-                        placeholder='Insira o nome completo'
-                        placeholderTextColor={styles(isDark).colorIconInput.color}
-                        secureTextEntry={!showPassword}
-                        onChangeText={(text) => setFullName(text)}
-                        value={fullName}
-                        numberOfLines={1}
-                        style={[styles(isDark).textInput,{flex:1}]}
-                        onFocus={() => setIsFullNameFocused(true)}
-                        onBlur={() => setIsFullNameFocused(false)}
-                    />
-                </View>
-
-                <View style={[
-                    styles(isDark).input,
-                    isPhoneFocused && { borderColor: isDark ? Colors.dark.secondary : Colors.light.primary, borderWidth: 1.8 }
-                ]}>
-                  <Ionicons 
-                    name="call-outline" 
-                    size={22} 
-                    color={styles(isDark).colorIconInput.color}
-                  />
-                    <TextInput
-                        placeholder='Insira o Telefone'
-                        placeholderTextColor={styles(isDark).colorIconInput.color}
-                        secureTextEntry={!showPassword}
-                        onChangeText={(text) => setPhone(text)}
-                        value={phone}
-                        numberOfLines={1}
-                        style={[styles(isDark).textInput,{flex:1}]}
-                        onFocus={() => setIsPhoneFocused(true)}
-                        onBlur={() => setIsPhoneFocused(false)}
-                    />
-                </View>
-                
+               
                 
                 <View style={[
                     styles(isDark).input,
@@ -281,12 +244,10 @@ export default function SignUp() {
                     color={styles(isDark).colorIconInput.color}
                   />
                     <TextInput
-                        placeholder='Insira o e-mail'
+                        placeholder='Insira o e-mail ou o telefone'
                         placeholderTextColor={styles(isDark).colorIconInput.color}
                         keyboardType='email-address'
                         numberOfLines={1}
-                        value={emailAddress}
-                        onChangeText={(text) => setEmailAddress(text)}
                         style={[styles(isDark).textInput,{flex:1, fontWeight:'300'}]}
                         onFocus={() => setIsEmailFocused(true)}
                         onBlur={() => setIsEmailFocused(false)}
@@ -317,17 +278,21 @@ export default function SignUp() {
                         {renderPasswordIcon()}
                     </Pressable>
                 </View>
-                {
-                  !isPasswordStrong && password.length > 0 ? (
-                    <View style={{width: '100%', gap: 10, marginBottom: 10}}>
-                        {renderStrengthBar()}
-                        {renderRequirements()}
-                    </View>
-                  ) : null
-                }
-                
+
+                <Pressable style={{width: '100%', alignItems: 'flex-end'}}>
+                    
+                    <Link href={'/sign-up'}>
+                        <Text style={{
+                            color: isDark ? Colors.dark.secondary : Colors.light.primary,
+                            fontWeight: '500',
+                            fontSize: width * 0.035
+                        }}>
+                            Esqueceu sua senha?
+                            </Text>
+                    </Link>
+                </Pressable>
+
                 <Pressable 
-                onPress={onSignUpPress}
                     style={[
                         styles(isDark).button,
                         {
@@ -346,36 +311,43 @@ export default function SignUp() {
                         ? Colors.light.background : (!isPasswordStrong && !isDark)
                         ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
                         ? Colors.dark.text : Colors.dark.textMuted}]}>
-                      Criar conta</Text>
+                      Entrar</Text>
                 </Pressable>
 
 
+                <View style={styles(isDark).divider}>
+                    <View style={styles(isDark).dividerLine} />
+                    <Text style={styles(isDark).dividerText}>
+                        ou continue com as suas redes sociais
+                    </Text>
+                    <View style={styles(isDark).dividerLine} />
+                </View>
+
+                    <View style={{marginVertical:20, flexDirection:'row', alignItems:'center', justifyContent:'center', gap:30}}>
+                      <TouchableOpacity style={{backgroundColor:isDark ? Colors.dark.textMuted : Colors.light.secondaryMuted, padding:10, borderRadius:50}}><FacebookSVG height={30} width={30}/></TouchableOpacity>
+                      <TouchableOpacity style={{backgroundColor:isDark ? Colors.dark.textMuted : Colors.light.secondaryMuted, padding:10, borderRadius:50}}><GoogleSVG height={30} width={30}/></TouchableOpacity>
+                    </View>
+
+
                 <Text style={styles(isDark).textEnd}>
-                    Já possui uma conta?{' '}
-                    <Pressable
-                        style={{ flexDirection:'row', alignItems:'center', justifyContent:'center'}}
-                        onPress={() => router.back()}
-                    >
-                        <Text  style={{
+                    Ainda não possui uma conta?{' '}
+                    <Link
+                        href={'/sign-up'}
+                        style={{
                             textDecorationLine: 'underline',
                             color: isDark ? Colors.dark.secondary : Colors.light.primary,
-                            fontWeight: '400',
-                            alignItems:'center',
-                        }}>Faça o login</Text>
-                    </Pressable>
+                            fontWeight: '400'
+                        }}
+                    >
+                        crie agora mesmo
+                    </Link>
                 </Text>
-
-                {errors.map((error) => (
-                    <Text key={error.longMessage} style={{ color: "red" }}>
-                    {error.longMessage}
-                    </Text>
-                ))}
             </View>
         </Animated.View>
 
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
-  );
+  ); */
 }
 const styles = (isDark:boolean)=> StyleSheet.create({
   container: {
@@ -460,36 +432,10 @@ const styles = (isDark:boolean)=> StyleSheet.create({
       color: isDark ? Colors.dark.text : Colors.light.text,
       fontWeight: '300',
       marginVertical: '4%',
-      fontSize: 14,
-      flexDirection:'row',
-      alignItems:'center',
-      gap:4,
-      fontFamily: fontFamily.poppins.regular
+      fontSize: 14
   },
   colorIconInput:{
     color: isDark ? Colors.dark.colorIconInput: Colors.light.colorIconInput.toString()
-  },
-  strengthBarContainer: {
-    width: '100%',
-    height: 4,
-    backgroundColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
-    borderRadius: 2,
-    overflow: 'hidden',
-  },
-  strengthBar: {
-    height: '100%',
-    borderRadius: 2,
-  },
-  requirementsContainer: {
-    width: '100%',
-    backgroundColor: 'transparent',
-  },
-  requirement: {
-    fontSize: 12,
-    marginBottom: 4,
-    fontFamily: fontFamily.poppins.regular,
-  },
+  }
 });
-
-
 
