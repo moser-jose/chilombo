@@ -11,6 +11,7 @@ import { ClerkAPIError } from "@clerk/types";
 import { router } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { isClerkAPIResponseError, useSignUp } from "@clerk/clerk-expo";
+import Button from "./Button";
 
 interface ModalSSOProps {
     openModal: boolean, 
@@ -240,30 +241,10 @@ export function ModalSSO({openModal, isDark, emailAddress,isPasswordStrong}: Mod
                             />
                         </View>
                     </View>
-                    {
-                        isLoading ? <ActivityIndicator size="large" color={isDark ? Colors.dark.text : Colors.light.text} /> : <Pressable 
-                        onPress={onVerifyPress}
-                            style={[
-                                styles(isDark).button,
-                                {
-                                    marginTop:30,
-                                    backgroundColor: (isPasswordStrong && !isDark) 
-                                    ? Colors.light.primary : (!isPasswordStrong && !isDark)
-                                    ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
-                                    ? Colors.dark.secondary : Colors.dark.textMuted,
-                                    //borderWidth:0
-                                }
-                            ]}
-                            //disabled={!isPasswordStrong}
-                        >
-                            <Text style={[styles(isDark).buttonText, 
-                                {color:(isPasswordStrong && !isDark) 
-                                ? Colors.light.background : (!isPasswordStrong && !isDark)
-                                ? Colors.light.primaryMuted : (isPasswordStrong && isDark)
-                                ? Colors.dark.text : Colors.dark.textMuted}]}>
-                                Verificar</Text>
-                        </Pressable>
-                    }
+
+                    <Button style={{marginTop:30}} disabled={isLoading} loading={isLoading} onPress={onVerifyPress} variant="filled" size="lg">
+                        Verificar
+                    </Button>
                     
                 </View>
             </TouchableWithoutFeedback>

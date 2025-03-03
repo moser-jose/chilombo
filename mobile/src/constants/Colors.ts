@@ -11,6 +11,7 @@ const tintColorDark = "#fff";
 export default {
   light: {
     text: '#000',
+    textMuted: 'rgba(136, 133, 135, 0.14)',
     background: '#fff',
     tint: tintColorLight,
     tabIconDefault: '#ccc',
@@ -36,7 +37,7 @@ export default {
     
     primary: '#0D0D12',
     secondary: '#c2347b',
-    secondaryMuted: 'rgba(194, 52, 123, 0.1)',
+    secondaryMuted: 'rgba(194, 52, 123, 0.2)',
     
   },
   
