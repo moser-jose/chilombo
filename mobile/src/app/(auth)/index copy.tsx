@@ -1,203 +1,231 @@
-import { Image,TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Platform, Animated, useWindowDimensions, Pressable, useColorScheme } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {
+	Image,
+	TextInput,
+	StyleSheet,
+	Keyboard,
+	TouchableWithoutFeedback,
+	KeyboardAvoidingView,
+	Platform,
+	Animated,
+	useWindowDimensions,
+	Pressable,
+	useColorScheme,
+} from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
-import { Text,TouchableOpacity, View } from '@/src/components/Themed';
-import { FontSize } from '@/src/constants/FontSize';
-import { GoogleSVG } from '@/src/components/svg/GoogleSvg';
-import { FacebookSVG } from '@/src/components/svg/FacebookSVG';
+import { Text, TouchableOpacity, View } from '@/src/components/Themed'
+import { FontSize } from '@/src/constants/FontSize'
+import { GoogleSVG } from '@/src/components/svg/GoogleSvg'
+import { FacebookSVG } from '@/src/components/svg/FacebookSVG'
 import empresa from '@/assets/images/empresa.jpg'
-import { useSignIn, useSSO,isClerkAPIResponseError } from '@clerk/clerk-expo';
-import { Link, useRouter,Href } from 'expo-router';
-import { useState, useEffect,useCallback, useRef } from 'react';
-import Colors from '@/src/constants/Colors';
-import { checkPasswordStrength, getPasswordRequirements, isStrongPassword } from '../../util/strenghPasswordForce';
-import {LinearGradient}  from 'react-native-linear-gradient';
-import { fontFamily } from '@/src/constants/FontFamily';
+import { useSignIn, useSSO, isClerkAPIResponseError } from '@clerk/clerk-expo'
+import { Link, useRouter, Href } from 'expo-router'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import Colors from '@/src/constants/Colors'
+import {
+	checkPasswordStrength,
+	getPasswordRequirements,
+	isStrongPassword,
+} from '../../util/strenghPasswordForce'
+import { LinearGradient } from 'react-native-linear-gradient'
+import { fontFamily } from '@/src/constants/FontFamily'
 
-
-import * as Haptics from "expo-haptics";
-import * as WebBrowser from "expo-web-browser";
-import { useWarmUpBrowser } from "@/hooks/useWarmUpBrowser";
-import * as AuthSession from "expo-auth-session";
-import { ClerkAPIError } from "@clerk/types";
-import Landing from "@/components/Landing";
-import { ScrollView } from "react-native";
+import * as Haptics from 'expo-haptics'
+import * as WebBrowser from 'expo-web-browser'
+import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
+import * as AuthSession from 'expo-auth-session'
+import { ClerkAPIError } from '@clerk/types'
+import Landing from '@/components/Landing'
+import { ScrollView } from 'react-native'
 // Handle any pending authentication sessions
-WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession()
 
 const logoApp = Image.resolveAssetSource(empresa).uri
 
-
 export default function SignIn() {
-    const {signIn, setActive, isLoaded} = useSignIn()
-    const router = useRouter()
-    const theme = useColorScheme();
-    const isDark = theme === "dark";
-    const { width, height } = useWindowDimensions();
-    const [emailAddress, setEmailAddress] = useState('')
-    const [password, setPassword] = useState('')
-    const [isSignIn, setIsSignIn] = useState(false)
-    const strength = checkPasswordStrength(password);
-    const requirements = getPasswordRequirements(password);
-    const [showPassword, setShowPassword] = useState(false);
-    const [isPasswordStrong, setIsPasswordStrong] = useState(false);
-    const [isEmailFocused, setIsEmailFocused] = useState(false);
-    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+	const { signIn, setActive, isLoaded } = useSignIn()
+	const router = useRouter()
+	const theme = useColorScheme()
+	const isDark = theme === 'dark'
+	const { width, height } = useWindowDimensions()
+	const [emailAddress, setEmailAddress] = useState('')
+	const [password, setPassword] = useState('')
+	const [isSignIn, setIsSignIn] = useState(false)
+	const strength = checkPasswordStrength(password)
+	const requirements = getPasswordRequirements(password)
+	const [showPassword, setShowPassword] = useState(false)
+	const [isPasswordStrong, setIsPasswordStrong] = useState(false)
+	const [isEmailFocused, setIsEmailFocused] = useState(false)
+	const [isPasswordFocused, setIsPasswordFocused] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 
-    const translateY = useRef(new Animated.Value(0)).current;
+	const translateY = useRef(new Animated.Value(0)).current
 
+	useWarmUpBrowser()
+	const { startSSOFlow } = useSSO()
+	const [errors, setErrors] = useState<ClerkAPIError[]>([])
+	const handleSignInWithGoogle = useCallback(async () => {
+		if (!isLoaded) return
 
+		if (process.env.EXPO_OS === 'ios') {
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+		}
 
-    useWarmUpBrowser();
-    const { startSSOFlow } = useSSO();
-    const [errors, setErrors] = useState<ClerkAPIError[]>([]);
-    const handleSignInWithGoogle = useCallback(async () => {
-      if (!isLoaded) return;
-      
-      if (process.env.EXPO_OS === "ios") {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      }
+		setIsLoading(true)
+		setErrors([])
 
-      setIsLoading(true);
-      setErrors([]);
+		try {
+			const { createdSessionId, setActive, signIn, signUp } =
+				await startSSOFlow({
+					strategy: 'oauth_google',
+					redirectUrl: AuthSession.makeRedirectUri(),
+				})
 
-      try {
-        const { createdSessionId, setActive, signIn, signUp } = await startSSOFlow({
-          strategy: "oauth_google",
-          redirectUrl: AuthSession.makeRedirectUri(),
-        });
+			const handleAuthComplete = async (sessionId: string) => {
+				try {
+					await setActive!({ session: sessionId })
+					router.replace('/(main)/home')
+				} catch (error) {
+					console.error('Error setting active session:', error)
+					if (isClerkAPIResponseError(error)) setErrors(error.errors)
+				}
+			}
 
-        const handleAuthComplete = async (sessionId: string) => {
-          try {
-            await setActive!({ session: sessionId });
-            router.replace("/(main)/home");
-          } catch (error) {
-            console.error("Error setting active session:", error);
-            if (isClerkAPIResponseError(error)) setErrors(error.errors);
-          }
-        };
+			if (createdSessionId) {
+				await handleAuthComplete(createdSessionId)
+			} else if (signIn) {
+				const signInResult = await signIn.create({
+					strategy: 'oauth_google',
+				})
 
-        if (createdSessionId) {
-          await handleAuthComplete(createdSessionId);
-        } else if (signIn) {
-          const signInResult = await signIn.create({
-            strategy: "oauth_google",
-          });
-          
-          if (signInResult.status === "complete") {
-            await handleAuthComplete(signInResult.createdSessionId);
-          } else {
-            // Handle incomplete status
-            console.warn("Sign in incomplete:", signInResult.status);
-          }
-        } else if (signUp) {
-          const signUpResult = await signUp.create({
-            strategy: "oauth_google",
-          });
-          
-          if (signUpResult.status === "complete") {
-            await handleAuthComplete(signUpResult.createdSessionId);
-          } else {
-            // Handle incomplete status
-            console.warn("Sign up incomplete:", signUpResult.status);
-          }
-        }
-      } catch (err) {
-        if (isClerkAPIResponseError(err)) {
-          setErrors(err.errors);
-          console.error("Authentication Error:", err.errors.map(e => e.message).join(", "));
-        } else {
-          console.error("Unexpected error during authentication:", err);
-          setErrors([{ message: "An unexpected error occurred. Please try again." }]);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }, [isLoaded, router]);
+				if (signInResult.status === 'complete') {
+					await handleAuthComplete(signInResult.createdSessionId)
+				} else {
+					// Handle incomplete status
+					console.warn('Sign in incomplete:', signInResult.status)
+				}
+			} else if (signUp) {
+				const signUpResult = await signUp.create({
+					strategy: 'oauth_google',
+				})
 
-    const onNavigatePress = useCallback(
-      (href: string) => {
-        if (process.env.EXPO_OS === "ios") {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        }
-        router.push(href as Href);
-      },
-      [router]
-    );
+				if (signUpResult.status === 'complete') {
+					await handleAuthComplete(signUpResult.createdSessionId)
+				} else {
+					// Handle incomplete status
+					console.warn('Sign up incomplete:', signUpResult.status)
+				}
+			}
+		} catch (err) {
+			if (isClerkAPIResponseError(err)) {
+				setErrors(err.errors)
+				console.error(
+					'Authentication Error:',
+					err.errors.map(e => e.message).join(', '),
+				)
+			} else {
+				console.error('Unexpected error during authentication:', err)
+				setErrors([
+					{ message: 'An unexpected error occurred. Please try again.' },
+				])
+			}
+		} finally {
+			setIsLoading(false)
+		}
+	}, [isLoaded, router])
 
+	const onNavigatePress = useCallback(
+		(href: string) => {
+			if (process.env.EXPO_OS === 'ios') {
+				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+			}
+			router.push(href as Href)
+		},
+		[router],
+	)
 
-    useEffect(() => {
-        const keyboardWillShow = Keyboard.addListener(
-            Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-            (e) => {
-                Animated.timing(translateY, {
-                    toValue: Platform.OS === 'ios' ? -e.endCoordinates.height / 3 : -height * 0.15,
-                    duration: 250,
-                    useNativeDriver: true,
-                }).start();
-            }
-        );
+	useEffect(() => {
+		const keyboardWillShow = Keyboard.addListener(
+			Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+			e => {
+				Animated.timing(translateY, {
+					toValue:
+						Platform.OS === 'ios'
+							? -e.endCoordinates.height / 3
+							: -height * 0.15,
+					duration: 250,
+					useNativeDriver: true,
+				}).start()
+			},
+		)
 
-        const keyboardWillHide = Keyboard.addListener(
-            Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-            () => {
-                Animated.timing(translateY, {
-                    toValue: 0,
-                    duration: 250,
-                    useNativeDriver: true,
-                }).start();
-            }
-        );
+		const keyboardWillHide = Keyboard.addListener(
+			Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+			() => {
+				Animated.timing(translateY, {
+					toValue: 0,
+					duration: 250,
+					useNativeDriver: true,
+				}).start()
+			},
+		)
 
-        return () => {
-            keyboardWillShow.remove();
-            keyboardWillHide.remove();
-        };
-    }, [height]);
+		return () => {
+			keyboardWillShow.remove()
+			keyboardWillHide.remove()
+		}
+	}, [height])
 
-    useEffect(() => {
-        setIsPasswordStrong(isStrongPassword(password));
-    }, [password]);
+	useEffect(() => {
+		setIsPasswordStrong(isStrongPassword(password))
+	}, [password])
 
-    const logoSize = {
-        width: width * 0.6,
-        height: (width * 0.6) * 0.478,
-        maxWidth: 230,
-        maxHeight: 110
-    };
+	const logoSize = {
+		width: width * 0.6,
+		height: width * 0.6 * 0.478,
+		maxWidth: 230,
+		maxHeight: 110,
+	}
 
-    const renderPasswordIcon = () => (
-        <View style={{ backgroundColor:'transparent', flexDirection:'row', alignItems:'center', justifyContent:'center', gap:4}}>
-            {password.length > 0 ? (
-              <Ionicons 
-                name={showPassword ? "eye-off-outline" : "eye-outline"} 
-                size={22} 
-                color={styles(isDark).colorIconInput.color}
-              />
-            ) : null}
-        </View>
-    );
+	const renderPasswordIcon = () => (
+		<View
+			style={{
+				backgroundColor: 'transparent',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				gap: 4,
+			}}
+		>
+			{password.length > 0 ? (
+				<Ionicons
+					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+					size={22}
+					color={styles(isDark).colorIconInput.color}
+				/>
+			) : null}
+		</View>
+	)
 
-    return Platform.OS === "web" ? (
-      <ScrollView>
-        <Landing
-          onGoogleSignIn={handleSignInWithGoogle}
-          onEmailSignIn={() => onNavigatePress("/sign-in-email")}
-          onPrivacyPolicy={() => onNavigatePress("/privacy-policy")}
-          isLoading={isLoading}
-        />
-      </ScrollView>
-    ) : (
-      <Landing
-        onGoogleSignIn={handleSignInWithGoogle}
-        onEmailSignIn={() => onNavigatePress("/sign-in-email")}
-        onPrivacyPolicy={() => onNavigatePress("/privacy-policy")}
-        isLoading={isLoading}
-      />
-    );
+	return Platform.OS === 'web' ? (
+		<ScrollView>
+			<Landing
+				onGoogleSignIn={handleSignInWithGoogle}
+				onEmailSignIn={() => onNavigatePress('/sign-in-email')}
+				onPrivacyPolicy={() => onNavigatePress('/privacy-policy')}
+				isLoading={isLoading}
+			/>
+		</ScrollView>
+	) : (
+		<Landing
+			onGoogleSignIn={handleSignInWithGoogle}
+			onEmailSignIn={() => onNavigatePress('/sign-in-email')}
+			onPrivacyPolicy={() => onNavigatePress('/privacy-policy')}
+			isLoading={isLoading}
+		/>
+	)
 
-  /* return (
+	/* return (
     
     <TouchableWithoutFeedback  onPress={Keyboard.dismiss}>
       
@@ -349,93 +377,99 @@ export default function SignIn() {
     </TouchableWithoutFeedback>
   ); */
 }
-const styles = (isDark:boolean)=> StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
-  },
-  contentContainer: {
-    width: '100%',
-    alignItems: 'center',
-    paddingHorizontal: '5%',
-  },
-  headerText: {
-    fontWeight: '300',
-    marginBottom: '4%',
-    maxWidth: 300,
-    textAlign: 'center',
-    fontFamily: fontFamily.poppins.regular
-  },
-  textInput:{
-    padding: '.7%',
-    fontSize:16,
-    marginLeft:6,
-    fontFamily: fontFamily.poppins.regular,
-    color: isDark ? Colors.dark.text : Colors.light.text,
-  },
-  input:{
-    padding: '3.9%',
-    borderRadius: 16,
-    width: '100%',
-    flexDirection: 'row',
-    borderColor:isDark ? Colors.dark.borderInput : Colors.light.borderInput,
-    alignItems:'center',
-    borderWidth:1,
-    marginBottom:20,
-    backgroundColor: isDark ? Colors.dark.ImputBackgroundColors : Colors.light.ImputBackgroundColors,
-  },
-  button:{
-    padding: '3.8%',
-    borderRadius: 16,
-    width: '100%',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    marginBottom:14
-  },
-  buttonText:{
-    fontSize: FontSize.base,
-    fontFamily: fontFamily.poppins.regular,
-    letterSpacing: 0.5
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: fontFamily.poppins.regular
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent:'center',
-    marginVertical: '4%',
-    width: '100%',
-  },
-  dividerLine: {
-    width: '6%',
-    height: 1,
-    backgroundColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
-  },
-  dividerText: {
-    color: isDark ? Colors.dark.text : Colors.light.text,
-    fontWeight: '300',
-    paddingHorizontal: '1.5%',
-    fontFamily: fontFamily.poppins.regular
-  },
-  textEnd: {
-      color: isDark ? Colors.dark.text : Colors.light.text,
-      fontWeight: '300',
-      marginVertical: '4%',
-      fontSize: 14
-  },
-  colorIconInput:{
-    color: isDark ? Colors.dark.colorIconInput: Colors.light.colorIconInput.toString()
-  }
-});
-
+const styles = (isDark: boolean) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			alignItems: 'center',
+			justifyContent: 'flex-start',
+			width: '100%',
+		},
+		contentContainer: {
+			width: '100%',
+			alignItems: 'center',
+			paddingHorizontal: '5%',
+		},
+		headerText: {
+			fontWeight: '300',
+			marginBottom: '4%',
+			maxWidth: 300,
+			textAlign: 'center',
+			fontFamily: fontFamily.poppins.regular,
+		},
+		textInput: {
+			padding: '.7%',
+			fontSize: 16,
+			marginLeft: 6,
+			fontFamily: fontFamily.poppins.regular,
+			color: isDark ? Colors.dark.text : Colors.light.text,
+		},
+		input: {
+			padding: '3.9%',
+			borderRadius: 16,
+			width: '100%',
+			flexDirection: 'row',
+			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+			alignItems: 'center',
+			borderWidth: 1,
+			marginBottom: 20,
+			backgroundColor: isDark
+				? Colors.dark.ImputBackgroundColors
+				: Colors.light.ImputBackgroundColors,
+		},
+		button: {
+			padding: '3.8%',
+			borderRadius: 16,
+			width: '100%',
+			alignItems: 'center',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			gap: 10,
+			marginBottom: 14,
+		},
+		buttonText: {
+			fontSize: FontSize.base,
+			fontFamily: fontFamily.poppins.regular,
+			letterSpacing: 0.5,
+		},
+		title: {
+			fontSize: 20,
+			fontFamily: fontFamily.poppins.regular,
+		},
+		separator: {
+			marginVertical: 30,
+			height: 1,
+			width: '80%',
+		},
+		divider: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginVertical: '4%',
+			width: '100%',
+		},
+		dividerLine: {
+			width: '6%',
+			height: 1,
+			backgroundColor: isDark
+				? Colors.dark.borderInput
+				: Colors.light.borderInput,
+		},
+		dividerText: {
+			color: isDark ? Colors.dark.text : Colors.light.text,
+			fontWeight: '300',
+			paddingHorizontal: '1.5%',
+			fontFamily: fontFamily.poppins.regular,
+		},
+		textEnd: {
+			color: isDark ? Colors.dark.text : Colors.light.text,
+			fontWeight: '300',
+			marginVertical: '4%',
+			fontSize: 14,
+		},
+		colorIconInput: {
+			color: isDark
+				? Colors.dark.colorIconInput
+				: Colors.light.colorIconInput.toString(),
+		},
+	})
