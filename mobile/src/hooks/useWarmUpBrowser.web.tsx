@@ -1,3 +1,3 @@
 export const useWarmUpBrowser = () => {
-  return;
-};
+	return
+}

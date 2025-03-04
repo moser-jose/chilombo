@@ -1,83 +1,87 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
-import { useColorScheme } from '@/src/components/useColorScheme';
-import { tokenCache } from '@/cache';
-import { Poppins_300Light, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
+	DarkTheme,
+	DefaultTheme,
+	ThemeProvider,
+} from '@react-navigation/native'
+import { useFonts } from 'expo-font'
+import { Slot, Stack } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
+import 'react-native-reanimated'
+import {
+	ClerkProvider,
+	ClerkLoaded,
+} from '@clerk/clerk-expo'
+import { useColorScheme } from '@/src/components/useColorScheme'
+import { tokenCache } from '@/cache'
+import {
+	Poppins_300Light,
+	Poppins_400Regular,
+	Poppins_500Medium,
+	Poppins_600SemiBold,
+	Poppins_700Bold,
+} from '@expo-google-fonts/poppins'
 
-const clerkPublicKey=process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
+const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
-if(!clerkPublicKey){
-  throw new Error('Missing Publishable ClerkKey')
+if (!clerkPublicKey) {
+	throw new Error('Missing Publishable ClerkKey')
 }
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+	// Catch any errors thrown by the Layout component.
+	ErrorBoundary,
+} from 'expo-router'
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(auth)',
-};
+	// Ensure that reloading on `/modal` keeps a back button present.
+	initialRouteName: '(auth)',
+}
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    //SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
-    PoppinsLight: Poppins_300Light, 
-    PoppinsRegular: Poppins_400Regular, 
-    PoppinsMedium: Poppins_500Medium, 
-    PoppinsSemiBold: Poppins_600SemiBold, 
-    PoppinsBold: Poppins_700Bold,
-    ...FontAwesome.font,
-  });
+	const [loaded, error] = useFonts({
+		//SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
+		PoppinsLight: Poppins_300Light,
+		PoppinsRegular: Poppins_400Regular,
+		PoppinsMedium: Poppins_500Medium,
+		PoppinsSemiBold: Poppins_600SemiBold,
+		PoppinsBold: Poppins_700Bold,
+		...FontAwesome.font,
+	})
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+	useEffect(() => {
+		if (error) throw error
+	}, [error])
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+	useEffect(() => {
+		if (loaded) {
+			SplashScreen.hideAsync()
+		}
+	}, [loaded])
 
-  if (!loaded) {
-    return null;
-  }
+	if (!loaded) {
+		return null
+	}
 
-  return <RootLayoutNav />;
+	return <RootLayoutNav />
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+	const colorScheme = useColorScheme()
 
-  return (
-    <ClerkProvider publishableKey={clerkPublicKey}
-    tokenCache={tokenCache}>
-     <ClerkLoaded>
-     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        {/* <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(main)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-        </Stack> */}
-        <Slot />
-      </ThemeProvider>
-     </ClerkLoaded>
-    </ClerkProvider>
-  );
+	return (
+		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
+			<ClerkLoaded>
+				<ThemeProvider
+					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+				>
+					<Slot />
+				</ThemeProvider>
+			</ClerkLoaded>
+		</ClerkProvider>
+	)
 }

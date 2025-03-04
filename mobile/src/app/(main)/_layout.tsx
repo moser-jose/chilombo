@@ -12,15 +12,13 @@ import { CategorySVG } from '@/src/components/svg/CategorySVG'
 import { UserSVG } from '@/src/components/svg/UserSvg'
 import { MyServicesSVG } from '@/src/components/svg/MyServices'
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
 	color: string
 	height?: number
 	width?: number
-	Component:React.FC<SVGProps>
-
-}){
-	const {Component, ...rest} = props
+	Component: React.FC<SVGProps>
+}) {
+	const { Component, ...rest } = props
 	return <Component {...rest} />
 }
 
@@ -32,20 +30,20 @@ export default function TabLayout() {
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
 				headerShown: useClientOnlyValue(false, true),
-				/* headerStyle: {
-					backgroundColor: Colors[colorScheme ?? 'light'].background,
-				},
-				headerTitleStyle: {
-					color: Colors[colorScheme ?? 'light'].text,
-				}, */
-				
 			}}
 		>
 			<Tabs.Screen
-				name="home"
+				name="index"
 				options={{
 					title: 'Início',
-					tabBarIcon: ({ color }) => <TabBarIcon height={24} width={24} Component={HomeSVG} color={color} />,
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon
+							height={24}
+							width={24}
+							Component={HomeSVG}
+							color={color}
+						/>
+					),
 					headerRight: () => (
 						<Link href="/modal" asChild>
 							<Pressable>
@@ -66,24 +64,42 @@ export default function TabLayout() {
 				name="categories"
 				options={{
 					title: 'Categorias',
-					tabBarIcon: ({ color }) => <TabBarIcon height={24} width={24} Component={CategorySVG} color={color} />,
-					
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon
+							height={24}
+							width={24}
+							Component={CategorySVG}
+							color={color}
+						/>
+					),
 				}}
 			/>
 			<Tabs.Screen
 				name="services"
 				options={{
 					title: 'Meus Serviços',
-					tabBarIcon: ({ color }) => <TabBarIcon height={24} width={24} Component={MyServicesSVG} color={color} />,
-					
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon
+							height={24}
+							width={24}
+							Component={MyServicesSVG}
+							color={color}
+						/>
+					),
 				}}
 			/>
 			<Tabs.Screen
 				name="user"
 				options={{
 					title: 'Usuário',
-					tabBarIcon: ({ color }) => <TabBarIcon height={24} width={24} Component={UserSVG} color={color} />,
-					
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon
+							height={24}
+							width={24}
+							Component={UserSVG}
+							color={color}
+						/>
+					),
 				}}
 			/>
 		</Tabs>
