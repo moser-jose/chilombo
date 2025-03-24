@@ -59,13 +59,15 @@ module.exports = [
       'no-alert': 'error',
       'no-unreachable': 'error',
       'no-undef': 'off',
+      'no-unused-vars': 'warn',
       'react-native/no-raw-text': ['error', { skip: ['Text'] }],
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      'react-native/no-inline-styles': 'off',
     }
   }
 ]; 

@@ -1,12 +1,12 @@
-export const primary = '#06174a'
-const secondary = '#c2347b'
-const tertiary = '#f7f2f7'
-const quaternary = '#9aa4b9'
-const quinary = '#000000'
-const inactiveIcon = 'rgba(89, 92, 97, 0.81)'
+export const primary = '#0D0D12'
+export const secondary = '#c2347b'
+export const tertiary = '#f7f2f7'
+export const quaternary = '#9aa4b9'
+export const quinary = '#0D0D12'
+export const inactiveIcon = 'rgba(89, 92, 97, 0.81)'
 
-const tintColorLight = '#0a7ea4'
-const tintColorDark = '#fff'
+export const tintColorLight = '#0a7ea4'
+export const tintColorDark = '#fff'
 
 export default {
 	light: {
@@ -43,6 +43,9 @@ export default {
 	warning: '#FFC107', // Amarelo
 	error: '#F44336', // Vermelho
 	orange: '#FF9800', // Laranja
+	white: '#FFFFFF',
+
+	primary: '#0D0D12',
 }
 
 /**

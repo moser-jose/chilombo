@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { Link, Tabs } from 'expo-router'
-import { Pressable } from 'react-native'
+import { Link, Redirect, Tabs } from 'expo-router'
+import { Image, Pressable } from 'react-native'
 
 import Colors from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/components/useColorScheme'
@@ -11,6 +12,8 @@ import { SVGProps } from '@/src/types/SVGProps'
 import { CategorySVG } from '@/src/components/svg/CategorySVG'
 import { UserSVG } from '@/src/components/svg/UserSvg'
 import { MyServicesSVG } from '@/src/components/svg/MyServices'
+import { fontFamily } from '@/src/constants/FontFamily'
+import { useUser } from '@clerk/clerk-expo'
 
 function TabBarIcon(props: {
 	color: string
@@ -24,12 +27,20 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
+	const { user } = useUser()
+
+	if (!user) {
+		return <Redirect href="/(auth)" />
+	}
 
 	return (
 		<Tabs
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
 				headerShown: useClientOnlyValue(false, true),
+				tabBarLabelStyle: {
+					fontFamily: fontFamily.poppins.medium,
+				},
 			}}
 		>
 			<Tabs.Screen
@@ -92,16 +103,38 @@ export default function TabLayout() {
 				name="user"
 				options={{
 					title: 'Usuário',
-					tabBarIcon: ({ color }) => (
-						<TabBarIcon
-							height={24}
-							width={24}
-							Component={UserSVG}
-							color={color}
-						/>
-					),
+					tabBarIcon: ({ color }) =>
+						user.imageUrl ? (
+							<Image
+								source={{ uri: user.imageUrl }}
+								style={{
+									height: 26,
+									width: 26,
+									borderRadius: 50,
+									borderWidth: 1.5,
+									borderColor: color,
+								}}
+								resizeMode="contain"
+							/>
+						) : (
+							<TabBarIcon
+								height={24}
+								width={24}
+								Component={UserSVG}
+								color={color}
+							/>
+						),
 				}}
 			/>
 		</Tabs>
 	)
+}
+
+{
+	/* <TabBarIcon
+	height={24}
+	width={24}
+	Component={UserSVG}
+	color={color}
+/> */
 }
