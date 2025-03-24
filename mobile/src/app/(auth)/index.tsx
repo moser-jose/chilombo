@@ -36,10 +36,10 @@ import {
 	useAuth,
 } from '@clerk/clerk-expo'
 import Colors from '@/src/constants/Colors'
-import { isStrongPassword } from '@/util/strenghPasswordForce'
+import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
 import Button from '@/src/components/ui/Button'
-import { isValidEmail } from '@/util/validEmail'
+import { isValidEmail } from '@/src/utils/validEmail'
 // Finaliza qualquer sessão de autenticação pendente
 WebBrowser.maybeCompleteAuthSession()
 

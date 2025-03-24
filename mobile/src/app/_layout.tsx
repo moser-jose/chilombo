@@ -1,4 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -9,10 +11,7 @@ import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
-import {
-	ClerkProvider,
-	ClerkLoaded,
-} from '@clerk/clerk-expo'
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo'
 import { useColorScheme } from '@/src/components/useColorScheme'
 import { tokenCache } from '@/cache'
 import {
@@ -75,13 +74,15 @@ function RootLayoutNav() {
 
 	return (
 		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
-			<ClerkLoaded>
-				<ThemeProvider
-					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-				>
-					<Slot />
-				</ThemeProvider>
-			</ClerkLoaded>
+			<GestureHandlerRootView style={{ flex: 1 }}>
+				<ClerkLoaded>
+					<ThemeProvider
+						value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+					>
+						<Slot />
+					</ThemeProvider>
+				</ClerkLoaded>
+			</GestureHandlerRootView>
 		</ClerkProvider>
 	)
 }

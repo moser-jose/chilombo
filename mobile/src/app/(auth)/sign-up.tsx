@@ -23,7 +23,7 @@ import {
 	checkPasswordStrength,
 	getPasswordRequirements,
 	isStrongPassword,
-} from '../../util/strenghPasswordForce'
+} from '../../utils/strenghPasswordForce'
 
 import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'

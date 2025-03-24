@@ -26,7 +26,7 @@ import {
 	checkPasswordStrength,
 	getPasswordRequirements,
 	isStrongPassword,
-} from '../../util/strenghPasswordForce'
+} from '../../utils/strenghPasswordForce'
 const logoApp = Image.resolveAssetSource(empresa).uri
 export default function SignUp() {
 	const { signIn, setActive, isLoaded } = useSignIn()

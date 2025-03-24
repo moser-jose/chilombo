@@ -6,11 +6,13 @@ import {
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
+	Image,
+	Dimensions,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import * as Location from 'expo-location'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
@@ -24,6 +26,8 @@ const Header = () => {
 	const [location, setLocation] = useState<Location.LocationObject | null>(null)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
+
+	
 	const { user } = useUser()
 
 	useEffect(() => {
@@ -60,44 +64,46 @@ const Header = () => {
  */
 	//console.log(text, address)
 	return (
-		<View style={styles.container}>
-			<View style={styles.leftContainer}>
-				<View style={styles.leftContainerLeft}>
-					<Text style={styles.leftContainerLeftText}>
-						Olá, {user?.firstName}
-					</Text>
-					{address && (
-						<View style={styles.locationContainer}>
-							<Ionicons name="location-outline" size={18} color="#EC7FB6" />
-							<Text style={styles.locationText}>
-								{address?.city}, {address?.isoCountryCode}
-							</Text>
-						</View>
-					)}
+		<>
+			<View style={styles.container}>
+				<View style={styles.leftContainer}>
+					<View style={styles.leftContainerLeft}>
+						<Text style={styles.leftContainerLeftText}>
+							Olá, {user?.firstName}
+						</Text>
+						{address && (
+							<View style={styles.locationContainer}>
+								<Ionicons name="location-outline" size={18} color="#EC7FB6" />
+								<Text style={styles.locationText}>
+									{address?.city}, {address?.isoCountryCode}
+								</Text>
+							</View>
+						)}
+					</View>
+					<View style={styles.leftContainerRight}>
+						<TouchableOpacity style={styles.notificationContainer}>
+							<Ionicons
+								name="notifications-outline"
+								size={24}
+								color={Colors.white}
+							/>
+						</TouchableOpacity>
+					</View>
 				</View>
-				<View style={styles.leftContainerRight}>
-					<TouchableOpacity style={styles.notificationContainer}>
-						<Ionicons
-							name="notifications-outline"
-							size={24}
-							color={Colors.white}
-						/>
+
+				<View style={styles.rightContainer}>
+					<Ionicons name="search-outline" size={24} color="#666D80" />
+					<TextInput
+						style={styles.inputText}
+						placeholder="Pesquisar por serviços"
+						placeholderTextColor="#666D80"
+					/>
+					<TouchableOpacity style={styles.rightContainerRightFilter}>
+						<Ionicons name="options-outline" size={24} color="#666D80" />
 					</TouchableOpacity>
 				</View>
 			</View>
-
-			<View style={styles.rightContainer}>
-				<Ionicons name="search-outline" size={24} color="#666D80" />
-				<TextInput
-					style={styles.inputText}
-					placeholder="Pesquisar por serviços"
-					placeholderTextColor="#666D80"
-				/>
-				<TouchableOpacity style={styles.rightContainerRightFilter}>
-					<Ionicons name="options-outline" size={24} color="#666D80" />
-				</TouchableOpacity>
-			</View>
-		</View>
+		</>
 	)
 }
 
