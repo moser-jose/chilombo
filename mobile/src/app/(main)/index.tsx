@@ -60,22 +60,22 @@ const users = [
 const services = [
 	{
 		id: 1,
-		icon: 'logo-bitbucket',
+		icon: require('../../../assets/icons/emp.png'),
 		service: 'Empregadas Domésticas',
 	},
 	{
 		id: 2,
-		icon: 'logo-flickr',
-		service: 'Limpeza de Jardim',
+		icon: require('../../../assets/icons/garden.png'),
+		service: 'Tratamento de Jardim',
 	},
 	{
 		id: 3,
-		icon: 'logo-wordpress',
+		icon: require('../../../assets/icons/houseclean.png'),
 		service: 'Limpeza Residencial',
 	},
 	{
 		id: 4,
-		icon: 'logo-wordpress',
+		icon: require('../../../assets/icons/toolsclean.png'),
 		service: 'Limpeza Empresarial',
 	},
 ]
@@ -83,7 +83,10 @@ const services = [
 export default function HomeScreen() {
 	const { user } = useUser()
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
+		<ScrollView
+			contentInsetAdjustmentBehavior="automatic"
+			showsVerticalScrollIndicator={false}
+		>
 			<Stack.Screen options={{ header: () => <Header /> }} />
 			<View style={{ marginTop: 10 }}>
 				<CarouselCard />
