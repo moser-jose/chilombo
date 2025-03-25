@@ -1,0 +1,69 @@
+/* eslint-disable react-native/no-color-literals */
+import { Ionicons } from '@expo/vector-icons'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { fontFamily } from '../../constants/FontFamily'
+import { FontSize } from '../../constants/FontSize'
+
+type SeparadorProps = {
+	onPress?: () => void
+	text: string
+	more?: boolean
+}
+
+export const Separador = ({ onPress, text, more }: SeparadorProps) => {
+	return (
+		<View style={styles.container}>
+			<View style={styles.separator} />
+			<View style={styles.textContainer}>
+				<Text style={styles.text}>{text}</Text>
+				<TouchableOpacity
+					activeOpacity={0.8}
+					onPress={onPress}
+					style={styles.vermais}
+				>
+					{more && (
+						<>
+							<Text style={styles.vermaisText}>Ver mais</Text>
+							<Ionicons name="chevron-forward-outline" size={18} />
+						</>
+					)}
+				</TouchableOpacity>
+			</View>
+		</View>
+	)
+}
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginHorizontal: 16,
+		marginVertical: 18,
+	},
+	separator: {
+		width: 5,
+		height: 25,
+		backgroundColor: '#EC7FB6',
+		marginRight: 8,
+		borderRadius: 10,
+	},
+	textContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+	},
+	text: {
+		fontSize: FontSize.base,
+		fontFamily: fontFamily.poppins.bold,
+	},
+	vermais: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 2,
+	},
+	vermaisText: {
+		fontSize: FontSize.xsB,
+		fontFamily: fontFamily.poppins.regular,
+	},
+})

@@ -1,9 +1,12 @@
 /* eslint-disable react-native/no-color-literals */
 import { window } from '../../constants/sizes'
-import { renderItem } from '../../utils/render-item'
 import * as React from 'react'
 import { View, Text, Animated, TouchableOpacity } from 'react-native'
-import { useSharedValue } from 'react-native-reanimated'
+import {
+	Extrapolation,
+	interpolate,
+	useSharedValue,
+} from 'react-native-reanimated'
 import Carousel, {
 	ICarouselInstance,
 	Pagination,
@@ -18,13 +21,14 @@ const carouselData = [
 		backgroundColor: '#FF69B4',
 		imgem: require('../../../assets/banner.jpg'), // Rosa
 	},
+
 	{
 		title: 'Promoção',
 		discount: '25%',
 		description: 'Pacotes especiais para você',
 		period: 'até Janeiro',
 		backgroundColor: '#4B0082', // Índigo
-		imgem: require('../../../assets/banner.jpg'), // Rosa
+		imgem: require('../../../assets/limpeza.jpg'), // Rosa
 	},
 	{
 		title: 'Ofertas',
@@ -68,25 +72,26 @@ function Index() {
 				flex: 1,
 			}}
 		>
-			<TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-				
-			<Animated.Image
-				style={{
-					width: '100%',
-					height: '100%',
-					borderRadius: 15,
-				}}
-				source={item.imgem}
-				resizeMode="cover"
-			/>
-			<View style={{
-				position: 'absolute',
-				bottom: 0,
-				left: 0,
-				right: 0,
-				padding: 20,
-			}}>
-				{/* <Text
+			<TouchableOpacity activeOpacity={0.8} style={{ flex: 1 }}>
+				<Animated.Image
+					style={{
+						width: '100%',
+						height: '100%',
+						borderRadius: 15,
+					}}
+					source={item.imgem}
+					resizeMode="cover"
+				/>
+				<View
+					style={{
+						position: 'absolute',
+						bottom: 0,
+						left: 0,
+						right: 0,
+						padding: 20,
+					}}
+				>
+					{/* <Text
 					style={{
 						fontSize: 16,
 						color: 'white',
@@ -142,7 +147,7 @@ function Index() {
 			>
 					{item.period}
 				</Text> */}
-			</View>
+				</View>
 			</TouchableOpacity>
 		</Animated.View>
 	)
@@ -179,19 +184,58 @@ function Index() {
 				onProgressChange={progress}
 				renderItem={renderSlide}
 			/>
-			<Pagination.Basic
-				progress={progress}
-				data={carouselData}
-				dotStyle={{
-					backgroundColor: '#262626',
-					borderRadius: 10,
-					width: 6,
-					height: 6,
+			<View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'flex-start',
+					alignItems: 'center',
+					marginLeft: 16,
 				}}
-				activeDotStyle={{ backgroundColor: 'rgba(101, 99, 228, 0.82)', width: 6, height: 6 }}
-				containerStyle={{ gap: 5 }}
-				onPress={onPressPagination}
-			/>
+			>
+				<Pagination.Custom
+					progress={progress}
+					data={carouselData}
+					size={6}
+					dotStyle={{
+						borderRadius: 16,
+						backgroundColor: 'rgba(46, 46, 64, 0.82)',
+					}}
+					activeDotStyle={{
+						borderRadius: 8,
+						width: 12,
+						height: 6,
+						overflow: 'hidden',
+						backgroundColor: '#0D8ABC',
+					}}
+					containerStyle={{
+						gap: 5,
+						marginBottom: 10,
+						alignItems: 'center',
+						height: 10,
+					}}
+					horizontal
+					onPress={onPressPagination}
+					customReanimatedStyle={(progress, index, length) => {
+						let val = Math.abs(progress - index)
+						if (index === 0 && progress > length - 1) {
+							val = Math.abs(progress - length)
+						}
+
+						return {
+							transform: [
+								{
+									translateY: interpolate(
+										val,
+										[0, 1],
+										[0, 0],
+										Extrapolation.CLAMP,
+									),
+								},
+							],
+						}
+					}}
+				/>
+			</View>
 		</View>
 	)
 }

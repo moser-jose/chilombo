@@ -27,7 +27,6 @@ const Header = () => {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
 
-	
 	const { user } = useUser()
 
 	useEffect(() => {
