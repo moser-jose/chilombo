@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { Text } from '@/components/Themed'
 import { BodyScrollView } from '@/components/ui/BodyScrollView'
 import Button from '@/components/ui/Button'
-import TextInput from '@/components/ui/TextInput'
+import TextInput from '@/src/components/ui/TextInputd'
 import { isClerkAPIResponseError, useSignIn, useSSO } from '@clerk/clerk-expo'
 import { ClerkAPIError } from '@clerk/types'
 import * as WebBrowser from 'expo-web-browser'
@@ -65,7 +65,7 @@ export default function SignInEmail() {
 		} finally {
 			setIsSigningIn(false)
 		}
-	}, [isLoaded, signIn, emailAddress, password, setActive])
+	}, [isLoaded, signIn, emailAddress, password, setActive, router])
 
 	return (
 		<BodyScrollView contentContainerStyle={styles.container}>

@@ -15,6 +15,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { Link, Stack, useRouter } from 'expo-router'
 import Colors from '@/src/constants/Colors'
 import { useState } from 'react'
+import ModalMessage from '@/src/components/ui/ModalMessage'
 
 export default function UserScreen() {
 	const { user } = useUser()
@@ -166,53 +167,15 @@ export default function UserScreen() {
 				</View>
 			</ScrollView>
 
-			<Modal
-				animationType="fade"
-				transparent={true}
-				visible={showLogoutModal}
-				onRequestClose={() => setShowLogoutModal(false)}
-			>
-				<View style={styles.modalOverlay}>
-					<View style={styles.modalContent}>
-						<View style={styles.modalIconContainer}>
-							<Ionicons
-								name="log-out-outline"
-								size={35}
-								color={Colors.primary}
-							/>
-						</View>
-						<Text style={styles.modalTitle}>Sair do App</Text>
-						<Text style={styles.modalText}>
-							Tem certeza que deseja encerrar sua sessão?
-						</Text>
-
-						<View style={styles.modalButtons}>
-							<TouchableOpacity
-								style={[styles.modalButton, styles.cancelButton]}
-								onPress={() => setShowLogoutModal(false)}
-							>
-								<Text style={[styles.modalButtonText, styles.cancelButtonText]}>
-									Cancelar
-								</Text>
-							</TouchableOpacity>
-
-							<TouchableOpacity
-								style={[styles.modalButton, styles.confirmButton]}
-								onPress={() => {
-									setShowLogoutModal(false)
-									handleSignOut()
-								}}
-							>
-								<Text
-									style={[styles.modalButtonText, styles.confirmButtonText]}
-								>
-									Sair
-								</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</View>
-			</Modal>
+			<ModalMessage
+				setShowLogoutModal={setShowLogoutModal}
+				showLogoutModal={showLogoutModal}
+				modalIcon="log-out-outline"
+				modalTitle="Sair do App"
+				modalText="Tem certeza que deseja sair do app?"
+				cancelButton={true}
+				handleOk={handleSignOut}
+			/>
 		</>
 	)
 }
