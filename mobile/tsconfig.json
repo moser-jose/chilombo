@@ -43,7 +43,7 @@
 			"@/hooks/*": ["./src/hooks/*"],
 			"@/types/*": ["./src/types/*"],
 			"@/services/*": ["./src/services/*"],
-			"@/util/*": ["./src/util/*"],
+			"@/utils/*": ["./src/utils/*"],
 			"@/styles/*": ["./src/styles/*"],
 			"@/tests/*": ["__tests__/*"]
 		} /* Specify a set of entries that re-map imports to additional lookup locations. */,

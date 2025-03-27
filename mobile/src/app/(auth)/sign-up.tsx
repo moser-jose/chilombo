@@ -23,7 +23,7 @@ import {
 	checkPasswordStrength,
 	getPasswordRequirements,
 	isStrongPassword,
-} from '../../util/strenghPasswordForce'
+} from '../../utils/strenghPasswordForce'
 
 import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'
@@ -253,7 +253,7 @@ export default function SignUp() {
 						styles(isDark).container,
 						{
 							transform: [{ translateY }],
-							paddingVertical: height * 0.05,
+							paddingVertical: height * 0.01,
 						},
 					]}
 				>
@@ -397,7 +397,7 @@ export default function SignUp() {
 							style={[
 								styles(isDark).button,
 								{
-									marginTop: 30,
+									marginTop: 10,
 									backgroundColor:
 										isPasswordStrong && !isDark
 											? Colors.light.primary
@@ -494,8 +494,8 @@ const styles = (isDark: boolean) =>
 			color: isDark ? Colors.dark.text : Colors.light.text,
 		},
 		input: {
-			padding: '3.9%',
-			borderRadius: 16,
+			padding: 10,
+			borderRadius: 10,
 			width: '100%',
 			flexDirection: 'row',
 			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
@@ -507,14 +507,14 @@ const styles = (isDark: boolean) =>
 				: Colors.light.ImputBackgroundColors,
 		},
 		button: {
-			padding: '3.8%',
-			borderRadius: 16,
+			padding: 12,
+			borderRadius: 10,
 			width: '100%',
 			alignItems: 'center',
 			flexDirection: 'row',
 			justifyContent: 'center',
 			gap: 10,
-			marginBottom: 14,
+			marginBottom: 10,
 		},
 		buttonText: {
 			fontSize: FontSize.base,

@@ -17,7 +17,7 @@ import { router } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import Button from './Button'
-import { maskEmail } from '@/src/util/maskEmail'
+import { maskEmail } from '@/src/utils/maskEmail'
 interface ModalSSOProps {
 	openModal: boolean
 	isDark: boolean

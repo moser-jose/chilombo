@@ -36,10 +36,10 @@ import {
 	useAuth,
 } from '@clerk/clerk-expo'
 import Colors from '@/src/constants/Colors'
-import { isStrongPassword } from '@/util/strenghPasswordForce'
+import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
 import Button from '@/src/components/ui/Button'
-import { isValidEmail } from '@/util/validEmail'
+import { isValidEmail } from '@/src/utils/validEmail'
 // Finaliza qualquer sessão de autenticação pendente
 WebBrowser.maybeCompleteAuthSession()
 
@@ -365,7 +365,7 @@ export default function SignIn() {
 							loading={isSignIn}
 							variant="filled"
 							size="lg"
-							style={{ marginTop: 30 }}
+							style={{ marginTop: 20 }}
 						>
 							<Text
 								style={{
@@ -393,7 +393,7 @@ export default function SignIn() {
 
 						<View
 							style={{
-								marginVertical: 20,
+								marginVertical: 12,
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
@@ -474,8 +474,8 @@ const styles = (isDark: boolean) =>
 			color: isDark ? Colors.dark.text : Colors.light.text,
 		},
 		input: {
-			padding: '3.9%',
-			borderRadius: 16,
+			padding: 12,
+			borderRadius: 10,
 			width: '100%',
 			flexDirection: 'row',
 			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
@@ -487,7 +487,7 @@ const styles = (isDark: boolean) =>
 				: Colors.light.ImputBackgroundColors,
 		},
 		button: {
-			padding: '3.8%',
+			padding: 12,
 			borderRadius: 16,
 			width: '100%',
 			alignItems: 'center',
