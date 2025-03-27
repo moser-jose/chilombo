@@ -55,7 +55,7 @@ module.exports = [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-native/no-inline-styles': 'warn',
-      'react-native/no-color-literals': 'error',
+      'react-native/no-color-literals': 'off',
       'no-alert': 'error',
       'no-unreachable': 'error',
       'no-undef': 'off',

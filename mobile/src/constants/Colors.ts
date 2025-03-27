@@ -46,6 +46,7 @@ export default {
 	white: '#FFFFFF',
 
 	primary: '#0D0D12',
+	secondary: '#c2347b',
 }
 
 /**

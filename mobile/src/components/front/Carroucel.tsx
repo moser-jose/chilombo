@@ -168,7 +168,7 @@ function Index() {
 			<Carousel
 				autoPlayInterval={2000}
 				data={carouselData}
-				height={160}
+				height={140}
 				loop={true}
 				pagingEnabled={true}
 				snapEnabled={true}

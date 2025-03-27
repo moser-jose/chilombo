@@ -3,7 +3,14 @@ import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageSourcePropType } from 'react-native'
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Image,
+	ImageSourcePropType,
+} from 'react-native'
 
 type ServicesCardProps = {
 	icon: ImageSourcePropType

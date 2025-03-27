@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-
+//import { resourceCache } from '@clerk/clerk-expo/resource-cache'
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -73,7 +73,11 @@ function RootLayoutNav() {
 	const colorScheme = useColorScheme()
 
 	return (
-		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
+		<ClerkProvider
+			publishableKey={clerkPublicKey}
+			tokenCache={tokenCache}
+			//__experimental_resourceCache={resourceCache}
+		>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
 					<ThemeProvider

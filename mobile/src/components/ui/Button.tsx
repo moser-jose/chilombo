@@ -110,8 +110,8 @@ export const Button: React.FC<ButtonProps> = ({
 			style={[
 				getVariantStyle(),
 				{
-					height: sizeStyles[size].height,
-					paddingHorizontal: sizeStyles[size].padding,
+					padding:12,
+					borderRadius:10
 				},
 				style,
 			]}
@@ -126,7 +126,6 @@ export const Button: React.FC<ButtonProps> = ({
 							color: getTextColor(),
 							textAlign: 'center',
 							marginBottom: 0,
-							/* fontWeight: "700", */
 							fontFamily: fontFamily.poppins.medium,
 						},
 						textStyle,

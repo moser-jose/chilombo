@@ -47,6 +47,7 @@ export default function TabLayout() {
 				name="index"
 				options={{
 					title: 'Início',
+					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
 							height={24}
@@ -54,21 +55,7 @@ export default function TabLayout() {
 							Component={HomeSVG}
 							color={color}
 						/>
-					),
-					headerRight: () => (
-						<Link href="/modal" asChild>
-							<Pressable>
-								{({ pressed }) => (
-									<FontAwesome
-										name="info-circle"
-										size={25}
-										color={Colors[colorScheme ?? 'light'].text}
-										style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-									/>
-								)}
-							</Pressable>
-						</Link>
-					),
+					)
 				}}
 			/>
 			<Tabs.Screen
@@ -103,6 +90,7 @@ export default function TabLayout() {
 				name="user"
 				options={{
 					title: 'Usuário',
+					headerShown: false,
 					tabBarIcon: ({ color }) =>
 						user.imageUrl ? (
 							<Image

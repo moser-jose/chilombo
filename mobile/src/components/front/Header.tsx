@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 
 import * as Location from 'expo-location'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Children } from 'react'
 import { useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
@@ -23,7 +23,6 @@ type Address = {
 }
 
 const Header = () => {
-	const [location, setLocation] = useState<Location.LocationObject | null>(null)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
 
@@ -37,12 +36,11 @@ const Header = () => {
 				return
 			}
 
-			let location = await Location.getCurrentPositionAsync({})
-			setLocation(location)
+			let locationCords = await Location.getCurrentPositionAsync({})
 
 			const coords = {
-				latitude: location.coords.latitude,
-				longitude: location.coords.longitude,
+				latitude: locationCords.coords.latitude,
+				longitude: locationCords.coords.longitude,
 			}
 
 			const [result] = await Location.reverseGeocodeAsync(coords)
@@ -54,14 +52,6 @@ const Header = () => {
 		getCurrentLocation()
 	}, [])
 
-	/* let text = 'Waiting...'
-	if (errorMsg) {
-		text = errorMsg
-	} else if (location) {
-		text = JSON.stringify(location)
-	}
- */
-	//console.log(text, address)
 	return (
 		<>
 			<View style={styles.container}>
@@ -114,7 +104,7 @@ const styles = StyleSheet.create({
 	leftContainer: {
 		flexDirection: 'row',
 		gap: 10,
-		marginTop: 80,
+		marginTop: 55,
 		justifyContent: 'space-between',
 	},
 	leftContainerLeftText: {
