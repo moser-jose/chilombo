@@ -21,7 +21,7 @@ import { useSignIn } from '@clerk/clerk-expo'
 import { Link, useRouter } from 'expo-router'
 import { useState, useEffect, useRef } from 'react'
 import Colors from '@/src/constants/Colors'
-import { TextInput } from '@/src/components/ui/TextInput'
+import { TextInput } from '@/src/components/ui/TextInputd'
 import {
 	checkPasswordStrength,
 	getPasswordRequirements,

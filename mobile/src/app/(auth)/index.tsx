@@ -40,6 +40,7 @@ import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
 import Button from '@/src/components/ui/Button'
 import { isValidEmail } from '@/src/utils/validEmail'
+import TextInputUI from '@/src/components/ui/TextInput'
 // Finaliza qualquer sessão de autenticação pendente
 WebBrowser.maybeCompleteAuthSession()
 
@@ -279,7 +280,7 @@ export default function SignIn() {
 							Faça o login com o seu e-mail e senha
 						</Text>
 
-						<View
+						{/* <View
 							style={[
 								styles(isDark).input,
 								isEmailFocused && {
@@ -309,9 +310,18 @@ export default function SignIn() {
 								onChangeText={text => setEmailAddress(text)}
 								value={emailAddress}
 							/>
-						</View>
+						</View> */}
 
-						<View
+						<TextInputUI
+							type="email"
+							//label="E-mail ou telefone"
+							icon="mail-outline"
+							placeholder="Insira o e-mail"
+							value={emailAddress}
+							onChangeText={setEmailAddress}
+						/>
+
+						{/* <View
 							style={[
 								styles(isDark).input,
 								isPasswordFocused && {
@@ -337,11 +347,19 @@ export default function SignIn() {
 								style={[styles(isDark).textInput, { flex: 1 }]}
 								onFocus={() => setIsPasswordFocused(true)}
 								onBlur={() => setIsPasswordFocused(false)}
-							/>
+							/> 
 							<Pressable onPress={() => setShowPassword(!showPassword)}>
 								{renderPasswordIcon()}
 							</Pressable>
-						</View>
+						</View> */}
+
+						<TextInputUI
+							type="password"
+							icon="key"
+							placeholder="Insira a senha"
+							value={password}
+							onChangeText={setPassword}
+						/>
 
 						<Pressable style={{ width: '100%', alignItems: 'flex-end' }}>
 							<Link href={'/sign-up'}>

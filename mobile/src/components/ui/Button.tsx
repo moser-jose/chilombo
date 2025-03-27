@@ -117,7 +117,7 @@ export const Button: React.FC<ButtonProps> = ({
 			]}
 		>
 			{loading ? (
-				<ActivityIndicator color={getTextColor()} />
+				<ActivityIndicator color={getTextColor()} size={28} />
 			) : (
 				<Text
 					style={StyleSheet.flatten([
