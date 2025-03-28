@@ -10,6 +10,7 @@ import {
 	useWindowDimensions,
 	Pressable,
 	useColorScheme,
+	ScrollView,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
@@ -24,29 +25,28 @@ import {
 	getPasswordRequirements,
 	isStrongPassword,
 } from '../../utils/strenghPasswordForce'
+import { formatPhoneNumber } from '@/src/utils/formatPhone'
 
 import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'
 import { ModalSSO } from '@/src/components/ui/ModalSSO'
+import TextInputUI from '@/src/components/ui/TextInput'
 
 export default function SignUp() {
-	const { isLoaded, signUp, setActive } = useSignUp()
+	const { isLoaded, signUp } = useSignUp()
 	const router = useRouter()
 	const theme = useColorScheme()
 	const isDark = theme === 'dark'
 	const { width, height } = useWindowDimensions()
-	const [fullName, setFullName] = useState('')
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
 	const [phone, setPhone] = useState('')
 	const [emailAddress, setEmailAddress] = useState('')
+	const [address, setAddress] = useState('')
 	const [password, setPassword] = useState('')
 	const strength = checkPasswordStrength(password)
 	const requirements = getPasswordRequirements(password)
-	const [showPassword, setShowPassword] = useState(false)
 	const [isPasswordStrong, setIsPasswordStrong] = useState(false)
-	const [isFullNameFocused, setIsFullNameFocused] = useState(false)
-	const [isPhoneFocused, setIsPhoneFocused] = useState(false)
-	const [isEmailFocused, setIsEmailFocused] = useState(false)
-	const [isPasswordFocused, setIsPasswordFocused] = useState(false)
 
 	const [pendingVerification, setPendingVerification] = useState(false)
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
@@ -54,8 +54,6 @@ export default function SignUp() {
 	const [openModal, setOpenModal] = useState(false)
 
 	const translateY = useRef(new Animated.Value(0)).current
-
-	// Add refs for each input
 
 	useEffect(() => {
 		const keyboardWillShow = Keyboard.addListener(
@@ -87,13 +85,13 @@ export default function SignUp() {
 			keyboardWillShow.remove()
 			keyboardWillHide.remove()
 		}
-	}, [height])
+	}, [height, translateY])
 
 	useEffect(() => {
 		setIsPasswordStrong(isStrongPassword(password))
 	}, [password])
 
-	useEffect(() => {
+	/* useEffect(() => {
 		let timeoutId: NodeJS.Timeout
 
 		if (errors.length > 0) {
@@ -107,7 +105,7 @@ export default function SignUp() {
 				clearTimeout(timeoutId)
 			}
 		}
-	}, [errors])
+	}, [errors]) */
 
 	const renderStrengthBar = () => {
 		const barWidth = strength.score
@@ -174,41 +172,24 @@ export default function SignUp() {
 		</View>
 	)
 
-	const renderPasswordIcon = () => (
-		<View
-			style={{
-				backgroundColor: 'transparent',
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'center',
-				gap: 4,
-			}}
-		>
-			{isPasswordStrong ? (
-				<Ionicons name="checkmark-circle" size={16} color={Colors.success} />
-			) : null}
-			{password.length > 0 ? (
-				<Ionicons
-					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-					size={22}
-					color={styles(isDark).colorIconInput.color}
-				/>
-			) : null}
-		</View>
-	)
-
 	const onSignUpPress = async () => {
 		if (!isLoaded) return
 		if (process.env.EXPO_OS === 'ios') {
 			await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 		}
 		setIsLoading(true)
-		setErrors([])
 
 		try {
+			const formattedPhone = formatPhoneNumber(phone)
 			await signUp.create({
 				emailAddress,
 				password,
+				firstName,
+				lastName,
+				phoneNumber: formattedPhone,
+				unsafeMetadata: {
+					address,
+				},
 			})
 
 			await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
@@ -216,6 +197,7 @@ export default function SignUp() {
 			setPendingVerification(true)
 			setOpenModal(true)
 		} catch (err) {
+			//console.log(JSON.stringify(err, null, 2))
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
 		} finally {
 			setIsLoading(false)
@@ -237,6 +219,7 @@ export default function SignUp() {
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 78 : 0}
 				style={[
 					styles(isDark).container,
 					{
@@ -248,220 +231,170 @@ export default function SignUp() {
 					},
 				]}
 			>
-				<Animated.View
-					style={[
-						styles(isDark).container,
-						{
-							transform: [{ translateY }],
-							paddingVertical: height * 0.01,
-						},
-					]}
+				<ScrollView
+					style={styles(isDark).scrollView}
+					showsVerticalScrollIndicator={true}
+					contentInsetAdjustmentBehavior="automatic"
+					keyboardShouldPersistTaps="handled"
 				>
-					<View style={[styles(isDark).contentContainer, { maxWidth: 500 }]}>
-						<Text
-							style={[styles(isDark).headerText, { fontSize: width * 0.05 }]}
-						>
-							Cria a sua conta e desfrute dos nossos serviços
-						</Text>
-
-						<View
-							style={[
-								styles(isDark).input,
-								isFullNameFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="person-outline"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira o nome completo"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								secureTextEntry={!showPassword}
-								onChangeText={text => setFullName(text)}
-								value={fullName}
-								numberOfLines={1}
-								style={[styles(isDark).textInput, { flex: 1 }]}
-								onFocus={() => setIsFullNameFocused(true)}
-								onBlur={() => setIsFullNameFocused(false)}
-							/>
-						</View>
-
-						<View
-							style={[
-								styles(isDark).input,
-								isPhoneFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="call-outline"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira o Telefone"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								secureTextEntry={!showPassword}
-								onChangeText={text => setPhone(text)}
-								value={phone}
-								numberOfLines={1}
-								style={[styles(isDark).textInput, { flex: 1 }]}
-								onFocus={() => setIsPhoneFocused(true)}
-								onBlur={() => setIsPhoneFocused(false)}
-							/>
-						</View>
-
-						<View
-							style={[
-								styles(isDark).input,
-								isEmailFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="mail-outline"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira o e-mail"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								keyboardType="email-address"
-								numberOfLines={1}
-								value={emailAddress}
-								onChangeText={text => setEmailAddress(text)}
-								style={[
-									styles(isDark).textInput,
-									{ flex: 1, fontWeight: '300' },
-								]}
-								onFocus={() => setIsEmailFocused(true)}
-								onBlur={() => setIsEmailFocused(false)}
-							/>
-						</View>
-
-						<View
-							style={[
-								styles(isDark).input,
-								isPasswordFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="key"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira a senha"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								secureTextEntry={!showPassword}
-								onChangeText={text => setPassword(text)}
-								value={password}
-								numberOfLines={1}
-								style={[styles(isDark).textInput, { flex: 1 }]}
-								onFocus={() => setIsPasswordFocused(true)}
-								onBlur={() => setIsPasswordFocused(false)}
-							/>
-							<Pressable onPress={() => setShowPassword(!showPassword)}>
-								{renderPasswordIcon()}
-							</Pressable>
-						</View>
-						{!isPasswordStrong && password.length > 0 ? (
-							<View style={{ width: '100%', gap: 10, marginBottom: 10 }}>
-								{renderStrengthBar()}
-								{renderRequirements()}
-							</View>
-						) : null}
-
-						<Pressable
-							onPress={onSignUpPress}
-							style={[
-								styles(isDark).button,
-								{
-									marginTop: 10,
-									backgroundColor:
-										isPasswordStrong && !isDark
-											? Colors.light.primary
-											: !isPasswordStrong && !isDark
-												? Colors.light.primaryMuted
-												: isPasswordStrong && isDark
-													? Colors.dark.secondary
-													: Colors.dark.textMuted,
-									//borderWidth:0
-								},
-							]}
-							//disabled={!isPasswordStrong}
-						>
+					<Animated.View
+						style={[
+							styles(isDark).container,
+							{
+								transform: [{ translateY }],
+								paddingVertical: height * 0.01,
+							},
+						]}
+					>
+						<View style={[styles(isDark).contentContainer]}>
 							<Text
+								style={[styles(isDark).headerText, { fontSize: width * 0.05 }]}
+							>
+								Cria a sua conta e desfrute dos nossos serviços
+							</Text>
+
+							<View
+								style={{
+									width: '100%',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									gap: 6,
+								}}
+							>
+								<TextInputUI
+									type="text"
+									label="Nome"
+									placeholder="Insira o nome"
+									icon="person-outline"
+									value={firstName}
+									onChangeText={setFirstName}
+									style={{ flex: 1 }}
+								/>
+								<TextInputUI
+									type="text"
+									label="Sobrenome"
+									placeholder="Insira o sobrenome"
+									icon="person-outline"
+									value={lastName}
+									onChangeText={setLastName}
+									style={{ flex: 1 }}
+								/>
+							</View>
+
+							<TextInputUI
+								type="phone"
+								label="Telefone"
+								placeholder="Insira o telefone"
+								icon="call-outline"
+								value={phone}
+								onChangeText={setPhone}
+							/>
+							<TextInputUI
+								type="text"
+								label="Endereço"
+								placeholder="Insira o endereço"
+								icon="location-outline"
+								value={address}
+								onChangeText={setAddress}
+							/>
+							<TextInputUI
+								type="email"
+								label="E-mail"
+								placeholder="Insira o e-mail"
+								icon="mail-outline"
+								errors={errors}
+								value={emailAddress}
+								onChangeText={setEmailAddress}
+							/>
+
+							<TextInputUI
+								type="password"
+								label="Senha"
+								placeholder="Insira a senha"
+								icon="key-outline"
+								value={password}
+								onChangeText={setPassword}
+								errors={errors}
+								isPasswordStrong={isPasswordStrong}
+							/>
+							{!isPasswordStrong && password.length > 0 ? (
+								<View style={{ width: '100%', gap: 10, marginBottom: 10 }}>
+									{renderStrengthBar()}
+									{renderRequirements()}
+								</View>
+							) : null}
+
+							<Pressable
+								onPress={onSignUpPress}
 								style={[
-									styles(isDark).buttonText,
+									styles(isDark).button,
 									{
-										color:
+										marginTop: 10,
+										backgroundColor:
 											isPasswordStrong && !isDark
-												? Colors.light.background
+												? Colors.light.primary
 												: !isPasswordStrong && !isDark
 													? Colors.light.primaryMuted
 													: isPasswordStrong && isDark
-														? Colors.dark.text
+														? Colors.dark.secondary
 														: Colors.dark.textMuted,
+										//borderWidth:0
 									},
 								]}
-							>
-								Criar conta
-							</Text>
-						</Pressable>
-
-						<Text style={styles(isDark).textEnd}>
-							Já possui uma conta?{' '}
-							<Pressable
-								style={{
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
-								onPress={() => router.back()}
+								//disabled={!isPasswordStrong}
 							>
 								<Text
-									style={{
-										textDecorationLine: 'underline',
-										color: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
-										fontWeight: '400',
-										alignItems: 'center',
-									}}
+									style={[
+										styles(isDark).buttonText,
+										{
+											color:
+												isPasswordStrong && !isDark
+													? Colors.light.background
+													: !isPasswordStrong && !isDark
+														? Colors.light.primaryMuted
+														: isPasswordStrong && isDark
+															? Colors.dark.text
+															: Colors.dark.textMuted,
+										},
+									]}
 								>
-									Faça o login
+									Criar conta
 								</Text>
 							</Pressable>
-						</Text>
 
-						{errors.map(error => (
-							<Text key={error.longMessage} style={{ color: 'red' }}>
-								{error.longMessage}
+							<Text style={styles(isDark).textEnd}>
+								Já possui uma conta?{' '}
+								<Pressable
+									style={{
+										flexDirection: 'row',
+										alignItems: 'center',
+										justifyContent: 'center',
+									}}
+									onPress={() => router.back()}
+								>
+									<Text
+										style={{
+											textDecorationLine: 'underline',
+											color: isDark
+												? Colors.dark.secondary
+												: Colors.light.primary,
+											fontWeight: '400',
+											alignItems: 'center',
+										}}
+									>
+										Faça o login
+									</Text>
+								</Pressable>
 							</Text>
-						))}
-					</View>
-				</Animated.View>
+
+							{errors.map(error => (
+								<Text key={error.longMessage} style={{ color: 'red' }}>
+									{error.longMessage}
+								</Text>
+							))}
+						</View>
+					</Animated.View>
+				</ScrollView>
 			</KeyboardAvoidingView>
 		</TouchableWithoutFeedback>
 	)
@@ -477,7 +410,12 @@ const styles = (isDark: boolean) =>
 		contentContainer: {
 			width: '100%',
 			alignItems: 'center',
-			paddingHorizontal: '5%',
+			paddingHorizontal: 16,
+		},
+		scrollView: {
+			flex: 1,
+			backgroundColor: 'white',
+			marginBottom: 30,
 		},
 		headerText: {
 			fontWeight: '300',
@@ -486,7 +424,7 @@ const styles = (isDark: boolean) =>
 			textAlign: 'center',
 			fontFamily: fontFamily.poppins.regular,
 		},
-		textInput: {
+		/* textInput: {
 			padding: '.7%',
 			fontSize: 16,
 			marginLeft: 6,
@@ -505,7 +443,7 @@ const styles = (isDark: boolean) =>
 			backgroundColor: isDark
 				? Colors.dark.ImputBackgroundColors
 				: Colors.light.ImputBackgroundColors,
-		},
+		}, */
 		button: {
 			padding: 12,
 			borderRadius: 10,

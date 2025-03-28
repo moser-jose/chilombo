@@ -55,7 +55,7 @@ export default function TabLayout() {
 							Component={HomeSVG}
 							color={color}
 						/>
-					)
+					),
 				}}
 			/>
 			<Tabs.Screen

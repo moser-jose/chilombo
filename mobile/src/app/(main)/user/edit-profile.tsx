@@ -4,18 +4,16 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Alert,
-	TextInput,
 	Platform,
 	Keyboard,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 	Animated,
 	KeyboardEvent,
-	Dimensions,
 } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
-import { useUser, useAuth, useSession } from '@clerk/clerk-expo'
+import { useUser, useSession } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Stack, useRouter } from 'expo-router'
@@ -229,17 +227,24 @@ export default function EditProfileScreen() {
 							keyboardShouldPersistTaps="handled"
 						>
 							<View style={styles.container}>
-								<View style={styles.imageContainer}>
-									<Image
-										style={styles.profileImage}
-										source={{ uri: profileImage }}
-									/>
-									<TouchableOpacity
-										style={styles.editImageButton}
-										onPress={pickImage}
-									>
-										<Ionicons name="camera" size={18} color="white" />
-									</TouchableOpacity>
+								<View style={styles.headerContainer}>
+									<View style={styles.imageContainer}>
+										<Image
+											style={styles.profileImage}
+											source={{ uri: profileImage }}
+										/>
+
+										<TouchableOpacity
+											style={styles.editImageButton}
+											onPress={pickImage}
+										>
+											<Ionicons name="camera" size={18} color="white" />
+										</TouchableOpacity>
+									</View>
+									<Text style={styles.userName}>{user?.fullName}</Text>
+									<Text style={styles.userEmail}>
+										{user?.emailAddresses[0].emailAddress}
+									</Text>
 								</View>
 
 								<View style={styles.formContainer}>
@@ -318,7 +323,7 @@ export default function EditProfileScreen() {
 					<ModalMessage
 						setShowLogoutModal={setError}
 						showLogoutModal={error}
-						modalIcon="checkmark-circle-outline"
+						modalIcon="close-circle-outline"
 						modalTitle="Erro!"
 						modalText={errorMessage}
 						handleOk={() => setError(false)}
@@ -361,34 +366,53 @@ const styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderTopColor: '#eee',
 	},
+	headerContainer: {
+		alignItems: 'center',
+		paddingVertical: 20,
+	},
+	userName: {
+		fontSize: FontSize.lg,
+		marginBottom: 1,
+		fontFamily: fontFamily.poppins.bold,
+	},
 	saveButtonWrapper: {
 		backgroundColor: Colors.primary,
 		padding: 10,
 		borderRadius: 12,
 		alignItems: 'center',
 	},
+	userEmail: {
+		fontSize: FontSize.sm,
+		color: '#666',
+		fontFamily: fontFamily.poppins.regular,
+	},
 	saveButton: {
 		color: 'white',
-		fontSize: FontSize.base,
+		fontSize: FontSize.sm,
 		fontFamily: fontFamily.poppins.medium,
 	},
 	imageContainer: {
 		alignItems: 'center',
-		marginBottom: 30,
+		marginBottom: 10,
 		position: 'relative',
 	},
 	profileImage: {
-		width: 114,
-		height: 114,
+		width: 100,
+		height: 100,
 		borderRadius: 60,
+		shadowColor: 'black',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
 	},
 	editImageButton: {
 		position: 'absolute',
-		right: '32%',
+		right: '1%',
 		bottom: 0,
 		backgroundColor: Colors.primary,
-		width: 36,
-		height: 36,
+		width: 32,
+		height: 32,
 		borderRadius: 18,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -414,8 +438,5 @@ const styles = StyleSheet.create({
 		padding: 12,
 		fontSize: FontSize.base,
 		fontFamily: fontFamily.poppins.regular,
-	},
-	disabledInput: {
-		backgroundColor: '#f5f5f5',
 	},
 })
