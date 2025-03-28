@@ -33,7 +33,6 @@ export default function TermsScreen() {
 			/>
 			<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 				<View style={styles.content}>
-
 					<Text style={styles.section}>1. Aceitação dos Termos</Text>
 					<Text style={styles.text}>
 						Ao acessar e usar este aplicativo, você aceita e concorda em cumprir

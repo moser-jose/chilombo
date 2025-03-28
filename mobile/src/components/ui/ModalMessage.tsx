@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Children, useState } from 'react'
 import { Modal, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -66,78 +65,6 @@ const ModalMessage = ({
 export default ModalMessage
 
 const styles = StyleSheet.create({
-	scrollView: {
-		flex: 1,
-	},
-	container: {
-		flex: 1,
-		padding: 20,
-	},
-	headerContainer: {
-		alignItems: 'center',
-		paddingVertical: 20,
-	},
-	imageContainer: {
-		position: 'relative',
-		marginBottom: 15,
-	},
-	profileImage: {
-		width: 90,
-		height: 90,
-		borderRadius: 60,
-	},
-	editImageButton: {
-		position: 'absolute',
-		right: 0,
-		bottom: 0,
-		backgroundColor: '#007AFF',
-		width: 32,
-		height: 32,
-		borderRadius: 18,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderWidth: 2,
-		borderColor: 'white',
-	},
-	userName: {
-		fontSize: FontSize.lg,
-		marginBottom: 1,
-		fontFamily: fontFamily.poppins.bold,
-	},
-	userEmail: {
-		fontSize: FontSize.sm,
-		color: '#666',
-		fontFamily: fontFamily.poppins.regular,
-	},
-	separator: {
-		marginTop: 10,
-		height: 1,
-		width: '100%',
-	},
-	menuContainer: {
-		marginTop: 10,
-	},
-	menuItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: '#eee',
-		justifyContent: 'space-between',
-	},
-	menuLeftContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	menuText: {
-		fontSize: 16,
-		marginLeft: 15,
-		fontFamily: fontFamily.poppins.regular,
-	},
-	logoutText: {
-		color: Colors.secondary,
-		fontFamily: fontFamily.poppins.medium,
-	},
 	modalOverlay: {
 		flex: 1,
 		backgroundColor: 'rgba(0, 0, 0, 0.6)',

@@ -379,7 +379,7 @@ export default function SignIn() {
 
 						<Button
 							onPress={onSignInPress}
-							disabled={!isPasswordStrong || !isEmailValid}
+							disabled={!isPasswordStrong}
 							loading={isSignIn}
 							variant="filled"
 							size="lg"

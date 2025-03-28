@@ -110,8 +110,8 @@ export const Button: React.FC<ButtonProps> = ({
 			style={[
 				getVariantStyle(),
 				{
-					padding:12,
-					borderRadius:10
+					padding: 12,
+					borderRadius: 10,
 				},
 				style,
 			]}
