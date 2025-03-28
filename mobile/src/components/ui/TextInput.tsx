@@ -25,7 +25,7 @@ type TextInputUIProps = TextInputProps & {
 	isPasswordStrong?: boolean
 	icon?: keyof typeof Ionicons.glyphMap
 	label?: string
-	onChangeText: (text: string) => void
+	onChangeText?: (text: string) => void
 	onFocus?: () => void
 	onBlur?: () => void
 	errors?: any
@@ -56,6 +56,13 @@ export default function TextInputUI({
 	const isDark = theme === 'dark'
 	const [showPassword, setShowPassword] = useState(false)
 
+	const handleChangeText = (text: string) => {
+		if (text.length > 0) {
+			setErrorMessage(null)
+		}
+		onChangeText?.(text)
+	}
+
 	const renderPasswordIcon = () => (
 		<View
 			style={{
@@ -79,24 +86,86 @@ export default function TextInputUI({
 		</View>
 	)
 
+	const ERROR_MESSAGES = {
+		first_name: 'Verifique o nome',
+		last_name: 'Verifique o sobrenome',
+		phone_number: 'Verifique o telefone',
+		email_address: 'Verifique o e-mail',
+		password: 'Verifique a senha',
+	}
+
 	useEffect(() => {
-		errors?.find((error: any) => {
-			if (error.meta.paramName === 'email_address') {
-				setErrorMessage({
-					message: 'Verifique o e-mail',
-					type: 'email',
-				})
-			} else if (error.meta.paramName === 'password') {
-				setErrorMessage({
-					message: 'Verifique a senha',
-					type: 'password',
-				})
-			}
+		setErrorMessage(null)
+
+		if (!errors || errors.length === 0) return
+
+		const firstNameError = errors.find(
+			(error: any) => error.meta.paramName === 'first_name',
+		)
+		if (firstNameError) {
+			setErrorMessage({
+				message: ERROR_MESSAGES.first_name,
+				type: 'first_name',
+			})
+			return
+		}
+
+		const lastNameError = errors.find(
+			(error: any) => error.meta.paramName === 'last_name',
+		)
+		if (lastNameError) {
+			setErrorMessage({
+				message: ERROR_MESSAGES.last_name,
+				type: 'last_name',
+			})
+			return
+		}
+
+		const phoneError = errors.find(
+			(error: any) => error.meta.paramName === 'phone_number',
+		)
+		if (phoneError) {
+			setErrorMessage({
+				message: ERROR_MESSAGES.phone_number,
+				type: 'phone_number',
+			})
+			return
+		}
+
+		const error = errors.find((error: any) => {
+			const paramName = error.meta.paramName
+			return ERROR_MESSAGES[paramName as keyof typeof ERROR_MESSAGES]
 		})
+
+		if (error) {
+			const paramName = error.meta.paramName
+			setErrorMessage({
+				message: ERROR_MESSAGES[paramName as keyof typeof ERROR_MESSAGES],
+				type: paramName,
+			})
+		}
 	}, [errors])
 
-	/* console.log(JSON.stringify(errors, null, 2))
-	console.log(JSON.stringify(errorMessage, null, 2)) */
+	const shouldShowError = () => {
+		if (!errorMessage) return false
+
+		if (type === 'text') {
+			if (label === 'Nome' && errorMessage.type === 'first_name') return true
+			if (label === 'Sobrenome' && errorMessage.type === 'last_name')
+				return true
+		}
+
+		switch (type) {
+			case 'phone':
+				return errorMessage.type === 'phone_number'
+			case 'email':
+				return errorMessage.type === 'email_address'
+			case 'password':
+				return errorMessage.type === 'password'
+			default:
+				return false
+		}
+	}
 
 	return (
 		<View style={style}>
@@ -132,7 +201,7 @@ export default function TextInputUI({
 						setIsInputFocused(false)
 						onBlur?.()
 					}}
-					onChangeText={onChangeText}
+					onChangeText={handleChangeText}
 					value={value}
 				/>
 				{type === 'password' && (
@@ -141,10 +210,7 @@ export default function TextInputUI({
 					</Pressable>
 				)}
 			</View>
-			{type === 'email' && errorMessage?.type === 'email' && (
-				<Text style={styles(isDark).errorText}>{errorMessage.message}</Text>
-			)}
-			{type === 'password' && errorMessage?.type === 'password' && (
+			{shouldShowError() && errorMessage && (
 				<Text style={styles(isDark).errorText}>{errorMessage.message}</Text>
 			)}
 		</View>
