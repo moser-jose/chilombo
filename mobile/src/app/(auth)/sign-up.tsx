@@ -197,7 +197,6 @@ export default function SignUp() {
 			setPendingVerification(true)
 			setOpenModal(true)
 		} catch (err) {
-			//console.log(JSON.stringify(err, null, 2))
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
 		} finally {
 			setIsLoading(false)

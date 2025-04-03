@@ -7,19 +7,23 @@ import { FontSize } from '@/src/constants/FontSize'
 const ModalMessage = ({
 	setShowLogoutModal,
 	showLogoutModal,
+	children,
 	handleOk,
 	modalTitle,
 	modalText,
 	modalIcon,
+	textButton = 'OK',
 	cancelButton,
 }: {
 	setShowLogoutModal: (show: boolean) => void
 	showLogoutModal: boolean
 	handleOk: () => void
+	textButton?: string
+	children?: React.ReactNode
 	modalTitle: string
-	modalText: string
+	modalText?: string
 	modalIcon: keyof typeof Ionicons.glyphMap
-	cancelButton: boolean
+	cancelButton?: boolean
 }) => {
 	return (
 		<Modal
@@ -34,7 +38,9 @@ const ModalMessage = ({
 						<Ionicons name={modalIcon} size={35} color={Colors.primary} />
 					</View>
 					<Text style={styles.modalTitle}>{modalTitle}</Text>
-					<Text style={styles.modalText}>{modalText}</Text>
+					{modalText && <Text style={styles.modalText}>{modalText}</Text>}
+
+					{children && children}
 
 					<View style={styles.modalButtons}>
 						{cancelButton && (
@@ -52,7 +58,7 @@ const ModalMessage = ({
 							onPress={handleOk}
 						>
 							<Text style={[styles.modalButtonText, styles.confirmButtonText]}>
-								OK
+								{textButton}
 							</Text>
 						</TouchableOpacity>
 					</View>

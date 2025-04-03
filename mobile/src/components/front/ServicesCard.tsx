@@ -3,6 +3,7 @@ import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import {
 	View,
 	Text,
@@ -15,11 +16,20 @@ import {
 type ServicesCardProps = {
 	icon: ImageSourcePropType
 	service: string
+	route: string
 }
 
-const ServicesCard = ({ icon, service }: ServicesCardProps) => {
+const ServicesCard = ({ icon, service, route }: ServicesCardProps) => {
+	const handlePress = () => {
+		router.push(route)
+	}
+
 	return (
-		<TouchableOpacity activeOpacity={0.8} style={styles.container}>
+		<TouchableOpacity
+			activeOpacity={0.8}
+			style={styles.container}
+			onPress={handlePress}
+		>
 			<View style={styles.containerIcon}>
 				<Image source={icon} style={styles.icon} />
 				{/* <Ionicons name={icon} size={40} color={Colors.primary} /> */}

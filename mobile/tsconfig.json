@@ -42,7 +42,7 @@
 			"@/constants/*": ["./src/constants/*"],
 			"@/hooks/*": ["./src/hooks/*"],
 			"@/types/*": ["./src/types/*"],
-			"@/services/*": ["./src/services/*"],
+			"@/services/*": ["src/app/(services)/*"],
 			"@/utils/*": ["./src/utils/*"],
 			"@/styles/*": ["./src/styles/*"],
 			"@/tests/*": ["__tests__/*"]

@@ -22,6 +22,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
+import CompletedServiceCard from '../../components/front/CompletedServiceCard'
 
 const users = [
 	{
@@ -73,21 +74,25 @@ const services = [
 		id: 1,
 		icon: require('../../../assets/icons/emp.png'),
 		service: 'Empregadas Domésticas',
+		route: '/services/empregada-domestica',
 	},
 	{
 		id: 2,
 		icon: require('../../../assets/icons/garden.png'),
 		service: 'Tratamento de Jardim',
+		route: '/services/tratamento-jardim',
 	},
 	{
 		id: 3,
 		icon: require('../../../assets/icons/houseclean.png'),
 		service: 'Limpeza Residencial',
+		route: '/services/limpeza-residencial',
 	},
 	{
 		id: 4,
 		icon: require('../../../assets/icons/toolsclean.png'),
 		service: 'Limpeza Empresarial',
+		route: '/services/limpeza-empresarial',
 	},
 ]
 
@@ -95,6 +100,52 @@ import tapete from '../../../assets/empresa/tapete.jpg'
 import empregada from '../../../assets/empresa/empregada.png'
 import empresa from '../../../assets/empresa/empresa.png'
 import cadeiroes from '../../../assets/empresa/cadeiroes.png'
+
+const completedServices = [
+	{
+		id: 1,
+		title: 'Limpeza Residencial',
+		image:
+			'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1470&auto=format&fit=crop',
+		stars: 4.8,
+		likes: 126,
+		address: 'Rua Bié, Huambo, HBO',
+		description: 'Limpeza completa de residência com 3 quartos e 2 banheiros.',
+	},
+	{
+		id: 2,
+		title: 'Limpeza de Tapetes',
+		image:
+			'https://images.unsplash.com/photo-1603848198135-5ace8c4a91c3?q=80&w=1374&auto=format&fit=crop',
+		stars: 4.7,
+		likes: 98,
+		address: 'Cidade Alta, Huambo, HBO',
+		description:
+			'Limpeza profunda e higienização de tapetes de sala e quartos.',
+	},
+	{
+		id: 3,
+		title: 'Limpeza Empresarial',
+		image:
+			'https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=1470&auto=format&fit=crop',
+		stars: 4.9,
+		likes: 215,
+		address: 'Rua dos Ministros, Huambo, HBO',
+		description: 'Serviço completo de limpeza para escritório com 10 salas.',
+	},
+	{
+		id: 4,
+		title: 'Limpeza de Sofás',
+		image:
+			'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1470&auto=format&fit=crop',
+		stars: 4.6,
+		likes: 87,
+		address: 'Lossambo, Huambo, HBO',
+		description:
+			'Higienização e limpeza profunda de sofá de 4 lugares e 2 poltronas.',
+	},
+]
+
 export default function HomeScreen() {
 	const tapeteUrl = Image.resolveAssetSource(tapete).uri
 	const empregadaUrl = Image.resolveAssetSource(empregada).uri
@@ -160,7 +211,11 @@ export default function HomeScreen() {
 								gap: 10,
 							}}
 						>
-							<ServicesCard icon={item.icon} service={item.service} />
+							<ServicesCard
+								icon={item.icon}
+								service={item.service}
+								route={item.route}
+							/>
 						</View>
 					)}
 				/>
@@ -193,49 +248,26 @@ export default function HomeScreen() {
 
 				<Separador text="Serviços de Limpeza" more />
 
-				{/* <View style={styles.container}>
-				<Animated.View
-					style={{
-						width: '48%',
-						height: 180,
-					}}
-				>
-					<Animated.Image
-						source={require('../../../assets/empresa/tapete.jpg')}
-						style={{
-							width: '100%',
-							height: '100%',
-							borderRadius: 20,
-						}}
-					/>
-					<Text>Limpeza Residencial</Text>
-				</Animated.View>
-				<View
-					style={{
-						backgroundColor: 'blue',
-						width: '48%',
-						height: 180,
-					}}
-				>
-					<Text>Limpeza Residencial</Text>
-				</View>
-			</View> */}
 				<View style={styles.container}>
-					<TouchableOpacity activeOpacity={0.8} style={styles.containerImage}>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={styles.containerImage}
+						onPress={() => router.push('/(services)/empregada-domestica')}
+					>
 						<FastImage
 							source={{ uri: empregadaUrl }}
 							style={styles.backgroundImage}
 							resizeMode={FastImage.resizeMode.cover}
 						/>
-						{/* <View style={styles.headerContainerTop}>
-						<Text style={styles.categoryTitleTop}>10% OFF</Text>
-					</View> */}
-
 						<View style={styles.headerContainer}>
 							<Text style={styles.categoryTitle}>Empregada Doméstica</Text>
 						</View>
 					</TouchableOpacity>
-					<TouchableOpacity activeOpacity={0.8} style={styles.containerImage}>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={styles.containerImage}
+						onPress={() => router.push('/(services)/limpeza-tapete')}
+					>
 						<FastImage
 							source={{ uri: tapeteUrl }}
 							style={styles.backgroundImage}
@@ -249,28 +281,31 @@ export default function HomeScreen() {
 								<Ionicons name="star" size={16} color="#fbd602" />
 							</View>
 						</View>
-
 						<View style={styles.headerContainer}>
 							<Text style={styles.categoryTitle}>Limpeza de Tapete</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
 				<View style={styles.container}>
-					<TouchableOpacity activeOpacity={0.8} style={styles.containerImage}>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={styles.containerImage}
+						onPress={() => router.push('/(services)/limpeza-empresarial')}
+					>
 						<FastImage
 							source={{ uri: empresaUrl }}
 							style={styles.backgroundImage}
 							resizeMode={FastImage.resizeMode.cover}
 						/>
-						{/* <View style={styles.headerContainerTop}>
-						<Text style={styles.categoryTitleTop}>10% OFF</Text>
-					</View> */}
-
 						<View style={styles.headerContainer}>
 							<Text style={styles.categoryTitle}>Limpeza Empresarial</Text>
 						</View>
 					</TouchableOpacity>
-					<TouchableOpacity activeOpacity={0.8} style={styles.containerImage}>
+					<TouchableOpacity
+						activeOpacity={0.8}
+						style={styles.containerImage}
+						onPress={() => router.push('/(services)/limpeza-cadeiroes')}
+					>
 						<FastImage
 							source={{ uri: cadeiroesUrl }}
 							style={styles.backgroundImage}
@@ -293,12 +328,39 @@ export default function HomeScreen() {
 								</Text>
 							</View>
 						</View>
-
 						<View style={styles.headerContainer}>
 							<Text style={styles.categoryTitle}>Limpeza de Cadeirões</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
+
+				<Separador text="Serviços Realizados" more />
+
+				<FlatList
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					data={completedServices}
+					keyExtractor={item => item.id.toString()}
+					renderItem={({ index, item }) => (
+						<View
+							style={{
+								marginLeft: index === 0 ? 16 : 16,
+								marginRight: index === completedServices.length - 1 ? 16 : 0,
+								flex: 1,
+							}}
+						>
+							<CompletedServiceCard
+								title={item.title}
+								image={item.image}
+								stars={item.stars}
+								likes={item.likes}
+								address={item.address}
+								description={item.description}
+								id={item.id}
+							/>
+						</View>
+					)}
+				/>
 			</ScrollView>
 		</>
 	)

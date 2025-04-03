@@ -47,6 +47,7 @@ export default {
 
 	primary: '#0D0D12',
 	secondary: '#c2347b',
+	secondaryMuted: '#ccc',
 }
 
 /**
