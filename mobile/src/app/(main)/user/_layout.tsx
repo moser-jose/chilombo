@@ -4,37 +4,20 @@ import { FontSize } from '@/src/constants/FontSize'
 import { Stack } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-function UserScreenLayout() {
+export default function UserLayout() {
 	return (
-		<View style={{ flex: 1 }}>
-			<Stack>
-				<Stack.Screen
-					name="index"
-					options={{
-						headerTitle: '',
-						headerShown: true,
-						headerLeft: () => (
-							<TouchableOpacity>
-								<Text
-									style={{
-										color: 'white',
-										fontSize: FontSize.lg,
-										fontFamily: fontFamily.poppins.bold,
-										paddingLeft: 10,
-									}}
-								>
-									Perfil
-								</Text>
-							</TouchableOpacity>
-						),
-						headerStyle: {
-							backgroundColor: Colors.primary,
-						},
-					}}
-				/>
-			</Stack>
-		</View>
+		<Stack
+			screenOptions={{
+				headerTitle: 'Usuário',
+				headerStyle: {
+					backgroundColor: Colors.primary,
+				},
+				headerTitleStyle: {
+					color: 'white',
+					fontSize: FontSize.lg,
+					fontFamily: fontFamily.poppins.bold,
+				},
+			}}
+		/>
 	)
 }
-
-export default UserScreenLayout

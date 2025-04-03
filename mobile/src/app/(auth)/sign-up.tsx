@@ -197,7 +197,6 @@ export default function SignUp() {
 			setPendingVerification(true)
 			setOpenModal(true)
 		} catch (err) {
-			//console.log(JSON.stringify(err, null, 2))
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
 		} finally {
 			setIsLoading(false)
@@ -219,7 +218,7 @@ export default function SignUp() {
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 78 : 0}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 18 : 0}
 				style={[
 					styles(isDark).container,
 					{
@@ -248,7 +247,7 @@ export default function SignUp() {
 					>
 						<View style={[styles(isDark).contentContainer]}>
 							<Text
-								style={[styles(isDark).headerText, { fontSize: width * 0.05 }]}
+								style={styles(isDark).headerText}
 							>
 								Cria a sua conta e desfrute dos nossos serviços
 							</Text>
@@ -269,6 +268,7 @@ export default function SignUp() {
 									value={firstName}
 									onChangeText={setFirstName}
 									style={{ flex: 1 }}
+									errors={errors}
 								/>
 								<TextInputUI
 									type="text"
@@ -278,17 +278,41 @@ export default function SignUp() {
 									value={lastName}
 									onChangeText={setLastName}
 									style={{ flex: 1 }}
+									errors={errors}
 								/>
 							</View>
 
-							<TextInputUI
-								type="phone"
-								label="Telefone"
-								placeholder="Insira o telefone"
-								icon="call-outline"
-								value={phone}
-								onChangeText={setPhone}
-							/>
+							<View
+								style={{
+									width: '100%',
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									gap: 6,
+								}}
+							>
+								<TextInputUI
+									type="text"
+									label="DDI"
+									readOnly={true}
+									editable={false}
+									placeholder="Insira o telefone"
+									//icon="call-outline"
+									value="+244"
+									style={{ flex: .25 }}
+								/>
+
+								<TextInputUI
+									type="phone"
+									label="Telefone"
+									placeholder="Insira o telefone"
+									icon="call-outline"
+									value={phone}
+									onChangeText={setPhone}
+									style={{ flex: 1 }}
+									errors={errors}
+								/>
+							</View>
+
 							<TextInputUI
 								type="text"
 								label="Endereço"
@@ -296,6 +320,7 @@ export default function SignUp() {
 								icon="location-outline"
 								value={address}
 								onChangeText={setAddress}
+								errors={errors}
 							/>
 							<TextInputUI
 								type="email"
@@ -305,6 +330,7 @@ export default function SignUp() {
 								errors={errors}
 								value={emailAddress}
 								onChangeText={setEmailAddress}
+								
 							/>
 
 							<TextInputUI
@@ -387,11 +413,11 @@ export default function SignUp() {
 								</Pressable>
 							</Text>
 
-							{errors.map(error => (
+							{/* {errors.map(error => (
 								<Text key={error.longMessage} style={{ color: 'red' }}>
 									{error.longMessage}
 								</Text>
-							))}
+							))} */}
 						</View>
 					</Animated.View>
 				</ScrollView>
@@ -415,7 +441,7 @@ const styles = (isDark: boolean) =>
 		scrollView: {
 			flex: 1,
 			backgroundColor: 'white',
-			marginBottom: 30,
+			//marginBottom: 10,
 		},
 		headerText: {
 			fontWeight: '300',
