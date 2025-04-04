@@ -1,5 +1,5 @@
 import { Stack, router } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
 	View,
 	Text,
@@ -7,6 +7,9 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	Dimensions,
+	Animated,
+	Platform,
+	TextInput,
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -14,17 +17,30 @@ import {
 	Ionicons,
 	MaterialCommunityIcons,
 	FontAwesome5,
+	MaterialIcons,
 } from '@expo/vector-icons'
 import PlanCard from '@/src/components/front/PlanCard'
 import Colors from '@/src/constants/Colors'
 import { FontSize } from '@/src/constants/FontSize'
 import { LinearGradient } from 'react-native-linear-gradient'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import ModalMessage from '@/src/components/ui/ModalMessage'
+import { Separador } from '@/src/components/front/Separador'
 
 const { width } = Dimensions.get('window')
+const HEADER_HEIGHT = 250
+const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 70
 
 export default function EmpregadaDomesticaScreen() {
 	const [isMonthly, setIsMonthly] = useState(false)
 	const [showAllReviews, setShowAllReviews] = useState(false)
+	const scrollY = useRef(new Animated.Value(0)).current
+	const insets = useSafeAreaInsets()
+	const [liked, setLiked] = useState(false)
+	const [userRating, setUserRating] = useState(0)
+	const [showRatingModal, setShowRatingModal] = useState(false)
+	const [showCommentModal, setShowCommentModal] = useState(false)
+	const [commentText, setCommentText] = useState('')
 
 	const handlePlanSelection = (plan: string) => {
 		// Implementar lógica de seleção do plano
@@ -91,233 +107,451 @@ export default function EmpregadaDomesticaScreen() {
 
 	const visibleReviews = showAllReviews ? reviews : reviews.slice(0, 2)
 
+	// Animations for Twitter-like scroll behavior
+	const headerHeight = scrollY.interpolate({
+		inputRange: [0, HEADER_HEIGHT - HEADER_MIN_HEIGHT],
+		outputRange: [HEADER_HEIGHT, HEADER_MIN_HEIGHT],
+		extrapolate: 'clamp',
+	})
+
+	const headerOpacity = scrollY.interpolate({
+		inputRange: [0, HEADER_HEIGHT - HEADER_MIN_HEIGHT, HEADER_HEIGHT],
+		outputRange: [1, 0.3, 0],
+		extrapolate: 'clamp',
+	})
+
+	const titleOpacity = scrollY.interpolate({
+		inputRange: [0, 60, 90],
+		outputRange: [0, 0.5, 1],
+		extrapolate: 'clamp',
+	})
+
+	const imageScale = scrollY.interpolate({
+		inputRange: [-100, 0],
+		outputRange: [1.2, 1],
+		extrapolateLeft: 'extend',
+		extrapolateRight: 'clamp',
+	})
+
+	const titleTranslate = scrollY.interpolate({
+		inputRange: [0, HEADER_HEIGHT - HEADER_MIN_HEIGHT],
+		outputRange: [0, -50],
+		extrapolate: 'clamp',
+	})
+
+	const handleLike = () => {
+		setLiked(!liked)
+	}
+
+	const handleRating = (rating: number) => {
+		setUserRating(rating)
+	}
+
+	const handleCommentSubmit = () => {
+		if (commentText.trim()) {
+			setCommentText('')
+			setShowCommentModal(false)
+		}
+	}
+
+	const renderUserRatingStars = () => {
+		return (
+			<View style={styles.userRatingContainer}>
+				{[...Array(5)].map((_, index) => (
+					<TouchableOpacity
+						key={index}
+						onPress={() => handleRating(index + 1)}
+						style={styles.userRatingStar}
+					>
+						<Ionicons
+							name={index < userRating ? 'star' : 'star-outline'}
+							size={32}
+							color={index < userRating ? 'rgb(245, 194, 26)' : '#aaa'}
+						/>
+					</TouchableOpacity>
+				))}
+			</View>
+		)
+	}
+
 	return (
 		<>
 			<Stack.Screen
 				options={{
-					title: 'Limpeza de Residência',
-					headerShown: true,
-					headerLeft: () => (
-						<TouchableOpacity
-							onPress={() => router.back()}
-							style={styles.backButton}
-						>
-							<Ionicons name="chevron-back" size={24} color={Colors.primary} />
-						</TouchableOpacity>
-					),
+					headerShown: false,
 				}}
 			/>
-			<View style={styles.imageContainer}>
-				<FastImage
-					source={require('../../../assets/empresa/empregada.png')}
-					style={styles.headerImage}
-					resizeMode={FastImage.resizeMode.cover}
-				/>
-				<LinearGradient
-					colors={['rgba(0,0,0,0.6)', 'transparent']}
-					style={styles.gradient}
-				/>
-				<View style={styles.imageOverlay}>
-					<Text style={styles.serviceTitle}>Limpeza de Residência</Text>
-					<View style={styles.ratingRow}>
-						{renderRating(4.7)}
-						<Text style={styles.ratingText}>4.7 (124 avaliações)</Text>
-					</View>
-				</View>
-				<TouchableOpacity
-					onPress={() => router.back()}
-					style={styles.backButton}
+			<View style={styles.container}>
+				{/* Sticky Header for Twitter-like scroll */}
+				<Animated.View
+					style={[
+						styles.stickyHeader,
+						{
+							height: HEADER_MIN_HEIGHT + 10,
+							paddingTop: insets.top,
+							paddingBottom: 10,
+							opacity: titleOpacity,
+						},
+					]}
 				>
-					<Ionicons name="chevron-back" size={24} color={Colors.primary} />
-				</TouchableOpacity>
-			</View>
-			<ScrollView style={styles.container}>
-				<View style={styles.infoCard}>
-					<Text style={styles.descriptionTitle}>Sobre o serviço</Text>
-					<Text style={styles.description}>
-						Profissionais experientes para cuidar da limpeza completa da sua
-						residência. Os preços aplicam-se aos serviços de limpeza de
-						residências e domésticos, com diferentes planos para atender às suas
-						necessidades.
-					</Text>
-
-					<View style={styles.statsContainer}>
-						<View style={styles.statItem}>
-							<Ionicons name="time-outline" size={24} color={Colors.primary} />
-							<Text style={styles.statValue}>2-4h</Text>
-							<Text style={styles.statLabel}>Duração</Text>
-						</View>
-						<View style={styles.statItem}>
-							<FontAwesome5
-								name="user-check"
-								size={20}
-								color={Colors.primary}
-							/>
-							<Text style={styles.statValue}>250+</Text>
-							<Text style={styles.statLabel}>Profissionais</Text>
-						</View>
-						<View style={styles.statItem}>
-							<MaterialCommunityIcons
-								name="home-heart"
-								size={24}
-								color={Colors.primary}
-							/>
-							<Text style={styles.statValue}>2.500+</Text>
-							<Text style={styles.statLabel}>Serviços</Text>
-						</View>
-					</View>
-				</View>
-
-				<View style={styles.benefitsSection}>
-					<Text style={styles.sectionTitle}>Benefícios</Text>
-					<View style={styles.benefitRow}>
-						<View style={styles.benefitItem}>
-							<Ionicons
-								name="shield-checkmark"
-								size={24}
-								color={Colors.primary}
-							/>
-							<Text style={styles.benefitText}>Garantia de satisfação</Text>
-						</View>
-						<View style={styles.benefitItem}>
-							<Ionicons name="people" size={24} color={Colors.primary} />
-							<Text style={styles.benefitText}>Profissionais verificados</Text>
-						</View>
-					</View>
-					<View style={styles.benefitRow}>
-						<View style={styles.benefitItem}>
-							<Ionicons name="calendar" size={24} color={Colors.primary} />
-							<Text style={styles.benefitText}>Agendamento flexível</Text>
-						</View>
-						<View style={styles.benefitItem}>
-							<Ionicons name="sparkles" size={24} color={Colors.primary} />
-							<Text style={styles.benefitText}>Produtos de qualidade</Text>
-						</View>
-					</View>
-				</View>
-
-				<Text style={styles.sectionTitle}>Planos disponíveis</Text>
-				<View style={styles.periodSelector}>
 					<TouchableOpacity
-						onPress={() => setIsMonthly(false)}
-						style={[styles.periodOptionContainer]}
+						style={styles.backButtonSticky}
+						onPress={() => router.back()}
 					>
-						<Text
-							style={[
-								styles.periodOption,
-								!isMonthly && styles.periodOptionActive,
-							]}
-						>
-							Diário
-						</Text>
+						<Ionicons name="chevron-back" size={24} color={Colors.primary} />
 					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => setIsMonthly(true)}
-						style={[styles.periodOptionContainer]}
+					<Animated.Text
+						style={[styles.stickyTitle, { opacity: titleOpacity }]}
+						numberOfLines={1}
 					>
-						<Text
-							style={[
-								styles.periodOption,
-								isMonthly && styles.periodOptionActive,
-							]}
+						Limpeza de Residência
+					</Animated.Text>
+				</Animated.View>
+
+				<Animated.ScrollView
+					showsVerticalScrollIndicator={false}
+					scrollEventThrottle={16}
+					onScroll={Animated.event(
+						[{ nativeEvent: { contentOffset: { y: scrollY } } }],
+						{ useNativeDriver: false },
+					)}
+					contentContainerStyle={{ paddingTop: 0 }}
+				>
+					{/* Header Image with Animation */}
+					<Animated.View
+						style={[
+							styles.imageContainer,
+							{
+								height: headerHeight,
+								opacity: headerOpacity,
+							},
+						]}
+					>
+						<Animated.View
+							style={{
+								transform: [{ scale: imageScale }],
+							}}
 						>
-							Mensal
-						</Text>
-					</TouchableOpacity>
-				</View>
-
-				<PlanCard
-					title="Básico"
-					description="Ideal para famílias com um agregado reduzido."
-					price={getPrice(50000)}
-					activities={[
-						'Limpeza Geral',
-						'Higienização da Roupa',
-						'Limpeza de 4 divisões',
-					]}
-					tag="Popular"
-					onPress={() => handlePlanSelection('basic')}
-				/>
-
-				<PlanCard
-					title="Pro"
-					description="Ideal para famílias com 5 a 6 membros"
-					price={getPrice(65000)}
-					activities={[
-						'Tudo do plano Básico',
-						'Preparo de duas Refeições',
-						'Limpeza de janelas',
-					]}
-					tag="Recomendado"
-					onPress={() => handlePlanSelection('pro')}
-				/>
-
-				<PlanCard
-					title="Premium"
-					description="Ideal para famílias com mais de 7 membros"
-					price={getPrice(80000)}
-					activities={[
-						'Tudo do plano Pro',
-						'Cuidar de Crianças',
-						'Organização de armários',
-						'Limpeza profunda',
-					]}
-					tag="melhor valor"
-					onPress={() => handlePlanSelection('premium')}
-				/>
-
-				<View style={styles.divider} />
-
-				<Text style={styles.reviewTitle}>O que dizem deste serviço</Text>
-				<View style={styles.overallRating}>
-					<Text style={styles.ratingBig}>4.7</Text>
-					{renderRating(4.7)}
-					<Text style={styles.ratingCount}>De 124 avaliações</Text>
-				</View>
-
-				<View style={styles.reviewSection}>
-					{visibleReviews.map(review => (
-						<View key={review.id} style={styles.reviewItem}>
 							<FastImage
-								source={{ uri: review.image }}
-								style={styles.userImage}
+								source={require('../../../assets/empresa/empregada.png')}
+								style={styles.headerImage}
+								resizeMode={FastImage.resizeMode.cover}
 							/>
-							<View style={styles.userInfo}>
-								<View style={styles.reviewHeader}>
-									<Text style={styles.userName}>{review.name}</Text>
-									<Text style={styles.reviewDate}>{review.date}</Text>
+						</Animated.View>
+						<LinearGradient
+							colors={['rgba(0,0,0,0.7)', 'transparent']}
+							style={styles.gradient}
+						/>
+						<TouchableOpacity
+							style={[styles.backButton, { top: insets.top + 10 }]}
+							onPress={() => router.back()}
+						>
+							<Ionicons name="chevron-back" size={24} color="#fff" />
+						</TouchableOpacity>
+
+						<Animated.View
+							style={[
+								styles.imageOverlay,
+								{
+									transform: [{ translateY: titleTranslate }],
+								},
+							]}
+						>
+							<Text style={styles.serviceTitle}>Limpeza de Residência</Text>
+
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								<View style={styles.testimonialRatingSmall}>
+									<Ionicons name="star" size={14} color="rgb(245, 194, 26)" />
+									<Text style={styles.testimonialRatingText}>4.7</Text>
+									<Text style={styles.testimonialRatingText}>
+									(124)
+								</Text>
 								</View>
-								{renderRating(review.rating)}
-								<Text style={styles.reviewText}>"{review.text}"</Text>
-								<View style={styles.reviewFooter}>
-									<TouchableOpacity style={styles.likeButton}>
-										<Ionicons
-											name="thumbs-up-outline"
-											size={16}
-											color={Colors.primary}
-										/>
-										<Text style={styles.likeCount}>{review.likes}</Text>
-									</TouchableOpacity>
+								
+							</View>
+						</Animated.View>
+					</Animated.View>
+
+					{/* Main Content */}
+					<View style={styles.mainContent}>
+						{/* Engagement Buttons */}
+						<View style={styles.engagementContainer}>
+							<TouchableOpacity
+								style={styles.engagementButton}
+								onPress={handleLike}
+							>
+								<Ionicons
+									name={liked ? 'heart' : 'heart-outline'}
+									size={24}
+									color={liked ? '#FF5959' : Colors.primary}
+								/>
+								<Text style={styles.engagementText}>Amar</Text>
+							</TouchableOpacity>
+
+							<TouchableOpacity
+								style={styles.engagementButton}
+								onPress={() => setShowRatingModal(true)}
+							>
+								<Ionicons
+									name={userRating > 0 ? 'star' : 'star-outline'}
+									size={24}
+									color={userRating > 0 ? 'rgb(245, 194, 26)' : Colors.primary}
+								/>
+								<Text style={styles.engagementText}>Avaliar</Text>
+							</TouchableOpacity>
+
+							<TouchableOpacity
+								style={styles.engagementButton}
+								onPress={() => setShowCommentModal(true)}
+							>
+								<Ionicons
+									name="chatbox-outline"
+									size={24}
+									color={Colors.primary}
+								/>
+								<Text style={styles.engagementText}>Comentar</Text>
+							</TouchableOpacity>
+						</View>
+
+						<View style={styles.infoCard}>
+							<Text style={styles.descriptionTitle}>Sobre o serviço</Text>
+							<Text style={styles.description}>
+								Profissionais experientes para cuidar da limpeza completa da sua
+								residência. Os preços aplicam-se aos serviços de limpeza de
+								residências e domésticos, com diferentes planos para atender às
+								suas necessidades.
+							</Text>
+
+							<View style={styles.statsContainer}>
+								<View style={styles.statItem}>
+									<Ionicons
+										name="time-outline"
+										size={24}
+										color={Colors.primary}
+									/>
+									<Text style={styles.statValue}>2-4h</Text>
+									<Text style={styles.statLabel}>Duração</Text>
+								</View>
+								<View style={styles.statItem}>
+									<FontAwesome5
+										name="user-check"
+										size={20}
+										color={Colors.primary}
+									/>
+									<Text style={styles.statValue}>250+</Text>
+									<Text style={styles.statLabel}>Profissionais</Text>
+								</View>
+								<View style={styles.statItem}>
+									<MaterialCommunityIcons
+										name="home-heart"
+										size={24}
+										color={Colors.primary}
+									/>
+									<Text style={styles.statValue}>2.500+</Text>
+									<Text style={styles.statLabel}>Serviços</Text>
 								</View>
 							</View>
 						</View>
-					))}
 
-					{!showAllReviews && reviews.length > 2 && (
-						<TouchableOpacity
-							style={styles.showMoreButton}
-							onPress={() => setShowAllReviews(true)}
-						>
-							<Text style={styles.showMoreText}>Ver mais avaliações</Text>
-							<Ionicons name="chevron-down" size={16} color={Colors.primary} />
+						<View style={styles.benefitsSection}>
+							<Text style={styles.sectionTitle}>Benefícios</Text>
+							<View style={styles.benefitRow}>
+								<View style={styles.benefitItem}>
+									<Ionicons
+										name="shield-checkmark"
+										size={24}
+										color={Colors.primary}
+									/>
+									<Text style={styles.benefitText}>Garantia de satisfação</Text>
+								</View>
+								<View style={styles.benefitItem}>
+									<Ionicons name="people" size={24} color={Colors.primary} />
+									<Text style={styles.benefitText}>
+										Profissionais verificados
+									</Text>
+								</View>
+							</View>
+							<View style={styles.benefitRow}>
+								<View style={styles.benefitItem}>
+									<Ionicons name="calendar" size={24} color={Colors.primary} />
+									<Text style={styles.benefitText}>Agendamento flexível</Text>
+								</View>
+								<View style={styles.benefitItem}>
+									<Ionicons name="sparkles" size={24} color={Colors.primary} />
+									<Text style={styles.benefitText}>Produtos de qualidade</Text>
+								</View>
+							</View>
+						</View>
+
+						<Separador text="Planos disponíveis" />
+						<View style={styles.periodSelector}>
+							<TouchableOpacity
+								onPress={() => setIsMonthly(false)}
+								style={[styles.periodOptionContainer]}
+							>
+								<Text
+									style={[
+										styles.periodOption,
+										!isMonthly && styles.periodOptionActive,
+									]}
+								>
+									Diário
+								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								onPress={() => setIsMonthly(true)}
+								style={[styles.periodOptionContainer]}
+							>
+								<Text
+									style={[
+										styles.periodOption,
+										isMonthly && styles.periodOptionActive,
+									]}
+								>
+									Mensal
+								</Text>
+							</TouchableOpacity>
+						</View>
+
+						<PlanCard
+							title="Básico"
+							description="Ideal para famílias com um agregado reduzido."
+							price={getPrice(50000)}
+							activities={[
+								'Limpeza Geral',
+								'Higienização da Roupa',
+								'Limpeza de 4 divisões',
+							]}
+							tag="Popular"
+							onPress={() => handlePlanSelection('basic')}
+						/>
+
+						<PlanCard
+							title="Pro"
+							description="Ideal para famílias com 5 a 6 membros"
+							price={getPrice(65000)}
+							activities={[
+								'Tudo do plano Básico',
+								'Preparo de duas Refeições',
+								'Limpeza de janelas',
+							]}
+							tag="Recomendado"
+							onPress={() => handlePlanSelection('pro')}
+						/>
+
+						<PlanCard
+							title="Premium"
+							description="Ideal para famílias com mais de 7 membros"
+							price={getPrice(80000)}
+							activities={[
+								'Tudo do plano Pro',
+								'Cuidar de Crianças',
+								'Organização de armários',
+								'Limpeza profunda',
+							]}
+							tag="melhor valor"
+							onPress={() => handlePlanSelection('premium')}
+						/>
+
+						<View style={styles.divider} />
+
+						<Text style={styles.reviewTitle}>O que dizem deste serviço</Text>
+						<View style={styles.overallRating}>
+							<Text style={styles.ratingBig}>4.7</Text>
+							{renderRating(4.7)}
+							<Text style={styles.ratingCount}>De 124 avaliações</Text>
+						</View>
+
+						<View style={styles.reviewSection}>
+							{visibleReviews.map(review => (
+								<View key={review.id} style={styles.reviewItem}>
+									<FastImage
+										source={{ uri: review.image }}
+										style={styles.userImage}
+									/>
+									<View style={styles.userInfo}>
+										<View style={styles.reviewHeader}>
+											<Text style={styles.userName}>{review.name}</Text>
+											<Text style={styles.reviewDate}>{review.date}</Text>
+										</View>
+										{renderRating(review.rating)}
+										<Text style={styles.reviewText}>"{review.text}"</Text>
+										<View style={styles.reviewFooter}>
+											<TouchableOpacity style={styles.likeButton}>
+												<Ionicons
+													name="thumbs-up-outline"
+													size={16}
+													color={Colors.primary}
+												/>
+												<Text style={styles.likeCount}>{review.likes}</Text>
+											</TouchableOpacity>
+										</View>
+									</View>
+								</View>
+							))}
+
+							{!showAllReviews && reviews.length > 2 && (
+								<TouchableOpacity
+									style={styles.showMoreButton}
+									onPress={() => setShowAllReviews(true)}
+								>
+									<Text style={styles.showMoreText}>Ver mais avaliações</Text>
+									<Ionicons
+										name="chevron-down"
+										size={16}
+										color={Colors.primary}
+									/>
+								</TouchableOpacity>
+							)}
+						</View>
+
+						<TouchableOpacity style={styles.ctaButton}>
+							<Text style={styles.ctaButtonText}>Solicitar Serviço Agora</Text>
 						</TouchableOpacity>
-					)}
-				</View>
+					</View>
+				</Animated.ScrollView>
 
-				<TouchableOpacity style={styles.ctaButton}>
-					<Text style={styles.ctaButtonText}>Solicitar Serviço Agora</Text>
-				</TouchableOpacity>
-			</ScrollView>
+				{/* Rating Modal */}
+				{showRatingModal && (
+					<ModalMessage
+						showLogoutModal={showRatingModal}
+						setShowLogoutModal={setShowRatingModal}
+						handleOk={() => setShowRatingModal(false)}
+						textButton="Enviar"
+						modalTitle="Avalie este serviço"
+						modalIcon="star"
+						cancelButton={true}
+					>
+						<View style={styles.ratingModalContent}>
+							{renderUserRatingStars()}
+						</View>
+					</ModalMessage>
+				)}
+
+				{/* Comment Modal */}
+				{showCommentModal && (
+					<ModalMessage
+						showLogoutModal={showCommentModal}
+						setShowLogoutModal={setShowCommentModal}
+						handleOk={handleCommentSubmit}
+						textButton="Enviar"
+						modalTitle="Deixe seu comentário"
+						modalIcon="chatbox"
+						cancelButton={true}
+					>
+						<View style={styles.commentModalContent}>
+							<TextInput
+								style={styles.commentInput}
+								placeholder="Escreva seu comentário aqui..."
+								placeholderTextColor="#999"
+								multiline
+								value={commentText}
+								onChangeText={setCommentText}
+							/>
+						</View>
+					</ModalMessage>
+				)}
+			</View>
 		</>
 	)
 }
@@ -326,25 +560,60 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
+		position: 'relative',
+	},
+	stickyHeader: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		backgroundColor: '#fff',
+		zIndex: 100,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 16,
+		borderBottomWidth: 1,
+		borderBottomColor: '#eee',
+	},
+	backButtonSticky: {
+		height: 40,
+		width: 40,
+		borderRadius: 20,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	stickyTitle: {
+		fontSize: FontSize.base,
+		fontFamily: fontFamily.poppins.semibold,
+		color: '#222',
+		marginLeft: 10,
+		flex: 1,
 	},
 	imageContainer: {
 		position: 'relative',
+		overflow: 'hidden',
 	},
 	headerImage: {
 		width: '100%',
-		height: 180,
+		height: HEADER_HEIGHT,
 	},
 	gradient: {
 		position: 'absolute',
 		left: 0,
 		right: 0,
 		top: 0,
-		height: 180,
+		height: HEADER_HEIGHT,
 	},
 	imageOverlay: {
 		position: 'absolute',
 		bottom: 20,
 		left: 16,
+		right: 16,
+	},
+	mainContent: {
+		backgroundColor: '#fff',
+		marginTop: -10,
+		paddingTop: 20,
 	},
 	serviceTitle: {
 		fontSize: FontSize.lg,
@@ -367,6 +636,22 @@ const styles = StyleSheet.create({
 		textShadowOffset: { width: -1, height: 1 },
 		textShadowRadius: 10,
 	},
+	testimonialRatingSmall: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: 'rgba(245, 194, 26, 0.1)',
+		borderColor: '#F5C21A',
+		borderWidth: 1,
+		paddingHorizontal: 8,
+		paddingVertical: 2,
+		borderRadius: 20,
+	},
+	testimonialRatingText: {
+		fontSize: FontSize.xs,
+		fontFamily: fontFamily.poppins.regular,
+		color: '#fff',
+		marginLeft: 4,
+	},
 	infoCard: {
 		marginHorizontal: 16,
 		marginTop: 16,
@@ -374,14 +659,16 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		borderRadius: 12,
 		elevation: 2,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
+		shadowColor: 'rgba(0, 0, 0, 0.53)',
+		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.1,
-		shadowRadius: 4,
+		borderWidth: 0.5,
+		borderColor: 'rgba(0, 0, 0, 0.1)',
+		shadowRadius: 1,
 	},
 	descriptionTitle: {
 		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semiBold,
+		fontFamily: fontFamily.poppins.semibold,
 		color: '#333',
 		marginBottom: 8,
 	},
@@ -416,15 +703,15 @@ const styles = StyleSheet.create({
 	},
 	sectionTitle: {
 		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semiBold,
+		fontFamily: fontFamily.poppins.semibold,
 		color: '#333',
 		marginHorizontal: 16,
-		marginTop: 24,
+		//marginTop: 24,
 		marginBottom: 12,
 	},
 	benefitsSection: {
 		marginHorizontal: 16,
-		marginTop: 8,
+		marginTop: 20,
 		padding: 16,
 		backgroundColor: '#f9f9f9',
 		borderRadius: 12,
@@ -469,11 +756,15 @@ const styles = StyleSheet.create({
 	},
 	backButton: {
 		position: 'absolute',
-		top: 60,
+		top: 50,
 		left: 16,
-		padding: 8,
+		height: 40,
+		width: 40,
 		borderRadius: 20,
-		backgroundColor: 'rgba(245, 240, 240, 0.44)',
+		backgroundColor: 'rgba(0,0,0,0.3)',
+		alignItems: 'center',
+		justifyContent: 'center',
+		zIndex: 10,
 	},
 	divider: {
 		height: 8,
@@ -488,10 +779,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f9f9f9',
 		borderRadius: 12,
 		elevation: 3,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
+		shadowColor: 'rgba(0, 0, 0, 0.53)',
+		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.1,
-		shadowRadius: 4,
+		borderWidth: 0.5,
+		borderColor: 'rgba(0, 0, 0, 0.1)',
+		shadowRadius: 1,
 	},
 	reviewTitle: {
 		fontSize: FontSize.base,
@@ -552,7 +845,7 @@ const styles = StyleSheet.create({
 		marginBottom: 4,
 	},
 	reviewText: {
-		fontSize: FontSize.sm,
+		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
 		color: '#555',
 		lineHeight: 18,
@@ -603,5 +896,59 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		fontSize: FontSize.base,
 		fontFamily: fontFamily.poppins.bold,
+	},
+	engagementContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		paddingVertical: 12,
+		marginHorizontal: 16,
+		marginTop: 10,
+		backgroundColor: '#fff',
+		borderRadius: 12,
+		elevation: 2,
+		shadowColor: 'rgba(0, 0, 0, 0.53)',
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.1,
+		borderWidth: 0.5,
+		borderColor: 'rgba(0, 0, 0, 0.1)',
+		shadowRadius: 1,
+	},
+	engagementButton: {
+		flexDirection: 'column',
+		alignItems: 'center',
+		padding: 8,
+	},
+	engagementText: {
+		fontSize: FontSize.xs,
+		fontFamily: fontFamily.poppins.medium,
+		color: '#555',
+		marginTop: 6,
+	},
+	userRatingContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingVertical: 16,
+	},
+	userRatingStar: {
+		padding: 8,
+	},
+	ratingModalContent: {
+		paddingVertical: 8,
+	},
+	commentModalContent: {
+		paddingVertical: 16,
+		paddingHorizontal: 8,
+	},
+	commentInput: {
+		borderWidth: 1,
+		borderColor: '#eaeaea',
+		borderRadius: 8,
+		padding: 12,
+		minHeight: 120,
+		textAlignVertical: 'top',
+		fontSize: FontSize.sm,
+		fontFamily: fontFamily.poppins.regular,
+		color: '#333',
 	},
 })

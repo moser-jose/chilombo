@@ -1,14 +1,12 @@
 import { Stack, router, useLocalSearchParams } from 'expo-router'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import {
 	View,
 	Text,
 	StyleSheet,
-	ScrollView,
 	TouchableOpacity,
 	Dimensions,
 	FlatList,
-	StatusBar,
 	Animated,
 	Platform,
 } from 'react-native'
@@ -20,6 +18,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/ui/ModalMessage'
+import { Separador } from '@/src/components/front/Separador'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -36,7 +35,7 @@ const completedServicesData = [
 		address: 'Rua Bié, Huambo, HBO',
 		description: 'Limpeza completa de residência com 3 quartos e 2 banheiros.',
 		date: '15/03/2024',
-		client: 'João Mateus',
+		client: 'J. Mateus',
 		duration: '3 horas',
 		professionals: ['Maria Silva', 'Carlos Santos'],
 		workImages: [
@@ -61,7 +60,7 @@ const completedServicesData = [
 				clientName: 'Maria Oliveira',
 				clientImage:
 					'https://ui-avatars.com/api/?name=Maria+Oliveira&background=E91E63&color=fff',
-				text: 'Muito satisfeita com a limpeza. Profissionais muito educados e eficientes.',
+				text: 'Muito satisfeita com a limpeza. Profissionais muito educados.',
 				rating: 4.8,
 				date: '12/06/2024',
 			},
@@ -69,7 +68,7 @@ const completedServicesData = [
 				clientName: 'Carlos Mendes',
 				clientImage:
 					'https://ui-avatars.com/api/?name=Carlos+Mendes&background=9C27B0&color=fff',
-				text: 'Segunda vez que contrato e continua sendo excelente. Limpeza muito bem feita em todos os detalhes.',
+				text: 'Segunda vez que contrato e continua sendo excelente.',
 				rating: 5,
 				date: '05/05/2024',
 			},
@@ -400,10 +399,8 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Photo gallery */}
+						<Separador text="Fotos do Trabalho Realizado" />
 						<View style={styles.galleryContainer}>
-							<Text style={styles.sectionTitle}>
-								Fotos do Trabalho Realizado
-							</Text>
 							<FlatList
 								horizontal
 								showsHorizontalScrollIndicator={false}
@@ -449,7 +446,14 @@ export default function CompletedServiceDetailScreen() {
 										</View>
 									</View>
 
-									<View style={styles.detailItem}>
+									<View
+										style={[
+											styles.detailItem,
+											{
+												flex: 0.5,
+											},
+										]}
+									>
 										<Ionicons
 											name="time-outline"
 											size={20}
@@ -475,7 +479,14 @@ export default function CompletedServiceDetailScreen() {
 										</View>
 									</View>
 
-									<View style={styles.detailItem}>
+									<View
+										style={[
+											styles.detailItem,
+											{
+												flex: 0.5,
+											},
+										]}
+									>
 										<Ionicons
 											name="person-outline"
 											size={20}
@@ -491,23 +502,19 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Tasks Completed */}
+						<Separador text="Tarefas Realizadas" />
 						<View style={styles.tasksContainer}>
-							<Text style={styles.sectionTitle}>Tarefas Realizadas</Text>
 							{service.tasks.map((task, index) => (
 								<View key={index} style={styles.taskItem}>
-									<Ionicons
-										name="checkmark-circle"
-										size={22}
-										color={Colors.primary}
-									/>
+									<Ionicons name="checkmark" size={22} color={Colors.primary} />
 									<Text style={styles.taskText}>{task}</Text>
 								</View>
 							))}
 						</View>
 
 						{/* Team */}
+						<Separador text="Equipe Responsável" />
 						<View style={styles.teamContainer}>
-							<Text style={styles.sectionTitle}>Equipe Responsável</Text>
 							<View style={styles.professionalsList}>
 								{service.professionals.map((professional, index) => (
 									<View key={index} style={styles.professionalItem}>
@@ -528,9 +535,16 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Client Testimonial */}
+						<Separador text="Avaliação do Cliente" />
 						<View style={styles.testimonialContainer}>
-							<Text style={styles.sectionTitle}>Avaliação do Cliente</Text>
-							<View style={styles.testimonialContent}>
+							<View
+								style={[
+									styles.testimonialContent,
+									{
+										borderLeftColor: '#0D8ABC',
+									},
+								]}
+							>
 								<View style={styles.testimonialHeader}>
 									<View style={styles.testimonialHeaderLeft}>
 										<FontAwesome
@@ -563,17 +577,7 @@ export default function CompletedServiceDetailScreen() {
 						{service.additionalTestimonials &&
 							service.additionalTestimonials.length > 0 && (
 								<View style={styles.additionalTestimonialsContainer}>
-									<View style={styles.testimonialsHeader}>
-										<Text style={styles.sectionTitle}>Outros Testemunhos</Text>
-										<TouchableOpacity style={styles.viewAllButton}>
-											<Text style={styles.viewAllText}>Ver todos</Text>
-											<Ionicons
-												name="chevron-forward"
-												size={16}
-												color={Colors.primary}
-											/>
-										</TouchableOpacity>
-									</View>
+									<Separador text="Outros Comentários" more />
 
 									<FlatList
 										horizontal
@@ -582,7 +586,18 @@ export default function CompletedServiceDetailScreen() {
 										keyExtractor={(item, index) => index.toString()}
 										contentContainerStyle={styles.testimonialsList}
 										renderItem={({ item }) => (
-											<View style={styles.testimonialItemHorizontal}>
+											<View
+												style={[
+													styles.testimonialItemHorizontal,
+													{
+														borderLeftColor:
+															'#' +
+															item.clientImage
+																.split('background=')[1]
+																.split('&')[0],
+													},
+												]}
+											>
 												<View style={styles.testimonialItemHeader}>
 													<View style={styles.testimonialUser}>
 														<FastImage
@@ -611,7 +626,7 @@ export default function CompletedServiceDetailScreen() {
 													</View>
 												</View>
 												<Text style={styles.testimonialItemText}>
-													"{item.text}"
+													{item.text}
 												</Text>
 											</View>
 										)}
@@ -767,12 +782,14 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		marginTop: 10,
 		backgroundColor: '#fff',
-		borderRadius: 12,
+		borderRadius: 14,
 		elevation: 2,
-		shadowColor: '#000',
+		shadowColor: 'rgba(0, 0, 0, 0.53)',
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.1,
-		shadowRadius: 2,
+		borderWidth: 0.5,
+		borderColor: 'rgba(0, 0, 0, 0.1)',
+		shadowRadius: 1,
 	},
 	engagementButton: {
 		flexDirection: 'column',
@@ -787,11 +804,11 @@ const styles = StyleSheet.create({
 	},
 	// Gallery styles
 	galleryContainer: {
-		marginTop: 20,
+		//marginTop: 20,
 		paddingHorizontal: 16,
 	},
 	galleryList: {
-		paddingVertical: 12,
+		//paddingVertical: 12,
 	},
 	galleryItem: {
 		width: 90,
@@ -817,31 +834,34 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		borderRadius: 12,
 		elevation: 3,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
+		shadowColor: 'rgba(0, 0, 0, 0.53)',
+		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.1,
-		shadowRadius: 4,
+		borderWidth: 0.5,
+		borderColor: 'rgba(0, 0, 0, 0.1)',
+		shadowRadius: 1,
 	},
 	descriptionTitle: {
-		fontSize: FontSize.base + 1,
+		fontSize: FontSize.base,
 		fontFamily: fontFamily.poppins.semibold,
 		color: '#222',
 		marginBottom: 10,
 	},
 	description: {
-		fontSize: FontSize.sm,
+		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
 		color: '#555',
 		lineHeight: 22,
-		marginBottom: 16,
 	},
 	detailsContainer: {
 		marginTop: 10,
 	},
 	detailRow: {
+		marginTop: 16,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 16,
+		flex: 1,
+		width: '100%',
 	},
 	detailItem: {
 		flexDirection: 'row',
@@ -859,7 +879,7 @@ const styles = StyleSheet.create({
 		marginBottom: 2,
 	},
 	detailValue: {
-		fontSize: FontSize.sm,
+		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
 		color: '#333',
 	},
@@ -873,15 +893,13 @@ const styles = StyleSheet.create({
 	// Tasks styles
 	tasksContainer: {
 		marginHorizontal: 16,
-		marginTop: 28,
+		backgroundColor: '#f8f9fa',
+		borderRadius: 10,
 	},
 	taskItem: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: 12,
-		backgroundColor: '#f8f9fa',
-		padding: 14,
-		borderRadius: 10,
+		padding: 12,
 		elevation: 1,
 		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 1 },
@@ -889,7 +907,7 @@ const styles = StyleSheet.create({
 		shadowRadius: 2,
 	},
 	taskText: {
-		fontSize: FontSize.sm,
+		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
 		color: '#333',
 		marginLeft: 12,
@@ -898,7 +916,7 @@ const styles = StyleSheet.create({
 	// Team styles
 	teamContainer: {
 		marginHorizontal: 16,
-		marginTop: 28,
+		//marginTop: 28,
 	},
 	professionalsList: {
 		flexDirection: 'row',
@@ -912,16 +930,17 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	professionalAvatarContainer: {
-		width: 70,
-		height: 70,
-		borderRadius: 35,
-		backgroundColor: '#E8F5FE',
+		width: 55,
+		height: 55,
+		borderRadius: 50,
+		//backgroundColor: '#E8F5FE',
 		overflow: 'hidden',
 		marginBottom: 8,
 		borderWidth: 2,
-		borderColor: Colors.primary,
+		borderColor: 'rgba(0, 0, 0, 0.25)',
 		elevation: 2,
-		shadowColor: '#000',
+		padding: 2,
+		//shadowColor: 'rgba(0,0,0,0.1)',
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.1,
 		shadowRadius: 3,
@@ -929,6 +948,7 @@ const styles = StyleSheet.create({
 	professionalAvatar: {
 		width: '100%',
 		height: '100%',
+		borderRadius: 50,
 	},
 	professionalName: {
 		fontSize: FontSize.xs + 1,
@@ -946,7 +966,7 @@ const styles = StyleSheet.create({
 	// Testimonial styles
 	testimonialContainer: {
 		marginHorizontal: 16,
-		marginTop: 28,
+		//marginTop: 28,
 	},
 	testimonialContent: {
 		backgroundColor: '#f8f9fa',
@@ -1075,7 +1095,7 @@ const styles = StyleSheet.create({
 	},
 	// Additional Testimonials styles
 	additionalTestimonialsContainer: {
-		marginTop: 28,
+		//marginTop: 28,
 	},
 	testimonialsHeader: {
 		flexDirection: 'row',
@@ -1143,6 +1163,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: 'rgba(245, 194, 26, 0.1)',
+		borderColor: '#F5C21A',
+		borderWidth: 1,
 		paddingHorizontal: 8,
 		paddingVertical: 2,
 		borderRadius: 20,
