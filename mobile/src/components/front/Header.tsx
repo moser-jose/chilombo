@@ -5,14 +5,12 @@ import {
 	Text,
 	StyleSheet,
 	TextInput,
-	TouchableOpacity,
-	Image,
-	Dimensions,
+	TouchableOpacity
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import * as Location from 'expo-location'
-import { useState, useEffect, useRef, Children } from 'react'
+import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
