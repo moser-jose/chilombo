@@ -258,7 +258,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 						<Text style={styles.title}>Encontre os serviços</Text>
 						<View style={styles.closeButtonContainer}>
 							<TouchableOpacity onPress={onClose} style={styles.closeButton}>
-								<Ionicons name="close" size={18} color="rgba(0, 0, 0, 0.5)" />
+								<Ionicons name="close" size={18} color={Colors.white} />
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -360,15 +360,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: 16,
 		marginBottom: 5,
-		paddingTop: 16,
+		paddingVertical: 12,
+		backgroundColor: 'rgba(28, 34, 44, 0.86)',
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
 	},
 	title: {
 		fontSize: FontSize.base,
 		fontFamily: fontFamily.poppins.semibold,
-		color: '#172B4D',
+		color: Colors.white,
 	},
 	closeButtonContainer: {
-		backgroundColor: 'rgba(199, 17, 17, 0.58)',
+		backgroundColor: 'rgba(214, 30, 30, 0.58)',
 		borderColor: 'rgba(199, 17, 17, 0.58)',
 		borderWidth: 1,
 		borderRadius: 12,

@@ -10,6 +10,7 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import SearchResultsModal from './SearchResultsModal'
 import FastImage from 'react-native-fast-image'
+import { useRouter } from 'expo-router'
 
 type Address = {
 	city: string
@@ -22,7 +23,7 @@ const Header = () => {
 	const [isModalVisible, setIsModalVisible] = useState(false)
 
 	const { user } = useUser()
-
+	const router = useRouter()
 	useEffect(() => {
 		async function getCurrentLocation() {
 			let { status } = await Location.requestForegroundPermissionsAsync()
@@ -56,13 +57,13 @@ const Header = () => {
 			<View style={styles.container}>
 				<View style={styles.leftContainer}>
 					<View style={styles.leftContainerLeftUser}>
-						<View style={styles.imageContainer}>
+						<TouchableOpacity style={styles.imageContainer} onPress={() => router.push('/(user)')}>
 							<FastImage
 								style={styles.profileImage}
 								source={{ uri: user?.imageUrl }}
 								resizeMode={FastImage.resizeMode.cover}
 							/>
-						</View>
+						</TouchableOpacity>
 						<View style={styles.leftContainerLeft}>
 							<Text style={styles.leftContainerLeftText}>
 								Olá, {user?.firstName}
@@ -82,7 +83,7 @@ const Header = () => {
 						<View style={styles.leftContainerRight}>
 							<TouchableOpacity
 								onPress={() => setIsModalVisible(true)}
-								style={styles.notificationContainer}
+								style={styles.styleButton}
 							>
 								<Ionicons
 									name="search-outline"
@@ -91,15 +92,6 @@ const Header = () => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{/* <View style={styles.leftContainerRight}>
-							<TouchableOpacity style={styles.notificationContainer}>
-								<Ionicons
-									name="notifications-outline"
-									size={24}
-									color={Colors.white}
-								/>
-							</TouchableOpacity>
-						</View> */}
 					</View>
 				</View>
 			</View>
@@ -181,7 +173,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 14,
 	},
 
-	notificationContainer: {
+	styleButton: {
 		backgroundColor: '#1A1B25',
 		padding: 8,
 		borderRadius: 18,

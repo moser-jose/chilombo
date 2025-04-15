@@ -3,26 +3,16 @@ import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { router } from 'expo-router'
-import {
-	View,
-	Text,
-	StyleSheet,
-	TouchableOpacity,
-	Image,
-	ImageSourcePropType,
-} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 
 type ServicesCardProps = {
-	icon: ImageSourcePropType
-	service: string
-	route: string
 	data: any
 }
 
-const ServicesCard = ({ icon, service, route, data }: ServicesCardProps) => {
+const ServicesCard = ({ data }: ServicesCardProps) => {
 	const handlePress = () => {
 		router.push({
-			pathname:'/(services)/service-details',
+			pathname: '/(services)/service-details',
 			params: {
 				id: data.id,
 				data: data,
@@ -37,10 +27,9 @@ const ServicesCard = ({ icon, service, route, data }: ServicesCardProps) => {
 			onPress={handlePress}
 		>
 			<View style={styles.containerIcon}>
-				<Image source={icon} style={styles.icon} />
-				{/* <Ionicons name={icon} size={40} color={Colors.primary} /> */}
+				<Image source={data.icon} style={styles.icon} />
 			</View>
-			<Text style={styles.title}>{service}</Text>
+			<Text style={styles.title}>{data.service}</Text>
 		</TouchableOpacity>
 	)
 }
@@ -53,11 +42,9 @@ const styles = StyleSheet.create({
 		width: 88,
 		gap: 10,
 	},
-
 	containerIcon: {
 		backgroundColor: 'rgba(189, 189, 232, 0.15)',
 		borderRadius: 18,
-		//padding: 10,
 		width: 70,
 		justifyContent: 'center',
 		alignItems: 'center',

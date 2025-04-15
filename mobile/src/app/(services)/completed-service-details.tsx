@@ -19,6 +19,7 @@ import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import { Separador } from '@/src/components/front/Separador'
+import Star from '@/src/components/front/Star'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -358,12 +359,17 @@ export default function CompletedServiceDetailScreen() {
 							]}
 						>
 							<Text style={styles.serviceTitle}>{service.title}</Text>
-							<View style={styles.ratingRow}>
-								{/* {renderRating(service.stars)} */}
-								<Ionicons name="star" size={16} color="rgb(245, 194, 26)" />
-								<Text style={styles.ratingText}>
-									{service.stars} ({service.likes} gostos)
-								</Text>
+							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+								{/* <View style={styles.testimonialRatingSmall}>
+									<Ionicons name="star" size={14} color="rgb(245, 194, 26)" />
+									<Text style={styles.testimonialRatingText}>
+										{service.rating}
+									</Text>
+									<Text style={styles.testimonialRatingText}>
+										({service.reviews})
+									</Text>
+								</View> */}
+								<Star rating={service.stars} />
 							</View>
 						</Animated.View>
 					</Animated.View>
@@ -614,16 +620,7 @@ export default function CompletedServiceDetailScreen() {
 															</Text>
 														</View>
 													</View>
-													<View style={styles.testimonialRatingSmall}>
-														<Ionicons
-															name="star"
-															size={14}
-															color="rgb(245, 194, 26)"
-														/>
-														<Text style={styles.testimonialRatingText}>
-															{item.rating}
-														</Text>
-													</View>
+													<Star rating={item.rating} style={styles.testimonialRatingSmall} textColor="#555" />
 												</View>
 												<Text style={styles.testimonialItemText}>
 													{item.text}
