@@ -3,20 +3,10 @@ import CarouselCard from '@/src/components/front/Carroucel'
 import Header from '@/src/components/front/Header'
 import UserProfile from '@/src/components/front/EmployersCard'
 import { useUser } from '@clerk/clerk-expo'
-import { router, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import React from 'react'
-import FastImage from 'react-native-fast-image'
-import {
-	View,
-	Text,
-	FlatList,
-	ScrollView,
-	StyleSheet,
-	Image,
-	TouchableOpacity,
-} from 'react-native'
+import { View, Text, FlatList, ScrollView, StyleSheet } from 'react-native'
 import { fontFamily } from '@/src/constants/FontFamily'
-import { Ionicons } from '@expo/vector-icons'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
@@ -63,121 +53,6 @@ const users = [
 		lastname: 'Oliveira',
 		image: 'https://randomuser.me/api/portraits/men/20.jpg',
 		role: 'Fiscal',
-	},
-]
-
-const servicess = [
-	{
-		id: 1,
-		name: 'Limpeza de Residência',
-		image: require('../../../assets/empresa/empregada.png'),
-		rating: 4.7,
-		reviews: 124,
-		description:
-			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
-		duration: '2-4h',
-		professionals: 250,
-		services: 2500,
-		benefits: [
-			'Garantia de satisfação',
-			'Profissionais verificados',
-			'Agendamento flexível',
-			'Produtos de qualidade',
-		],
-		activities: [
-			'Limpeza Geral',
-			'Higienização da Roupa',
-			'Limpeza de 4 divisões',
-		],
-		price: 50000,
-		tag: 'Popular',
-		plan: {
-			diario: {
-				id: 1,
-				title: 'Diário',
-				subplan: [
-					{
-						id: 1,
-						title: 'Básico',
-						price: 50000,
-						type: 'Popular',
-						description: 'Ideal para famílias com um agregado reduzido.',
-						activities: [
-							'Limpeza Geral',
-							'Higienização da Roupa',
-							'Limpeza de 4 divisões',
-						],
-					},
-					{
-						id: 2,
-						title: 'Pro',
-						type: 'Recomendado',
-						price: 65000,
-						description: 'Ideal para famílias com 5 a 6 membros.',
-						activities: [
-							'Tudo do Plano Básico',
-							'Preparo de duas Refeições',
-							'Limpeza de Janelas',
-						],
-					},
-					{
-						id: 3,
-						title: 'Premium',
-						type: 'Melhor Valor',
-						price: 80000,
-						description: 'Ideal para famílias com mais de 6 membros.',
-						activities: [
-							'Tudo do Plano Pro',
-							'Cuidar de Crianças',
-							'Organização de Armários',
-							'Limpeza Profunda',
-						],
-					},
-				],
-			},
-			semanal: {
-				title: 'Semanal',
-				price: 100000,
-			},
-		},
-		comments: [
-			{
-				id: 1,
-				name: 'João Silva',
-				image: 'https://randomuser.me/api/portraits/men/5.jpg',
-				rating: 5,
-				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
-				date: '15/03/2023',
-				likes: 12,
-			},
-			{
-				id: 2,
-				name: 'Maria Oliveira',
-				image: 'https://randomuser.me/api/portraits/women/17.jpg',
-				rating: 4,
-				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
-				date: '22/05/2023',
-				likes: 8,
-			},
-			{
-				id: 3,
-				name: 'Carlos Mendes',
-				image: 'https://randomuser.me/api/portraits/men/32.jpg',
-				rating: 5,
-				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
-				date: '10/07/2023',
-				likes: 15,
-			},
-			{
-				id: 4,
-				name: 'Ana Beatriz',
-				image: 'https://randomuser.me/api/portraits/women/28.jpg',
-				rating: 5,
-				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
-				date: '03/09/2023',
-				likes: 9,
-			},
-		],
 	},
 ]
 
@@ -644,10 +519,7 @@ const services = [
 	},
 ]
 
-import tapete from '../../../assets/empresa/tapete.jpg'
-import empregada from '../../../assets/empresa/empregada.png'
-import empresa from '../../../assets/empresa/empresa.png'
-import cadeiroes from '../../../assets/empresa/cadeiroes.png'
+import Services from '@/src/components/front/Services'
 
 const completedServices = [
 	{
@@ -695,10 +567,6 @@ const completedServices = [
 ]
 
 export default function HomeScreen() {
-	const tapeteUrl = Image.resolveAssetSource(tapete).uri
-	const empregadaUrl = Image.resolveAssetSource(empregada).uri
-	const empresaUrl = Image.resolveAssetSource(empresa).uri
-	const cadeiroesUrl = Image.resolveAssetSource(cadeiroes).uri
 	const { user } = useUser()
 
 	return (
@@ -713,27 +581,9 @@ export default function HomeScreen() {
 				contentInsetAdjustmentBehavior="automatic"
 				showsVerticalScrollIndicator={false}
 			>
-				<Text
-					style={{
-						fontSize: 18,
-						color: '#000',
-						marginTop: 20,
-						paddingHorizontal: 16,
-						fontFamily: fontFamily.poppins.medium,
-					}}
-				>
-					{user?.firstName} 👋
-				</Text>
+				<Text style={styles.textUser}>{user?.firstName} 👋</Text>
 
-				<Text
-					style={{
-						fontSize: 26,
-						fontFamily: fontFamily.poppins.bold,
-						color: '#172B4D',
-						paddingHorizontal: 16,
-						marginTop: 10,
-					}}
-				>
+				<Text style={styles.textTitle}>
 					Aqui você encontra serviços completos para a sua casa... 🏡
 				</Text>
 				<View style={{ marginTop: 10 }}>
@@ -760,12 +610,7 @@ export default function HomeScreen() {
 								gap: 10,
 							}}
 						>
-							<ServicesCard
-								icon={item.icon}
-								service={item.service}
-								route={item.route}
-								data={item}
-							/>
+							<ServicesCard data={item} />
 						</View>
 					)}
 				/>
@@ -787,11 +632,7 @@ export default function HomeScreen() {
 								gap: 10,
 							}}
 						>
-							<UserProfile
-								name={`${item.firstname} ${item.lastname}`}
-								imageUrl={item.image}
-								role={item.role}
-							/>
+							<UserProfile data={item} />
 						</View>
 					)}
 				/>
@@ -866,59 +707,7 @@ export default function HomeScreen() {
 						return rows
 					}, [])
 					.map((row, rowIndex) => (
-						<View
-							key={rowIndex}
-							style={{
-								flexDirection: 'row',
-								gap: 16,
-								paddingTop: 16,
-								paddingHorizontal: 16,
-							}}
-						>
-							{row.map(item => (
-								<TouchableOpacity
-									key={item.id}
-									activeOpacity={0.8}
-									style={[styles.containerImage, { flex: 1 }]}
-									onPress={() =>
-										router.push({
-											pathname: '/(services)/service-details',
-											params: {
-												id: item.id.toString(),
-												data: JSON.stringify(item),
-											},
-										})
-									}
-								>
-									<FastImage
-										source={{ uri: Image.resolveAssetSource(item.image).uri }}
-										style={styles.backgroundImage}
-										resizeMode={FastImage.resizeMode.cover}
-									/>
-									<View style={styles.header}>
-										<View style={styles.headerContainerTop}>
-											<Text style={styles.categoryTitleTop}>10% OFF</Text>
-										</View>
-										<View style={styles.starContainer}>
-											<Ionicons name="star" size={14} color="#FFC107" />
-											<Text
-												style={{
-													fontSize: 10,
-													fontFamily: fontFamily.poppins.semibold,
-													color: '#fff',
-													marginLeft: 4,
-												}}
-											>
-												4.5
-											</Text>
-										</View>
-									</View>
-									<View style={styles.headerContainer}>
-										<Text style={styles.categoryTitle}>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							))}
-						</View>
+						<Services key={rowIndex} services={row} />
 					))}
 
 				<Separador text="Serviços Realizados" more />
@@ -936,15 +725,7 @@ export default function HomeScreen() {
 								flex: 1,
 							}}
 						>
-							<CompletedServiceCard
-								title={item.title}
-								image={item.image}
-								stars={item.stars}
-								likes={item.likes}
-								address={item.address}
-								description={item.description}
-								id={item.id}
-							/>
+							<CompletedServiceCard data={item} />
 						</View>
 					)}
 				/>
@@ -954,89 +735,17 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'row',
-		gap: 16,
-		flex: 1,
+	textUser: {
+		fontSize: 18,
+		color: '#000',
+		marginTop: 20,
 		paddingHorizontal: 16,
-		marginBottom: 20,
+		fontFamily: fontFamily.poppins.medium,
 	},
-	containerImage: {
-		flex: 1,
-	},
-	backgroundImage: {
-		width: '100%',
-		height: 180,
-		borderRadius: 20,
-	},
-	header: {
-		position: 'absolute',
-		zIndex: 2,
-		top: 6,
-		left: 6,
-		right: 6,
-		padding: 6,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
-	headerContainerTopStar: {
-		borderRadius: 14,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: 'rgba(255, 255, 255, 0.2)',
-		borderWidth: 1,
-		borderColor: 'rgba(255, 255, 255, 0.4)',
-		paddingVertical: 2,
-		paddingHorizontal: 4,
-	},
-	headerContainerTop: {
-		backgroundColor: '#FF5959',
-		padding: 4,
-		borderRadius: 14,
-	},
-	headerContainer: {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		bottom: 0,
-		zIndex: 2,
-		backgroundColor: 'rgba(12, 12, 12, 0.94)',
-		padding: 10,
-		borderRadius: 14,
-		marginHorizontal: 7,
-		marginBottom: 7,
-	},
-	backButton: {
-		height: 40,
-		width: 40,
-		borderRadius: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	categoryTitleTop: {
-		fontSize: 10,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#fff',
-	},
-	starContainer: {
-		position: 'absolute',
-		right: 6,
-		backgroundColor: 'rgba(0, 0, 0, 0.6)',
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 12,
-		justifyContent: 'center',
-		borderWidth: 1,
-		borderColor: 'rgba(0, 0, 0, 0.22)',
-	},
-	categoryTitle: {
-		fontSize: 10,
-		textAlign: 'center',
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#fff',
+	textTitle: {
+		fontSize: 26,
+		fontFamily: fontFamily.poppins.bold,
+		color: '#172B4D',
+		paddingHorizontal: 16,
 	},
 })

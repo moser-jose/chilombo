@@ -1,23 +1,21 @@
 import {
-	StyleSheet,
-	Image,
-	ScrollView,
-	TouchableOpacity,
-	Modal,
-	Alert,
+    StyleSheet,
+    Image,
+    ScrollView,
+    TouchableOpacity
 } from 'react-native'
 import * as Linking from 'expo-linking'
 import { Text, View } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
-import { useAuth, useClerk, useUser } from '@clerk/clerk-expo'
+import { useClerk, useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
-import { Link, Stack, useRouter } from 'expo-router'
+import { Tabs, useRouter } from 'expo-router'
 import Colors from '@/src/constants/Colors'
 import { useState } from 'react'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 
-export default function UserScreen() {
+export default function SettingsScreen() {
 	const { user } = useUser()
 	const { signOut } = useClerk()
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
@@ -40,21 +38,7 @@ export default function UserScreen() {
 				contentInsetAdjustmentBehavior="automatic"
 			>
 				<View style={styles.container}>
-					<View style={styles.headerContainer}>
-						<View style={styles.imageContainer}>
-							<Image
-								style={styles.profileImage}
-								source={{ uri: user?.imageUrl }}
-							/>
-							<TouchableOpacity style={styles.editImageButton}>
-								<Ionicons name="camera" size={18} color="white" />
-							</TouchableOpacity>
-						</View>
-						<Text style={styles.userName}>{user?.fullName}</Text>
-						<Text style={styles.userEmail}>
-							{user?.emailAddresses[0].emailAddress}
-						</Text>
-					</View>
+					
 
 					<View
 						style={styles.separator}
@@ -63,45 +47,14 @@ export default function UserScreen() {
 					/>
 
 					<View style={styles.menuContainer}>
-						<TouchableOpacity
-							style={styles.menuItem}
-							onPress={() => router.push('/user/edit-profile')}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="person-outline" size={24} />
-								<Text style={styles.menuText}>Editar Perfil</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
+						
 
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="settings-outline" size={24} />
-								<Text style={styles.menuText}>Configurações</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
+						
 
-						<TouchableOpacity style={styles.menuItem}>
+					<TouchableOpacity style={styles.menuItem}>
 							<View style={styles.menuLeftContent}>
-								<Ionicons name="notifications-outline" size={24} />
-								<Text style={styles.menuText}>Notificações</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
-
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="shield-checkmark-outline" size={24} />
-								<Text style={styles.menuText}>Segurança e Privacidade</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
-
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="wallet-outline" size={24} />
-								<Text style={styles.menuText}>Pagamentos</Text>
+								<Ionicons name="sunny-outline" size={24} />
+								<Text style={styles.menuText}>Aparência</Text>
 							</View>
 							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
 						</TouchableOpacity>
@@ -128,27 +81,7 @@ export default function UserScreen() {
 							</View>
 						</TouchableOpacity>
 
-						<TouchableOpacity
-							onPress={() => router.push('/user/privacity')}
-							style={styles.menuItem}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="lock-closed-outline" size={24} />
-								<Text style={styles.menuText}>Política de Privacidade</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							onPress={() => router.push('/user/terms')}
-							style={styles.menuItem}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="document-text-outline" size={24} />
-								<Text style={styles.menuText}>Termos de Uso</Text>
-							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
-						</TouchableOpacity>
+						
 
 						<TouchableOpacity
 							style={styles.menuItem}

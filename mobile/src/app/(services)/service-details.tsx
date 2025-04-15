@@ -10,6 +10,7 @@ import {
 	Animated,
 	Platform,
 	TextInput,
+	FlatList,
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -26,6 +27,7 @@ import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import { Separador } from '@/src/components/front/Separador'
+import Star from '@/src/components/front/Star'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -536,7 +538,9 @@ export default function ServiceDetailsScreen() {
 		)
 	}
 
-	const visibleReviews = showAllReviews ? service.comments : service.comments.slice(0, 2)
+	const visibleReviews = showAllReviews
+		? service.comments
+		: service.comments.slice(0, 2)
 
 	// Animations for Twitter-like scroll behavior
 	const headerHeight = scrollY.interpolate({
@@ -691,7 +695,7 @@ export default function ServiceDetailsScreen() {
 							<Text style={styles.serviceTitle}>{service.name}</Text>
 
 							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								<View style={styles.testimonialRatingSmall}>
+								{/* <View style={styles.testimonialRatingSmall}>
 									<Ionicons name="star" size={14} color="rgb(245, 194, 26)" />
 									<Text style={styles.testimonialRatingText}>
 										{service.rating}
@@ -699,7 +703,8 @@ export default function ServiceDetailsScreen() {
 									<Text style={styles.testimonialRatingText}>
 										({service.reviews})
 									</Text>
-								</View>
+								</View> */}
+								<Star rating={service.rating} />
 							</View>
 						</Animated.View>
 					</Animated.View>
@@ -783,7 +788,7 @@ export default function ServiceDetailsScreen() {
 						<View style={styles.benefitsSection}>
 							<Text style={styles.sectionTitle}>Benefícios</Text>
 
-							{service.benefits.map((benefit, index) => (
+							{/* {service.benefits.map((benefit, index) => (
 								<View style={styles.benefitRow} key={index}>
 									<View style={styles.benefitItem}>
 										<Ionicons
@@ -794,7 +799,54 @@ export default function ServiceDetailsScreen() {
 										<Text style={styles.benefitText}>{benefit}</Text>
 									</View>
 								</View>
-							))}
+							))} */}
+
+							{/* <FlatList
+								data={service.benefits}
+								keyExtractor={item => item}
+								numColumns={2}
+								columnWrapperStyle={{justifyContent: 'space-between'}}
+
+								renderItem={({ item }) => (
+									<View style={styles.benefitRow}>
+										<View style={styles.benefitItem}>
+											<Ionicons
+												name="shield-checkmark"
+												size={24}
+												color={Colors.primary}
+											/>
+											<Text style={styles.benefitText}>{item}</Text>
+										</View>
+									</View>
+								)}
+							/> */}
+
+							{service.benefits
+								.reduce<Array<Array<(typeof service.benefits)[0]>>>(
+									(rows, item, index) => {
+										if (index % 2 === 0) {
+											rows.push([item])
+										} else {
+											rows[rows.length - 1].push(item)
+										}
+										return rows
+									},
+									[],
+								)
+								.map((row, rowIndex) => (
+									<View style={styles.benefitRow} key={rowIndex}>
+										{row.map((benefit, index) => (
+											<View style={styles.benefitItem} key={index}>
+												<Ionicons
+													name="shield-checkmark"
+													size={24}
+													color={Colors.primary}
+										/>
+										<Text style={styles.benefitText}>{benefit}</Text>
+									</View>
+								))}
+							</View>
+						))}
 
 							{/* <View style={styles.benefitRow}>
 								<View style={styles.benefitItem}>

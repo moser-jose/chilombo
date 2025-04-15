@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { Link, Redirect, Tabs } from 'expo-router'
-import { Image, Pressable } from 'react-native'
+import { Redirect, Tabs } from 'expo-router'
 
 import Colors from '@/src/constants/Colors'
 import { useColorScheme } from '@/src/components/useColorScheme'
@@ -10,10 +8,10 @@ import { useClientOnlyValue } from '@/src/components/useClientOnlyValue'
 import { HomeSVG } from '@/src/components/svg/HomeSvg'
 import { SVGProps } from '@/src/types/SVGProps'
 import { CategorySVG } from '@/src/components/svg/CategorySVG'
-import { UserSVG } from '@/src/components/svg/UserSvg'
 import { MyServicesSVG } from '@/src/components/svg/MyServices'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { useUser } from '@clerk/clerk-expo'
+import { SettingsSVG } from '@/src/components/svg/SettingsSvg'
 
 function TabBarIcon(props: {
 	color: string
@@ -87,15 +85,14 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="user"
+				name="settings"
 				options={{
 					title: 'Configurações',
-					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
 							height={24}
 							width={24}
-							Component={UserSVG}
+							Component={SettingsSVG}
 							color={color}
 						/>
 					),

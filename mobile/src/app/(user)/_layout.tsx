@@ -8,7 +8,7 @@ export default function UserLayout() {
 	return (
 		<Stack
 			screenOptions={{
-				headerTitle: 'Usuário',
+				headerTitle: 'Perfil',
 				headerStyle: {
 					backgroundColor: Colors.primary,
 				},

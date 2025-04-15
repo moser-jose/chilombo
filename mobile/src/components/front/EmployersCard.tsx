@@ -6,23 +6,21 @@ import { FontSize } from '../../constants/FontSize'
 import Colors from '../../constants/Colors'
 
 interface UserProfileProps {
-	name: string
-	imageUrl?: string
-	role?: string
+	data: any
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({
-	name,
-	imageUrl = `https://ui-avatars.com/api/?name=${name.split(' ')[0]}+${name.split(' ')[name.split(' ').length - 1]}&background=0D8ABC&color=fff`,
-	role = 'Vendas',
-}) => {
+const UserProfile: React.FC<UserProfileProps> = ({ data }) => {
+	const name = `${data.firstname} ${data.lastname}`
+	const image =
+		data.image ||
+		`https://ui-avatars.com/api/?name=${name.split(' ')[0]}+${name.split(' ')[name.split(' ').length - 1]}&background=0D8ABC&color=fff`
 	return (
 		<TouchableOpacity activeOpacity={0.8} style={styles.container}>
 			<View style={styles.imageContainer}>
-				<Image source={{ uri: imageUrl }} style={styles.image} />
+				<Image source={{ uri: image }} style={styles.image} />
 			</View>
 			<Text style={styles.name}>{name}</Text>
-			<Text style={styles.role}>{role}</Text>
+			<Text style={styles.role}>{data.role}</Text>
 		</TouchableOpacity>
 	)
 }

@@ -1,57 +1,45 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import Colors from '../../constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
+import Star from './Star'
 
 interface CompletedServiceCardProps {
-	title: string
-	image: string
-	stars: number
-	likes: number
-	address: string
-	description: string
-	id: number
+	data: any
+	style?: StyleProp<ViewStyle>
 }
 
 const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
-	title,
-	image,
-	stars,
-	likes,
-	address,
-	description,
-	id,
+	data,
+	style,
 }) => {
 	return (
 		<TouchableOpacity
 			activeOpacity={0.8}
-			style={styles.container}
+			style={[styles.container, style]}
 			onPress={() =>
 				router.push({
 					pathname: '/(services)/completed-service-details',
-					params: { id },
+					params: { id: data.id },
 				})
 			}
 		>
 			<View style={styles.imageContainer}>
 				<FastImage
-					source={{ uri: image }}
+					source={{ uri: data.image }}
 					style={styles.image}
 					resizeMode={FastImage.resizeMode.cover}
 				/>
-				<View style={styles.starContainer}>
-					<Ionicons name="star" size={14} color="#FFC107" />
-					<Text style={styles.starText}>{stars}</Text>
-				</View>
+				<Star rating={data.stars} style={styles.starContainer} />
 			</View>
 			<View style={styles.contentContainer}>
 				<Text style={styles.title} numberOfLines={1}>
-					{title}
+					{data.title}
 				</Text>
 				<View style={styles.locationContainer}>
 					<Ionicons
@@ -60,15 +48,15 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 						color={Colors.secondary}
 					/>
 					<Text style={styles.locationText} numberOfLines={1}>
-						{address}
+						{data.address}
 					</Text>
 				</View>
 				<Text style={styles.description} numberOfLines={2}>
-					{description}
+					{data.description}
 				</Text>
 				<View style={styles.likesContainer}>
 					<Ionicons name="heart" size={14} color="#FF5959" />
-					<Text style={styles.likesText}>{likes} pessoas gostaram</Text>
+					<Text style={styles.likesText}>{data.likes} pessoas gostaram</Text>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -102,7 +90,6 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 10,
 		right: 10,
-		
 	},
 	imageContainer: {
 		position: 'relative',
@@ -117,15 +104,6 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 10,
 		right: 10,
-		backgroundColor: 'rgba(0, 0, 0, 0.6)',
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 8,
-		paddingVertical: 4,
-		borderRadius: 12,
-		justifyContent: 'center',
-		borderWidth: 1,
-		borderColor: 'rgba(0, 0, 0, 0.22)',
 	},
 	starText: {
 		color: 'white',
