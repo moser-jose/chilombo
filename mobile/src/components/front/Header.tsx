@@ -3,9 +3,7 @@ import Colors from '@/src/constants/Colors'
 import {
 	View,
 	Text,
-	StyleSheet,
-	TextInput,
-	TouchableOpacity
+	StyleSheet, TouchableOpacity
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -14,6 +12,7 @@ import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
+import SearchResultsModal from './SearchResultsModal'
 
 type Address = {
 	city: string
@@ -23,6 +22,7 @@ type Address = {
 const Header = () => {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
+	const [isModalVisible, setIsModalVisible] = useState(false)
 
 	const { user } = useUser()
 
@@ -50,6 +50,10 @@ const Header = () => {
 		getCurrentLocation()
 	}, [])
 
+	const handleCloseModal = () => {
+		setIsModalVisible(false)
+	}
+
 	return (
 		<>
 			<View style={styles.container}>
@@ -67,29 +71,36 @@ const Header = () => {
 							</View>
 						)}
 					</View>
-					<View style={styles.leftContainerRight}>
-						<TouchableOpacity style={styles.notificationContainer}>
-							<Ionicons
-								name="notifications-outline"
-								size={24}
-								color={Colors.white}
-							/>
-						</TouchableOpacity>
+					<View style={{ flexDirection: 'row', gap: 10 }}>
+						<View style={styles.leftContainerRight}>
+							<TouchableOpacity
+								onPress={() => setIsModalVisible(true)}
+								style={styles.notificationContainer}
+							>
+								<Ionicons
+									name="search-outline"
+									size={24}
+									color={Colors.white}
+								/>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.leftContainerRight}>
+							<TouchableOpacity style={styles.notificationContainer}>
+								<Ionicons
+									name="notifications-outline"
+									size={24}
+									color={Colors.white}
+								/>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</View>
-
-				<View style={styles.rightContainer}>
-					<Ionicons name="search-outline" size={24} color="#666D80" />
-					<TextInput
-						style={styles.inputText}
-						placeholder="Pesquisar por serviços"
-						placeholderTextColor="#666D80"
-					/>
-					<TouchableOpacity style={styles.rightContainerRightFilter}>
-						<Ionicons name="options-outline" size={24} color="#666D80" />
-					</TouchableOpacity>
-				</View>
 			</View>
+
+			<SearchResultsModal
+				visible={isModalVisible}
+				onClose={handleCloseModal}
+			/>
 		</>
 	)
 }
@@ -98,6 +109,8 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: Colors.primary,
 		paddingHorizontal: 16,
+		paddingBottom: 16,
+		paddingTop: 12,
 	},
 	leftContainer: {
 		flexDirection: 'row',
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
 	},
 	leftContainerLeftText: {
 		color: Colors.white,
-		fontSize: FontSize.sm,
+		fontSize: FontSize.smB,
 		fontFamily: fontFamily.poppins.bold,
 	},
 	leftContainerLeft: {
