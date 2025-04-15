@@ -21,6 +21,8 @@ import {
 	Poppins_600SemiBold,
 	Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
+import Colors from '../constants/Colors'
+import { DarkThemeUI } from '../constants/themes/Dark'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -71,7 +73,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 	const colorScheme = useColorScheme()
-
+	  
 	return (
 		<ClerkProvider
 			publishableKey={clerkPublicKey}
@@ -80,9 +82,7 @@ function RootLayoutNav() {
 		>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
-					<ThemeProvider
-						value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-					>
+					<ThemeProvider value={colorScheme === 'dark' ? Colors.dark : Colors.light}>
 						<Slot />
 					</ThemeProvider>
 				</ClerkLoaded>

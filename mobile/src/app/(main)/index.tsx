@@ -5,11 +5,12 @@ import UserProfile from '@/src/components/front/EmployersCard'
 import { useUser } from '@clerk/clerk-expo'
 import { Stack } from 'expo-router'
 import React from 'react'
-import { View, Text, FlatList, ScrollView, StyleSheet } from 'react-native'
+import {  FlatList, ScrollView, StyleSheet } from 'react-native'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
+import { Ionicons, Text, View } from '@/src/components/Themed'
 
 const users = [
 	{
@@ -737,7 +738,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 	textUser: {
 		fontSize: 18,
-		color: '#000',
 		marginTop: 20,
 		paddingHorizontal: 16,
 		fontFamily: fontFamily.poppins.medium,
@@ -745,7 +745,6 @@ const styles = StyleSheet.create({
 	textTitle: {
 		fontSize: 26,
 		fontFamily: fontFamily.poppins.bold,
-		color: '#172B4D',
 		paddingHorizontal: 16,
 	},
 })
