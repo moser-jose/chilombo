@@ -66,30 +66,581 @@ const users = [
 	},
 ]
 
+const servicess = [
+	{
+		id: 1,
+		name: 'Limpeza de Residência',
+		image: require('../../../assets/empresa/empregada.png'),
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
+	},
+]
+
 const services = [
 	{
 		id: 1,
 		icon: require('../../../assets/icons/emp.png'),
-		service: 'Empregadas Domésticas',
-		route: '/services/empregada-domestica',
+		service: 'Limpeza de Residência',
+		route: '/service-details',
+		name: 'Limpeza de Residência',
+		image: require('../../../assets/empresa/empregada.png'),
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 2,
 		icon: require('../../../assets/icons/garden.png'),
 		service: 'Tratamento de Jardim',
 		route: '/services/tratamento-jardim',
+		name: 'Tratamento de Jardim',
+		image: require('../../../assets/empresa/tapete.jpg'),
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 3,
 		icon: require('../../../assets/icons/houseclean.png'),
-		service: 'Limpeza Residencial',
+		service: 'Limpeza de Cadeirões',
 		route: '/services/limpeza-residencial',
+		image: require('../../../assets/empresa/cadeiroes.png'),
+		name: 'Limpeza de Cadeirões',
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 4,
 		icon: require('../../../assets/icons/toolsclean.png'),
 		service: 'Limpeza Empresarial',
 		route: '/services/limpeza-empresarial',
+		image: require('../../../assets/empresa/empresa.png'),
+		name: 'Limpeza Empresarial',
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 ]
 
@@ -213,6 +764,7 @@ export default function HomeScreen() {
 								icon={item.icon}
 								service={item.service}
 								route={item.route}
+								data={item}
 							/>
 						</View>
 					)}
@@ -244,93 +796,130 @@ export default function HomeScreen() {
 					)}
 				/>
 
-				<Separador text="Serviços de Limpeza" more />
+				<Separador
+					text="Serviços de Limpeza"
+					more
+					style={{ marginBottom: 0 }}
+				/>
 
-				<View style={styles.container}>
-					<TouchableOpacity
-						activeOpacity={0.8}
-						style={styles.containerImage}
-						onPress={() => router.push('/(services)/empregada-domestica')}
-					>
-						<FastImage
-							source={{ uri: empregadaUrl }}
-							style={styles.backgroundImage}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-						<View style={styles.headerContainer}>
-							<Text style={styles.categoryTitle}>Empregada Doméstica</Text>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						activeOpacity={0.8}
-						style={styles.containerImage}
-						onPress={() => router.push('/(services)/limpeza-tapete')}
-					>
-						<FastImage
-							source={{ uri: tapeteUrl }}
-							style={styles.backgroundImage}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-						<View style={styles.header}>
-							<View style={styles.headerContainerTop}>
-								<Text style={styles.categoryTitleTop}>10% OFF</Text>
+				{/* <FlatList
+					data={services
+						.filter(service => service.service.includes('Limpeza'))
+						.slice(0, 4)}
+					numColumns={2}
+					columnWrapperStyle={{
+						flexDirection: 'row',
+						gap: 16,
+						paddingTop: 16,
+						paddingHorizontal: 16,
+					}}
+					renderItem={({ item }) => (
+						<TouchableOpacity
+							activeOpacity={0.8}
+							style={[styles.containerImage, { flex: 1 }]}
+							onPress={() =>
+								router.push({
+									pathname: '/(services)/service-details',
+									params: { id: item.id, data: item as any },
+								})
+							}
+						>
+							<FastImage
+								source={{ uri: Image.resolveAssetSource(item.image).uri }}
+								style={styles.backgroundImage}
+								resizeMode={FastImage.resizeMode.cover}
+							/>
+							<View style={styles.header}>
+								<View style={styles.headerContainerTop}>
+									<Text style={styles.categoryTitleTop}>10% OFF</Text>
+								</View>
+								<View style={styles.starContainer}>
+									<Ionicons name="star" size={14} color="#FFC107" />
+									<Text
+										style={{
+											fontSize: 10,
+											fontFamily: fontFamily.poppins.semibold,
+											color: '#fff',
+											marginLeft: 4,
+										}}
+									>
+										4.5
+									</Text>
+								</View>
 							</View>
-							<View style={styles.headerContainerTopStar}>
-								<Ionicons name="star" size={16} color="#fbd602" />
+							<View style={styles.headerContainer}>
+								<Text style={styles.categoryTitle}>{item.name}</Text>
 							</View>
-						</View>
-						<View style={styles.headerContainer}>
-							<Text style={styles.categoryTitle}>Limpeza de Tapete</Text>
-						</View>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.container}>
-					<TouchableOpacity
-						activeOpacity={0.8}
-						style={styles.containerImage}
-						onPress={() => router.push('/(services)/limpeza-empresarial')}
-					>
-						<FastImage
-							source={{ uri: empresaUrl }}
-							style={styles.backgroundImage}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-						<View style={styles.headerContainer}>
-							<Text style={styles.categoryTitle}>Limpeza Empresarial</Text>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						activeOpacity={0.8}
-						style={styles.containerImage}
-						onPress={() => router.push('/(services)/limpeza-cadeiroes')}
-					>
-						<FastImage
-							source={{ uri: cadeiroesUrl }}
-							style={styles.backgroundImage}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-						<View style={styles.header}>
-							<View style={styles.headerContainerTop}>
-								<Text style={styles.categoryTitleTop}>10% OFF</Text>
-							</View>
-							<View style={styles.headerContainerTopStar}>
-								<Ionicons name="star" size={18} color="#fbd602" />
-								<Text
-									style={{
-										fontSize: 10,
-										fontFamily: fontFamily.poppins.semibold,
-										color: '#fff',
-									}}
+						</TouchableOpacity>
+					)}
+				/> */}
+
+				{services
+					.filter(service => service.service.includes('Limpeza'))
+					.slice(0, 4)
+					.reduce<Array<Array<(typeof services)[0]>>>((rows, item, index) => {
+						if (index % 2 === 0) {
+							rows.push([item])
+						} else {
+							rows[rows.length - 1].push(item)
+						}
+						return rows
+					}, [])
+					.map((row, rowIndex) => (
+						<View
+							key={rowIndex}
+							style={{
+								flexDirection: 'row',
+								gap: 16,
+								paddingTop: 16,
+								paddingHorizontal: 16,
+							}}
+						>
+							{row.map(item => (
+								<TouchableOpacity
+									key={item.id}
+									activeOpacity={0.8}
+									style={[styles.containerImage, { flex: 1 }]}
+									onPress={() =>
+										router.push({
+											pathname: '/(services)/service-details',
+											params: {
+												id: item.id.toString(),
+												data: JSON.stringify(item),
+											},
+										})
+									}
 								>
-									4.5
-								</Text>
-							</View>
+									<FastImage
+										source={{ uri: Image.resolveAssetSource(item.image).uri }}
+										style={styles.backgroundImage}
+										resizeMode={FastImage.resizeMode.cover}
+									/>
+									<View style={styles.header}>
+										<View style={styles.headerContainerTop}>
+											<Text style={styles.categoryTitleTop}>10% OFF</Text>
+										</View>
+										<View style={styles.starContainer}>
+											<Ionicons name="star" size={14} color="#FFC107" />
+											<Text
+												style={{
+													fontSize: 10,
+													fontFamily: fontFamily.poppins.semibold,
+													color: '#fff',
+													marginLeft: 4,
+												}}
+											>
+												4.5
+											</Text>
+										</View>
+									</View>
+									<View style={styles.headerContainer}>
+										<Text style={styles.categoryTitle}>{item.name}</Text>
+									</View>
+								</TouchableOpacity>
+							))}
 						</View>
-						<View style={styles.headerContainer}>
-							<Text style={styles.categoryTitle}>Limpeza de Cadeirões</Text>
-						</View>
-					</TouchableOpacity>
-				</View>
+					))}
 
 				<Separador text="Serviços Realizados" more />
 
@@ -430,6 +1019,19 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		fontFamily: fontFamily.poppins.semibold,
 		color: '#fff',
+	},
+	starContainer: {
+		position: 'absolute',
+		right: 6,
+		backgroundColor: 'rgba(0, 0, 0, 0.6)',
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 8,
+		paddingVertical: 4,
+		borderRadius: 12,
+		justifyContent: 'center',
+		borderWidth: 1,
+		borderColor: 'rgba(0, 0, 0, 0.22)',
 	},
 	categoryTitle: {
 		fontSize: 10,

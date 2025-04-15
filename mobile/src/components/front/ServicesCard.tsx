@@ -2,7 +2,6 @@
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
-import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import {
 	View,
@@ -17,11 +16,18 @@ type ServicesCardProps = {
 	icon: ImageSourcePropType
 	service: string
 	route: string
+	data: any
 }
 
-const ServicesCard = ({ icon, service, route }: ServicesCardProps) => {
+const ServicesCard = ({ icon, service, route, data }: ServicesCardProps) => {
 	const handlePress = () => {
-		router.push(route)
+		router.push({
+			pathname:'/(services)/service-details',
+			params: {
+				id: data.id,
+				data: data,
+			},
+		})
 	}
 
 	return (

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import { Ionicons } from '@expo/vector-icons'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 
@@ -8,11 +8,12 @@ type SeparadorProps = {
 	onPress?: () => void
 	text: string
 	more?: boolean
+	style?: StyleProp<ViewStyle>
 }
 
-export const Separador = ({ onPress, text, more }: SeparadorProps) => {
+export const Separador = ({ onPress, text, style, more  }: SeparadorProps) => {
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, style]}>
 			<View style={styles.separator} />
 			<View style={styles.textContainer}>
 				<Text style={styles.text}>{text}</Text>

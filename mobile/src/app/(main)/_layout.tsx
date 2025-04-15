@@ -89,29 +89,16 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="user"
 				options={{
-					title: 'Usuário',
+					title: 'Configurações',
 					headerShown: false,
-					tabBarIcon: ({ color }) =>
-						user.imageUrl ? (
-							<Image
-								source={{ uri: user.imageUrl }}
-								style={{
-									height: 26,
-									width: 26,
-									borderRadius: 50,
-									borderWidth: 1.5,
-									borderColor: color,
-								}}
-								resizeMode="contain"
-							/>
-						) : (
-							<TabBarIcon
-								height={24}
-								width={24}
-								Component={UserSVG}
-								color={color}
-							/>
-						),
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon
+							height={24}
+							width={24}
+							Component={UserSVG}
+							color={color}
+						/>
+					),
 				}}
 			/>
 		</Tabs>
