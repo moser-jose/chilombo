@@ -6,7 +6,6 @@ import { useUser } from '@clerk/clerk-expo'
 import { router, Stack } from 'expo-router'
 import React from 'react'
 import FastImage from 'react-native-fast-image'
-import LinearGradient from 'react-native-linear-gradient'
 import {
 	View,
 	Text,
@@ -14,11 +13,9 @@ import {
 	ScrollView,
 	StyleSheet,
 	Image,
-	Platform,
 	TouchableOpacity,
 } from 'react-native'
 import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
@@ -152,6 +149,7 @@ export default function HomeScreen() {
 	const empresaUrl = Image.resolveAssetSource(empresa).uri
 	const cadeiroesUrl = Image.resolveAssetSource(cadeiroes).uri
 	const { user } = useUser()
+
 	return (
 		<>
 			<Stack.Screen
@@ -365,16 +363,6 @@ export default function HomeScreen() {
 		</>
 	)
 }
-
-/* const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'row',
-		gap: 16,
-		flex: 1,
-		paddingHorizontal: 16,
-		marginBottom: 20,
-	},
-}) */
 
 const styles = StyleSheet.create({
 	container: {
