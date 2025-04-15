@@ -1,10 +1,6 @@
 /* eslint-disable react-native/no-color-literals */
 import Colors from '@/src/constants/Colors'
-import {
-	View,
-	Text,
-	StyleSheet, TouchableOpacity
-} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import * as Location from 'expo-location'
@@ -13,6 +9,7 @@ import { useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import SearchResultsModal from './SearchResultsModal'
+import FastImage from 'react-native-fast-image'
 
 type Address = {
 	city: string
@@ -58,19 +55,29 @@ const Header = () => {
 		<>
 			<View style={styles.container}>
 				<View style={styles.leftContainer}>
-					<View style={styles.leftContainerLeft}>
-						<Text style={styles.leftContainerLeftText}>
-							Olá, {user?.firstName}
-						</Text>
-						{address && (
-							<View style={styles.locationContainer}>
-								<Ionicons name="location-outline" size={18} color="#EC7FB6" />
-								<Text style={styles.locationText}>
-									{address?.city}, {address?.isoCountryCode}
-								</Text>
-							</View>
-						)}
+					<View style={styles.leftContainerLeftUser}>
+						<View style={styles.imageContainer}>
+							<FastImage
+								style={styles.profileImage}
+								source={{ uri: user?.imageUrl }}
+								resizeMode={FastImage.resizeMode.cover}
+							/>
+						</View>
+						<View style={styles.leftContainerLeft}>
+							<Text style={styles.leftContainerLeftText}>
+								Olá, {user?.firstName}
+							</Text>
+							{address && (
+								<View style={styles.locationContainer}>
+									<Ionicons name="location-outline" size={18} color="#EC7FB6" />
+									<Text style={styles.locationText}>
+										{address?.city}, {address?.isoCountryCode}
+									</Text>
+								</View>
+							)}
+						</View>
 					</View>
+
 					<View style={{ flexDirection: 'row', gap: 10 }}>
 						<View style={styles.leftContainerRight}>
 							<TouchableOpacity
@@ -84,7 +91,7 @@ const Header = () => {
 								/>
 							</TouchableOpacity>
 						</View>
-						<View style={styles.leftContainerRight}>
+						{/* <View style={styles.leftContainerRight}>
 							<TouchableOpacity style={styles.notificationContainer}>
 								<Ionicons
 									name="notifications-outline"
@@ -92,15 +99,12 @@ const Header = () => {
 									color={Colors.white}
 								/>
 							</TouchableOpacity>
-						</View>
+						</View> */}
 					</View>
 				</View>
 			</View>
 
-			<SearchResultsModal
-				visible={isModalVisible}
-				onClose={handleCloseModal}
-			/>
+			<SearchResultsModal visible={isModalVisible} onClose={handleCloseModal} />
 		</>
 	)
 }
@@ -111,6 +115,27 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 		paddingBottom: 16,
 		paddingTop: 12,
+	},
+	leftContainerLeftUser: {
+		flexDirection: 'row',
+		gap: 10,
+		alignItems: 'center',
+
+	},
+	imageContainer: {
+		width: 45,
+		height: 45,
+		borderRadius: 16,
+		overflow: 'hidden',
+		borderWidth: 2,
+		borderColor: 'rgba(202, 202, 234, 0.62)',
+		
+	},
+	profileImage: {
+		width: '100%',
+		height: '100%',
+		borderRadius: 14,
+		
 	},
 	leftContainer: {
 		flexDirection: 'row',

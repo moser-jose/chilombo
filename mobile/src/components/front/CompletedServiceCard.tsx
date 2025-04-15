@@ -88,6 +88,22 @@ const styles = StyleSheet.create({
 		elevation: 3,
 		marginBottom: 10,
 	},
+	headerContainerTopStar: {
+		borderRadius: 14,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: 'rgba(255, 255, 255, 0.2)',
+		borderWidth: 1,
+		borderColor: 'rgba(255, 255, 255, 0.4)',
+		paddingVertical: 2,
+		paddingHorizontal: 4,
+
+		position: 'absolute',
+		top: 10,
+		right: 10,
+		
+	},
 	imageContainer: {
 		position: 'relative',
 		width: '100%',
@@ -107,11 +123,14 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 8,
 		paddingVertical: 4,
 		borderRadius: 12,
+		justifyContent: 'center',
+		borderWidth: 1,
+		borderColor: 'rgba(0, 0, 0, 0.22)',
 	},
 	starText: {
 		color: 'white',
-		fontFamily: fontFamily.poppins.medium,
-		fontSize: FontSize.xs,
+		fontFamily: fontFamily.poppins.semibold,
+		fontSize: FontSize.xss,
 		marginLeft: 4,
 	},
 	contentContainer: {
