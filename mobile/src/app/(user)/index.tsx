@@ -4,6 +4,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	FlatList,
+	useColorScheme,
 } from 'react-native'
 import * as Linking from 'expo-linking'
 import { Text, View } from '@/src/components/Themed'
@@ -68,6 +69,8 @@ export default function UserScreen() {
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
 
+	const theme = useColorScheme() ?? 'light'
+
 	const handleSignOut = async () => {
 		try {
 			await signOut()
@@ -100,25 +103,25 @@ export default function UserScreen() {
 				}}
 			/>
 			<ScrollView
-				style={styles.scrollView}
+				style={styles(theme).scrollView}
 				showsVerticalScrollIndicator={false}
 				contentInsetAdjustmentBehavior="automatic"
 			>
-				<View style={styles.container}>
-					<View style={styles.headerContainer}>
+				<View style={styles(theme).container}>
+					<View style={styles(theme).headerContainer}>
 						<View>
-							<View style={styles.imageContainer}>
+							<View style={styles(theme).imageContainer}>
 								<Image
-									style={styles.profileImage}
+									style={styles(theme).profileImage}
 									source={{ uri: user?.imageUrl }}
 								/>
-								<View style={styles.editImageButton}>
+								<View style={styles(theme).editImageButton}>
 									<Ionicons name="ribbon-outline" size={18} color="white" />
 								</View>
 							</View>
 							<Text
 								style={[
-									styles.userName,
+									styles(theme).userName,
 									{
 										color: '#666',
 										marginBottom: -10,
@@ -129,12 +132,18 @@ export default function UserScreen() {
 							>
 								{user?.firstName}
 							</Text>
-							<Text style={styles.userName}>{user?.lastName}</Text>
+							<Text style={styles(theme).userName}>{user?.lastName}</Text>
 						</View>
-						<View style={styles.actionsContainer}>
-							<View style={{justifyContent: 'center', alignItems: 'center', width: '100%'}}>
-								<View style={styles.actionsContainerButtons}>
-									<View style={styles.actionsButton}>
+						<View style={styles(theme).actionsContainer}>
+							<View
+								style={{
+									justifyContent: 'center',
+									alignItems: 'center',
+									width: '100%',
+								}}
+							>
+								<View style={styles(theme).actionsContainerButtons}>
+									<View style={styles(theme).actionsButton}>
 										<Ionicons
 											name="wallet-outline"
 											size={26}
@@ -143,11 +152,11 @@ export default function UserScreen() {
 												borderRadius: 12,
 												padding: 6,
 											}}
-											color="rgba(43, 39, 39, 0.85)"
+											color={Colors[theme].colors.colorIconInput}
 										/>
-										<Text style={styles.actionsButtonText}>1</Text>
+										<Text style={styles(theme).actionsButtonText}>1</Text>
 									</View>
-									<View style={styles.actionsButton}>
+									<View style={styles(theme).actionsButton}>
 										<Ionicons
 											name="chatbubbles-outline"
 											size={26}
@@ -156,11 +165,11 @@ export default function UserScreen() {
 												borderRadius: 12,
 												padding: 6,
 											}}
-											color="rgba(43, 39, 39, 0.85)"
+											color={Colors[theme].colors.colorIconInput}
 										/>
-										<Text style={styles.actionsButtonText}>12</Text>
+										<Text style={styles(theme).actionsButtonText}>12</Text>
 									</View>
-									<View style={styles.actionsButton}>
+									<View style={styles(theme).actionsButton}>
 										<Ionicons
 											name="heart-outline"
 											size={26}
@@ -169,12 +178,12 @@ export default function UserScreen() {
 												borderRadius: 12,
 												padding: 6,
 											}}
-											color="rgba(43, 39, 39, 0.85)"
+											color={Colors[theme].colors.colorIconInput}
 										/>
-										<Text style={styles.actionsButtonText}>12</Text>
+										<Text style={styles(theme).actionsButtonText}>12</Text>
 									</View>
 
-									<View style={styles.actionsButton}>
+									<View style={styles(theme).actionsButton}>
 										<Ionicons
 											name="star-outline"
 											size={26}
@@ -183,19 +192,21 @@ export default function UserScreen() {
 												borderRadius: 12,
 												padding: 6,
 											}}
-											color="rgba(43, 39, 39, 0.85)"
+											color={Colors[theme].colors.colorIconInput}
 										/>
 										<Text style={styles.actionsButtonText}>4.5</Text>
 									</View>
 								</View>
-								<View style={styles.actionsTextContainer}>
-									<View style={styles.verifyContainer}>
+								<View style={styles(theme).actionsTextContainer}>
+									<View style={styles(theme).verifyContainer}>
 										<Ionicons
 											name="ribbon-outline"
 											size={18}
-											color="rgba(43, 39, 39, 0.85)"
+											color={Colors[theme].colors.colorIconInput}
 										/>
-										<Text style={styles.actionsText}>Perfil verificado</Text>
+										<Text style={styles(theme).actionsText}>
+											Perfil verificado
+										</Text>
 									</View>
 								</View>
 							</View>
@@ -217,85 +228,141 @@ export default function UserScreen() {
 							>
 								<CompletedServiceCard
 									data={item}
-									style={{ backgroundColor: 'rgba(43, 39, 39, 0.02)' }}
+									/* style={{ backgroundColor: 'rgba(43, 39, 39, 0.02)' }} */
 								/>
 							</View>
 						)}
 					/>
 
 					<View
-						style={styles.separator}
+						style={styles(theme).separator}
 						lightColor="#eee"
 						darkColor="rgba(255,255,255,0.1)"
 					/>
 
-					<View style={styles.menuContainer}>
+					<View style={styles(theme).menuContainer}>
 						<TouchableOpacity
-							style={styles.menuItem}
+							style={styles(theme).menuItem}
 							onPress={() => router.push('/(user)/edit-profile')}
 						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="person-outline" size={24} />
-								<Text style={styles.menuText}>Editar Perfil</Text>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="person-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>Editar Perfil</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
 						<TouchableOpacity
-							style={styles.menuItem}
+							style={styles(theme).menuItem}
 							onPress={() => router.push('/(user)/edit-profile')}
 						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="location-outline" size={24} />
-								<Text style={styles.menuText}>Adicionar Endereços</Text>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="location-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>Adicionar Endereços</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="notifications-outline" size={24} />
-								<Text style={styles.menuText}>Notificações</Text>
+						<TouchableOpacity style={styles(theme).menuItem}>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="notifications-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>Notificações</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="shield-checkmark-outline" size={24} />
-								<Text style={styles.menuText}>Segurança e Privacidade</Text>
+						<TouchableOpacity style={styles(theme).menuItem}>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="shield-checkmark-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>
+									Segurança e Privacidade
+								</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="wallet-outline" size={24} />
-								<Text style={styles.menuText}>Pagamentos</Text>
+						<TouchableOpacity style={styles(theme).menuItem}>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="wallet-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>Pagamentos</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
 						<TouchableOpacity
 							onPress={() => router.push('/(user)/privacity')}
-							style={styles.menuItem}
+							style={styles(theme).menuItem}
 						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="lock-closed-outline" size={24} />
-								<Text style={styles.menuText}>Política de Privacidade</Text>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons name="lock-closed-outline" size={24} color={Colors[theme].colors.colorIconInput} />
+								<Text style={styles(theme).menuText}>
+									Política de Privacidade
+								</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 
 						<TouchableOpacity
 							onPress={() => router.push('/(user)/terms')}
-							style={styles.menuItem}
+							style={styles(theme).menuItem}
 						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons name="document-text-outline" size={24} />
-								<Text style={styles.menuText}>Termos de Uso</Text>
+							<View style={styles(theme).menuLeftContent}>
+								<Ionicons
+									name="document-text-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
+								<Text style={styles(theme).menuText}>Termos de Uso</Text>
 							</View>
-							<Ionicons name="chevron-forward-outline" size={24} color="#ccc" />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={24}
+								color={Colors[theme].colors.colorIconInput}
+							/>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -304,206 +371,121 @@ export default function UserScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	scrollView: {
-		flex: 1,
-	},
-	container: {
-		flex: 1,
-	},
-	headerContainer: {
-		flexDirection: 'row',
-		//alignItems: 'center',
-		justifyContent: 'space-between',
-		paddingVertical: 20,
-		paddingHorizontal: 16,
-	},
-	actionsContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
-	},
+const styles = (theme: 'light' | 'dark') =>
+	StyleSheet.create({
+		scrollView: {
+			flex: 1,
+		},
+		container: {
+			flex: 1,
+		},
+		headerContainer: {
+			flexDirection: 'row',
+			//alignItems: 'center',
+			justifyContent: 'space-between',
+			paddingVertical: 20,
+			paddingHorizontal: 16,
+		},
+		actionsContainer: {
+			alignItems: 'center',
+			justifyContent: 'center',
+			flex: 1,
+		},
 
-	actionsTextContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginTop: 20,
-	},
-	verifyContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		gap: 10,
-		backgroundColor: 'rgba(43, 39, 39, 0.1)',
-		borderRadius: 5,
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-	},
-	actionsText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-	},
-	actionsContainerButtons: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		gap: 20,
-	},
-	actionsButtonText: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.regular,
-	},
-	actionsButton: {
-		alignItems: 'center',
-	},
-	imageContainer: {
-		position: 'relative',
-		marginBottom: 0,
-		flex: 1,
-		justifyContent: 'center',
-		//alignItems: 'center',
-	},
-	profileImage: {
-		width: 80,
-		height: 80,
-		borderRadius: 60,
-		borderWidth: 5,
-		borderColor: '#007AFF',
-		padding: 4,
-	},
-	editImageButton: {
-		position: 'absolute',
-		right: 10,
-		bottom: 10,
-		backgroundColor: '#007AFF',
-		width: 32,
-		height: 32,
-		borderRadius: 18,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderWidth: 3,
-		borderColor: 'white',
-	},
-	userName: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.bold,
-	},
-	userEmail: {
-		fontSize: FontSize.xsB,
-		color: '#666',
-		fontFamily: fontFamily.poppins.regular,
-	},
-	separator: {
-		marginTop: 10,
-		height: 1,
-		width: '100%',
-	},
-	menuContainer: {
-		marginTop: 10,
-		paddingHorizontal: 16,
-	},
-	menuItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: '#eee',
-		justifyContent: 'space-between',
-	},
-	menuLeftContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	menuText: {
-		fontSize: 16,
-		marginLeft: 15,
-		fontFamily: fontFamily.poppins.regular,
-	},
-	logoutText: {
-		color: Colors.secondary,
-		fontFamily: fontFamily.poppins.medium,
-	},
-	modalOverlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0, 0, 0, 0.6)',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	modalContent: {
-		backgroundColor: 'white',
-		borderRadius: 25,
-		padding: 25,
-		width: '85%',
-		alignItems: 'center',
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 2,
+		actionsTextContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginTop: 20,
 		},
-		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5,
-	},
-	modalIconContainer: {
-		width: 70,
-		height: 70,
-		backgroundColor: Colors.primary + '15',
-		borderRadius: 40,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginBottom: 20,
-	},
-	modalTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.bold,
-		marginBottom: 15,
-		color: Colors.primary,
-	},
-	modalText: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.regular,
-		marginBottom: 25,
-		textAlign: 'center',
-		color: '#666',
-		paddingHorizontal: 10,
-	},
-	modalButtons: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: '100%',
-		gap: 15,
-	},
-	modalButton: {
-		flex: 1,
-		paddingVertical: 10,
-		borderRadius: 14.67,
-		elevation: 2,
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
+		verifyContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			gap: 10,
+			backgroundColor: Colors[theme].colors.ImputBackgroundColors,
+			borderRadius: 5,
+			paddingHorizontal: 10,
+			paddingVertical: 4,
+		},
+		actionsText: {
+			fontSize: FontSize.xsB,
+			fontFamily: fontFamily.poppins.regular,
+		},
+		actionsContainerButtons: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			gap: 20,
+		},
+		actionsButtonText: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.regular,
+		},
+		actionsButton: {
+			alignItems: 'center',
+		},
+		imageContainer: {
+			position: 'relative',
+			marginBottom: 0,
+			flex: 1,
+			justifyContent: 'center',
+			//alignItems: 'center',
+		},
+		profileImage: {
+			width: 80,
+			height: 80,
+			borderRadius: 60,
+			borderWidth: 3,
+			borderColor: Colors[theme].colors.primary,
+			padding: 2,
+		},
+		editImageButton: {
+			position: 'absolute',
+			right: 6,
+			bottom: 10,
+			backgroundColor: Colors[theme].colors.primary,
+			width: 32,
+			height: 32,
+			borderRadius: 18,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderWidth: 3,
+			borderColor: 'white',
+		},
+		userName: {
+			fontSize: FontSize.base,
+			fontFamily: fontFamily.poppins.bold,
+		},
+		userEmail: {
+			fontSize: FontSize.xsB,
+			color: '#666',
+			fontFamily: fontFamily.poppins.regular,
+		},
+		separator: {
+			marginTop: 10,
 			height: 1,
+			width: '100%',
 		},
-		shadowOpacity: 0.2,
-		shadowRadius: 0.41,
-	},
-	cancelButton: {
-		backgroundColor: '#f5f5f5',
-		borderWidth: 1,
-		borderColor: '#e5e5e5',
-	},
-	confirmButton: {
-		backgroundColor: Colors.secondary,
-	},
-	modalButtonText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.medium,
-		textAlign: 'center',
-	},
-	cancelButtonText: {
-		color: '#666',
-	},
-	confirmButtonText: {
-		color: 'white',
-	},
-})
+		menuContainer: {
+			marginTop: 10,
+			paddingHorizontal: 16,
+		},
+		menuItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingVertical: 15,
+			borderBottomWidth: 1,
+			borderBottomColor: 'rgba(147, 137, 137, 0.28)',
+			justifyContent: 'space-between',
+		},
+		menuLeftContent: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		menuText: {
+			fontSize: FontSize.sm,
+			marginLeft: 15,
+			fontFamily: fontFamily.poppins.regular,
+		},
+	})

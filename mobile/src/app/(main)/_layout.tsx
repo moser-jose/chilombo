@@ -12,6 +12,7 @@ import { MyServicesSVG } from '@/src/components/svg/MyServices'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { useUser } from '@clerk/clerk-expo'
 import { SettingsSVG } from '@/src/components/svg/SettingsSvg'
+import { useThemeColor } from '@/src/components/Themed'
 
 function TabBarIcon(props: {
 	color: string
@@ -24,7 +25,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-	const colorScheme = useColorScheme()
+	const theme = useColorScheme() ?? 'light'
 	const { user } = useUser()
 
 	if (!user) {
@@ -34,7 +35,10 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+				tabBarActiveTintColor: Colors[theme].colors.tabBarActiveTintColor,//'#da6c18', //#FF5959
+				tabBarStyle: {
+					backgroundColor: Colors[theme].colors.tabBarBackgroundColor,
+				},
 				headerShown: useClientOnlyValue(false, true),
 				tabBarLabelStyle: {
 					fontFamily: fontFamily.poppins.medium,
@@ -48,8 +52,8 @@ export default function TabLayout() {
 					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
-							height={24}
-							width={24}
+							height={22}
+							width={22}
 							Component={HomeSVG}
 							color={color}
 						/>
@@ -62,8 +66,8 @@ export default function TabLayout() {
 					title: 'Categorias',
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
-							height={24}
-							width={24}
+							height={22}
+							width={22}
 							Component={CategorySVG}
 							color={color}
 						/>
@@ -76,8 +80,8 @@ export default function TabLayout() {
 					title: 'Meus Serviços',
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
-							height={24}
-							width={24}
+							height={22}
+							width={22}
 							Component={MyServicesSVG}
 							color={color}
 						/>
@@ -90,8 +94,8 @@ export default function TabLayout() {
 					title: 'Configurações',
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
-							height={24}
-							width={24}
+							height={22}
+							width={22}
 							Component={SettingsSVG}
 							color={color}
 						/>
@@ -104,8 +108,8 @@ export default function TabLayout() {
 
 {
 	/* <TabBarIcon
-	height={24}
-	width={24}
+	height={22}
+	width={22}
 	Component={UserSVG}
 	color={color}
 /> */

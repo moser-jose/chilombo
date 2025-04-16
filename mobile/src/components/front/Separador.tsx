@@ -10,6 +10,7 @@ import {
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { Text,Ionicons } from '../Themed'
+import Colors from '@/src/constants/Colors'
 
 type SeparadorProps = {
 	onPress?: () => void
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
 	separator: {
 		width: 5,
 		height: 25,
-		backgroundColor: '#EC7FB6',
+		backgroundColor: Colors.dark.colors.primary,
 		marginRight: 8,
 		borderRadius: 10,
 	},

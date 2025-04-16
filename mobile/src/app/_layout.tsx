@@ -73,7 +73,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
 	const colorScheme = useColorScheme()
-	  
+
 	return (
 		<ClerkProvider
 			publishableKey={clerkPublicKey}
@@ -82,7 +82,9 @@ function RootLayoutNav() {
 		>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
-					<ThemeProvider value={colorScheme === 'dark' ? Colors.dark : Colors.light}>
+					<ThemeProvider
+						value={colorScheme === 'dark' ? Colors.dark : Colors.light}
+					>
 						<Slot />
 					</ThemeProvider>
 				</ClerkLoaded>

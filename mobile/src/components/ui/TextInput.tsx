@@ -52,8 +52,8 @@ export default function TextInputUI({
 		message: string
 		type: string
 	} | null>(null)
-	const theme = useColorScheme()
-	const isDark = theme === 'dark'
+
+	const theme = useColorScheme() ?? 'light'
 	const [showPassword, setShowPassword] = useState(false)
 
 	const handleChangeText = (text: string) => {
@@ -80,7 +80,7 @@ export default function TextInputUI({
 				<Ionicons
 					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
 					size={22}
-					color={styles(isDark).colorIconInput.color}
+					color={styles(theme).colorIconInput.color}
 				/>
 			) : null}
 		</View>
@@ -169,12 +169,12 @@ export default function TextInputUI({
 
 	return (
 		<View style={style}>
-			{label && <Text style={styles(isDark).label}>{label}</Text>}
+			{label && <Text style={styles(theme).label}>{label}</Text>}
 			<View
 				style={[
-					styles(isDark).input,
+					styles(theme).input,
 					isInputFocused && {
-						borderColor: isDark ? Colors.dark.secondary : Colors.light.primary,
+						borderColor: Colors[theme].colors.secondary,
 						borderWidth: 1.8,
 					},
 				]}
@@ -184,13 +184,13 @@ export default function TextInputUI({
 						name={icon}
 						style={{ marginRight: 4 }}
 						size={20}
-						color={styles(isDark).colorIconInput.color}
+						color={styles(theme).colorIconInput.color}
 					/>
 				)}
 				<TextInput
 					placeholder={placeholder}
-					placeholderTextColor={styles(isDark).colorIconInput.color}
-					style={styles(isDark).textInput}
+					placeholderTextColor={styles(theme).colorIconInput.color}
+					style={styles(theme).textInput}
 					secureTextEntry={type === 'password' && !showPassword}
 					numberOfLines={1}
 					onFocus={() => {
@@ -211,13 +211,13 @@ export default function TextInputUI({
 				)}
 			</View>
 			{shouldShowError() && errorMessage && (
-				<Text style={styles(isDark).errorText}>{errorMessage.message}</Text>
+				<Text style={styles(theme).errorText}>{errorMessage.message}</Text>
 			)}
 		</View>
 	)
 }
 
-const styles = (isDark: boolean) =>
+const styles = (theme: 'light' | 'dark') =>
 	StyleSheet.create({
 		headerText: {
 			fontWeight: '300',
@@ -236,7 +236,7 @@ const styles = (isDark: boolean) =>
 		textInput: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.regular,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: Colors[theme].colors.text,
 			flex: 1,
 		},
 		input: {
@@ -244,28 +244,24 @@ const styles = (isDark: boolean) =>
 			width: '100%',
 			borderRadius: 10,
 			flexDirection: 'row',
-			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+			borderColor: Colors[theme].colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 10,
-			backgroundColor: isDark
-				? Colors.dark.ImputBackgroundColors
-				: Colors.light.ImputBackgroundColors,
+			backgroundColor: Colors[theme].colors.ImputBackgroundColors,
 		},
 		textEnd: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: Colors[theme].colors.text,
 			fontWeight: '300',
 			fontSize: 14,
 		},
 		colorIconInput: {
-			color: isDark
-				? Colors.dark.colorIconInput
-				: Colors.light.colorIconInput.toString(),
+			color: Colors[theme].colors.colorIconInput,
 		},
 		label: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.medium,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: Colors[theme].colors.text,
 			marginBottom: 4,
 		},
 	})

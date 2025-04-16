@@ -13,7 +13,7 @@ export const tintColorDark = '#fff'
 export default {
 	light: {
 		colors: {
-			text: '#000',
+			text: '#0D0D12',
 			textMuted: 'rgba(136, 133, 135, 0.14)',
 			background: '#fff',
 			tint: tintColorLight,
@@ -25,31 +25,42 @@ export default {
 			secondaryMuted: 'rgba(136, 133, 135, 0.14)',
 			primary: 'rgba(6,23,74,.8)',
 			primaryMuted: 'rgba(6,23,74,.4)',
+			secondary: 'rgba(6,23,74,.4)',
 			card: 'rgb(18, 18, 18)',
 			border: 'rgb(39, 39, 41)',
 			notification: 'rgb(255, 69, 58)',
 			muted: 'rgba(136, 133, 135, 0.14)',
+			tabBarBackgroundColor: '#fff',
+			tabBarActiveTintColor: '#da6c18',
 		},
 		fonts
 	},
+
+	/* backgroundColor: '#1A1B25',
+		padding: 8,
+		borderRadius: 18,
+		borderWidth: 1,
+		borderColor: '#262733', */
 	dark: {
 		colors: {
 			text: 'rgba(255, 255, 255, 0.77)',
 			textMuted: 'rgba(255, 255, 255, 0.04)',
-			background: 'rgba(0, 0, 0, 0.93)',
-			tint: '#3f3a3a',
+			background: '#000000',
+			tint: '#262733',//'#3f3a3a',
 			tabIconDefault: '#ccc',
 			borderInput: '#2A2C39',
 			tabIconSelected: tintColorDark,
-			ImputBackgroundColors: 'rgba(61, 58, 58, 0.32)',
+			ImputBackgroundColors: '#1A1B25', //'rgba(61, 58, 58, 0.32)',
 			colorIconInput: 'rgba(255, 255, 255, 0.59)',
-			primary: 'rgb(10, 132, 255)',
+			primary: '#da6c18',
 			card: 'rgb(18, 18, 18)',
 			border: 'rgb(39, 39, 41)',
 			notification: 'rgb(255, 69, 58)',
-			secondary: '#c2347b',
+			secondary: 'rgba(139, 156, 205, 0.4)',
 			secondaryMuted: 'rgba(194, 52, 123, 0.2)',
 			muted: 'rgba(166, 162, 162, 0.99)',
+			tabBarBackgroundColor: '#0D0D12',
+			tabBarActiveTintColor: '#da6c18',
 		},
 		fonts
 	},

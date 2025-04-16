@@ -54,7 +54,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 					<Ionicons
 						name="location-outline"
 						size={14}
-						color={Colors.secondary}
+						color={Colors[theme].colors.primary}
 					/>
 					<Text style={styles(theme).locationText} numberOfLines={1}>
 						{data.address}
