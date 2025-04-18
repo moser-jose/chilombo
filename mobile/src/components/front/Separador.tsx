@@ -9,8 +9,10 @@ import {
 } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
-import { Text,Ionicons } from '../Themed'
+import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/src/constants/Colors'
+import { Text } from '../ui/Text'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 type SeparadorProps = {
 	onPress?: () => void
@@ -20,6 +22,7 @@ type SeparadorProps = {
 }
 
 export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
+	const { themeColors } = useCustomTheme()
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.separator} />
@@ -33,7 +36,11 @@ export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
 					{more && (
 						<>
 							<Text style={styles.vermaisText}>Ver mais</Text>
-							<Ionicons name="chevron-forward-outline" size={18} />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={18}
+								color={themeColors.colors.text}
+							/>
 						</>
 					)}
 				</TouchableOpacity>
@@ -74,5 +81,6 @@ const styles = StyleSheet.create({
 	vermaisText: {
 		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
+		color: Colors.dark.colors.primary,
 	},
 })

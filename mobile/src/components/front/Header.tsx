@@ -88,7 +88,7 @@ const Header = () => {
 								<Ionicons
 									name="search-outline"
 									size={24}
-									color={Colors.white}
+									color={Colors.text}
 								/>
 							</TouchableOpacity>
 						</View>
@@ -103,7 +103,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: Colors.primary,
+		backgroundColor: Colors.black,
 		paddingHorizontal: 16,
 		paddingBottom: 16,
 		paddingTop: 12,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	leftContainerLeftText: {
-		color: Colors.white,
+		color: Colors.dark.colors.text,
 		fontSize: FontSize.smB,
 		fontFamily: fontFamily.poppins.semibold,
 	},
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
 		marginTop: -12,
 	},
 	locationText: {
-		color: Colors.white,
+		color: Colors.text,
 		fontSize: FontSize.xs,
 		fontFamily: fontFamily.poppins.regular,
 	},

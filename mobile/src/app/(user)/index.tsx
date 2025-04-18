@@ -334,7 +334,11 @@ export default function UserScreen() {
 							style={styles(theme).menuItem}
 						>
 							<View style={styles(theme).menuLeftContent}>
-								<Ionicons name="lock-closed-outline" size={24} color={Colors[theme].colors.colorIconInput} />
+								<Ionicons
+									name="lock-closed-outline"
+									size={24}
+									color={Colors[theme].colors.colorIconInput}
+								/>
 								<Text style={styles(theme).menuText}>
 									Política de Privacidade
 								</Text>
@@ -487,5 +491,10 @@ const styles = (theme: 'light' | 'dark') =>
 			fontSize: FontSize.sm,
 			marginLeft: 15,
 			fontFamily: fontFamily.poppins.regular,
+		},
+		icon: {
+			backgroundColor: 'rgba(43, 39, 39, 0.05)',
+			borderRadius: 12,
+			padding: 6,
 		},
 	})

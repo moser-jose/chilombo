@@ -2,8 +2,6 @@
 import React from 'react'
 import { Redirect, Tabs } from 'expo-router'
 
-import Colors from '@/src/constants/Colors'
-import { useColorScheme } from '@/src/components/useColorScheme'
 import { useClientOnlyValue } from '@/src/components/useClientOnlyValue'
 import { HomeSVG } from '@/src/components/svg/HomeSvg'
 import { SVGProps } from '@/src/types/SVGProps'
@@ -12,7 +10,7 @@ import { MyServicesSVG } from '@/src/components/svg/MyServices'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { useUser } from '@clerk/clerk-expo'
 import { SettingsSVG } from '@/src/components/svg/SettingsSvg'
-import { useThemeColor } from '@/src/components/Themed'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 function TabBarIcon(props: {
 	color: string
@@ -25,7 +23,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-	const theme = useColorScheme() ?? 'light'
+	const { themeColors } = useCustomTheme()
 	const { user } = useUser()
 
 	if (!user) {
@@ -35,9 +33,9 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: Colors[theme].colors.tabBarActiveTintColor,//'#da6c18', //#FF5959
+				tabBarActiveTintColor: themeColors.colors.tabBarActiveTintColor,
 				tabBarStyle: {
-					backgroundColor: Colors[theme].colors.tabBarBackgroundColor,
+					backgroundColor: themeColors.colors.tabBarBackgroundColor,
 				},
 				headerShown: useClientOnlyValue(false, true),
 				tabBarLabelStyle: {
@@ -89,9 +87,10 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="settings"
+				name="(settings)"
 				options={{
 					title: 'Configurações',
+					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
 							height={22}
@@ -104,13 +103,4 @@ export default function TabLayout() {
 			/>
 		</Tabs>
 	)
-}
-
-{
-	/* <TabBarIcon
-	height={22}
-	width={22}
-	Component={UserSVG}
-	color={color}
-/> */
 }

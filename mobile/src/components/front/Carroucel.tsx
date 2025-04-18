@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
+import Colors from '@/src/constants/Colors'
 import { window } from '../../constants/sizes'
 import * as React from 'react'
 import { View, Text, Animated, TouchableOpacity } from 'react-native'
@@ -205,7 +206,7 @@ function Index() {
 						width: 12,
 						height: 6,
 						overflow: 'hidden',
-						backgroundColor: '#0D8ABC',
+						backgroundColor: Colors.dark.colors.primary,
 					}}
 					containerStyle={{
 						gap: 5,

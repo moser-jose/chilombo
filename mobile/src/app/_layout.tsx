@@ -1,18 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-//import { resourceCache } from '@clerk/clerk-expo/resource-cache'
-import {
-	DarkTheme,
-	DefaultTheme,
-	ThemeProvider,
-} from '@react-navigation/native'
+import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo'
-import { useColorScheme } from '@/src/components/useColorScheme'
 import { tokenCache } from '@/cache'
 import {
 	Poppins_300Light,
@@ -21,8 +15,7 @@ import {
 	Poppins_600SemiBold,
 	Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
-import Colors from '../constants/Colors'
-import { DarkThemeUI } from '../constants/themes/Dark'
+import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -45,7 +38,6 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
 	const [loaded, error] = useFonts({
-		//SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
 		PoppinsLight: Poppins_300Light,
 		PoppinsRegular: Poppins_400Regular,
 		PoppinsMedium: Poppins_500Medium,
@@ -68,25 +60,23 @@ export default function RootLayout() {
 		return null
 	}
 
-	return <RootLayoutNav />
+	return (
+		<CustomThemeProvider>
+			<RootLayoutNav />
+		</CustomThemeProvider>
+	)
 }
 
 function RootLayoutNav() {
-	const colorScheme = useColorScheme()
+	const { themeColors } = useCustomTheme()
 
 	return (
-		<ClerkProvider
-			publishableKey={clerkPublicKey}
-			tokenCache={tokenCache}
-			//__experimental_resourceCache={resourceCache}
-		>
+		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
-					<ThemeProvider
-						value={colorScheme === 'dark' ? Colors.dark : Colors.light}
-					>
+					<NavigationThemeProvider value={themeColors}>
 						<Slot />
-					</ThemeProvider>
+					</NavigationThemeProvider>
 				</ClerkLoaded>
 			</GestureHandlerRootView>
 		</ClerkProvider>
