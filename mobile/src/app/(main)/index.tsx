@@ -10,7 +10,7 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
-import { Ionicons, View } from '@/src/components/Themed'
+import { View } from '@/src/components/Themed'
 import { Text } from '@/src/components/ui/Text'
 const users = [
 	{

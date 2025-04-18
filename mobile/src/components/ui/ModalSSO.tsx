@@ -68,8 +68,6 @@ export function ModalSSO({
 				code: codeOne + codeTwo + codeThree + codeFour + codeFive + codeSix,
 			})
 
-			// If verification was completed, set the session to active
-			// and redirect the user
 			if (signUpAttempt.status === 'complete') {
 				await setActive({ session: signUpAttempt.createdSessionId })
 				router.replace('/(main)')

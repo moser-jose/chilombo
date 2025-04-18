@@ -11,13 +11,14 @@ import { useState } from 'react'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import Constants from 'expo-constants'
 import { useCustomTheme } from '@/src/context/ThemeContext'
+import { ThemeColors } from '@/src/types/themeColors'
 
 export default function SettingsScreen() {
 	const { signOut } = useClerk()
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
 	const { themeColors } = useCustomTheme()
-
+	const styles = makeStyles(themeColors as ThemeColors)
 	const handleSignOut = async () => {
 		try {
 			await signOut()
@@ -52,11 +53,7 @@ export default function SettingsScreen() {
 									size={24}
 									color={themeColors.colors.colorIconInput}
 								/>
-								<Text
-									style={[styles.menuText, { color: themeColors.colors.text }]}
-								>
-									Aparência
-								</Text>
+								<Text style={styles.menuText}>Aparência</Text>
 							</View>
 							<Ionicons
 								name="chevron-forward-outline"
@@ -72,11 +69,7 @@ export default function SettingsScreen() {
 									size={24}
 									color={themeColors.colors.colorIconInput}
 								/>
-								<Text
-									style={[styles.menuText, { color: themeColors.colors.text }]}
-								>
-									Ajuda
-								</Text>
+								<Text style={styles.menuText}>Ajuda</Text>
 							</View>
 							<Ionicons
 								name="chevron-forward-outline"
@@ -92,11 +85,7 @@ export default function SettingsScreen() {
 									size={24}
 									color={themeColors.colors.colorIconInput}
 								/>
-								<Text
-									style={[styles.menuText, { color: themeColors.colors.text }]}
-								>
-									Compartilhar
-								</Text>
+								<Text style={styles.menuText}>Compartilhar</Text>
 							</View>
 						</TouchableOpacity>
 
@@ -107,11 +96,7 @@ export default function SettingsScreen() {
 									size={24}
 									color={themeColors.colors.colorIconInput}
 								/>
-								<Text
-									style={[styles.menuText, { color: themeColors.colors.text }]}
-								>
-									Avalie o App
-								</Text>
+								<Text style={styles.menuText}>Avalie o App</Text>
 							</View>
 						</TouchableOpacity>
 
@@ -123,7 +108,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="log-out-outline"
 									size={24}
-									color={Colors.dark.colors.primary}
+									color={themeColors.colors.primary}
 								/>
 								<Text style={[styles.menuText, styles.logoutText]}>Sair</Text>
 							</View>
@@ -153,59 +138,61 @@ export default function SettingsScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	scrollView: {
-		flex: 1,
-		height: '100%',
-	},
-	container: {
-		flex: 1,
-		padding: 16,
-	},
+const makeStyles = (themeColors: ThemeColors) =>
+	StyleSheet.create({
+		scrollView: {
+			flex: 1,
+			height: '100%',
+		},
+		container: {
+			flex: 1,
+			padding: 16,
+		},
 
-	footerContainer: {
-		position: 'fixed',
-		bottom: 0,
-	},
-	footerText: {
-		textAlign: 'center',
-		fontSize: FontSize.xss,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#666',
-	},
-	footerNumber: {
-		textAlign: 'center',
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666',
-	},
-	separator: {
-		marginTop: 10,
-		height: 1,
-		width: '100%',
-	},
-	menuContainer: {
-		marginTop: 10,
-	},
-	menuItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: 'rgba(147, 137, 137, 0.28)',
-		justifyContent: 'space-between',
-	},
-	menuLeftContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	menuText: {
-		fontSize: 16,
-		marginLeft: 15,
-		fontFamily: fontFamily.poppins.regular,
-	},
-	logoutText: {
-		fontFamily: fontFamily.poppins.medium,
-		color: Colors.dark.colors.primary,
-	},
-})
+		footerContainer: {
+			position: 'fixed',
+			bottom: 0,
+		},
+		footerText: {
+			textAlign: 'center',
+			fontSize: FontSize.xss,
+			fontFamily: fontFamily.poppins.semibold,
+			color: '#666',
+		},
+		footerNumber: {
+			textAlign: 'center',
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			color: '#666',
+		},
+		separator: {
+			marginTop: 10,
+			height: 1,
+			width: '100%',
+		},
+		menuContainer: {
+			marginTop: 10,
+		},
+		menuItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingVertical: 15,
+			borderBottomWidth: 1,
+			borderBottomColor: 'rgba(147, 137, 137, 0.28)',
+			justifyContent: 'space-between',
+		},
+		menuLeftContent: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		menuText: {
+			fontSize: 16,
+			marginLeft: 15,
+			fontFamily: fontFamily.poppins.regular,
+			color: themeColors.colors.text,
+		},
+		logoutText: {
+			fontFamily: fontFamily.poppins.medium,
+			color: Colors.dark.colors.primary,
+		},
+	})

@@ -56,4 +56,6 @@ export default {
 	},
 	black: '#0D0D12',
 	text: 'rgba(255, 255, 255, 0.77)',
+	error: 'rgba(255, 0, 0, 0.62)',
+	success: 'rgba(0, 255, 0, 0.62)',
 }

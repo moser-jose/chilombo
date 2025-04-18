@@ -18,7 +18,7 @@ interface ThemeContextProps {
 	themePreference: ThemePreference
 	effectiveTheme: EffectiveTheme
 	isSystemTheme: boolean
-	setThemePreference: () => Promise<void>
+	setThemePreference: (preference: ThemePreference) => Promise<void>
 	themeColors: typeof Colors.light | typeof Colors.dark
 	navigationTheme: NavigationTheme
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
-//import { Ionicons } from '@expo/vector-icons'
+
 import {
 	View,
 	StyleSheet,

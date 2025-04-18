@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
 	TextInput,
-	useColorScheme,
 	StyleSheet,
 	Pressable,
 	TextInputProps,
@@ -16,6 +15,8 @@ import { FontSize } from '@/src/constants/FontSize'
 
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { ThemeColors } from '@/src/types/themeColors'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -45,7 +46,6 @@ export default function TextInputUI({
 	onFocus,
 	isPasswordStrong,
 	onBlur,
-	...props
 }: TextInputUIProps) {
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<{
@@ -53,8 +53,10 @@ export default function TextInputUI({
 		type: string
 	} | null>(null)
 
-	const theme = useColorScheme() ?? 'light'
+	const { themeColors } = useCustomTheme()
 	const [showPassword, setShowPassword] = useState(false)
+
+	const styles = makeStyles(themeColors as ThemeColors)
 
 	const handleChangeText = (text: string) => {
 		if (text.length > 0) {
@@ -80,7 +82,7 @@ export default function TextInputUI({
 				<Ionicons
 					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
 					size={22}
-					color={styles(theme).colorIconInput.color}
+					color={themeColors.colors.colorIconInput}
 				/>
 			) : null}
 		</View>
@@ -169,12 +171,12 @@ export default function TextInputUI({
 
 	return (
 		<View style={style}>
-			{label && <Text style={styles(theme).label}>{label}</Text>}
+			{label && <Text style={styles.label}>{label}</Text>}
 			<View
 				style={[
-					styles(theme).input,
+					styles.input,
 					isInputFocused && {
-						borderColor: Colors[theme].colors.secondary,
+						borderColor: themeColors.colors.secondary,
 						borderWidth: 1.8,
 					},
 				]}
@@ -184,13 +186,13 @@ export default function TextInputUI({
 						name={icon}
 						style={{ marginRight: 4 }}
 						size={20}
-						color={styles(theme).colorIconInput.color}
+						color={styles.colorIconInput.color}
 					/>
 				)}
 				<TextInput
 					placeholder={placeholder}
-					placeholderTextColor={styles(theme).colorIconInput.color}
-					style={styles(theme).textInput}
+					placeholderTextColor={themeColors.colors.colorIconInput}
+					style={styles.textInput}
 					secureTextEntry={type === 'password' && !showPassword}
 					numberOfLines={1}
 					onFocus={() => {
@@ -211,13 +213,13 @@ export default function TextInputUI({
 				)}
 			</View>
 			{shouldShowError() && errorMessage && (
-				<Text style={styles(theme).errorText}>{errorMessage.message}</Text>
+				<Text style={styles.errorText}>{errorMessage.message}</Text>
 			)}
 		</View>
 	)
 }
 
-const styles = (theme: 'light' | 'dark') =>
+const makeStyles = (themeColors: ThemeColors) =>
 	StyleSheet.create({
 		headerText: {
 			fontWeight: '300',
@@ -236,7 +238,7 @@ const styles = (theme: 'light' | 'dark') =>
 		textInput: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.regular,
-			color: Colors[theme].colors.text,
+			color: themeColors.colors.text,
 			flex: 1,
 		},
 		input: {
@@ -244,24 +246,24 @@ const styles = (theme: 'light' | 'dark') =>
 			width: '100%',
 			borderRadius: 10,
 			flexDirection: 'row',
-			borderColor: Colors[theme].colors.borderInput,
+			borderColor: themeColors.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 10,
-			backgroundColor: Colors[theme].colors.ImputBackgroundColors,
+			backgroundColor: themeColors.colors.ImputBackgroundColors,
 		},
 		textEnd: {
-			color: Colors[theme].colors.text,
+			color: themeColors.colors.text,
 			fontWeight: '300',
 			fontSize: 14,
 		},
 		colorIconInput: {
-			color: Colors[theme].colors.colorIconInput,
+			color: themeColors.colors.colorIconInput,
 		},
 		label: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.medium,
-			color: Colors[theme].colors.text,
+			color: themeColors.colors.text,
 			marginBottom: 4,
 		},
 	})
