@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, useColorScheme } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
 import { Stack, useRouter } from 'expo-router'
 import { FontSize } from '@/src/constants/FontSize'
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
 
 export default function TermsScreen() {
+	const theme =useColorScheme() ?? 'light'
 	const router = useRouter()
 
 	return (
@@ -31,48 +32,48 @@ export default function TermsScreen() {
 					),
 				}}
 			/>
-			<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-				<View style={styles.content}>
-					<Text style={styles.section}>1. Aceitação dos Termos</Text>
-					<Text style={styles.text}>
+			<ScrollView style={styles(theme).container} showsVerticalScrollIndicator={false}>
+				<View style={styles(theme).content}>
+					<Text style={styles(theme).section}>1. Aceitação dos Termos</Text>
+					<Text style={styles(theme).text}>
 						Ao acessar e usar este aplicativo, você aceita e concorda em cumprir
 						estes termos e condições de uso.
 					</Text>
 
-					<Text style={styles.section}>2. Uso do Serviço</Text>
-					<Text style={styles.text}>
+					<Text style={styles(theme).section}>2. Uso do Serviço</Text>
+					<Text style={styles(theme).text}>
 						Nosso serviço permite que você gerencie e organize suas atividades
 						de forma eficiente. Você concorda em usar o serviço apenas para
 						propósitos legais e de acordo com estes termos.
 					</Text>
 
-					<Text style={styles.section}>3. Privacidade</Text>
-					<Text style={styles.text}>
+					<Text style={styles(theme).section}>3. Privacidade</Text>
+					<Text style={styles(theme).text}>
 						Sua privacidade é importante para nós. Consulte nossa Política de
 						Privacidade para entender como coletamos, usamos e protegemos seus
 						dados pessoais.
 					</Text>
 
-					<Text style={styles.section}>4. Conta do Usuário</Text>
-					<Text style={styles.text}>
+					<Text style={styles(theme).section}>4. Conta do Usuário</Text>
+					<Text style={styles(theme).text}>
 						Você é responsável por manter a confidencialidade de sua conta e
 						senha. Notifique-nos imediatamente sobre qualquer uso não
 						autorizado.
 					</Text>
 
-					<Text style={styles.section}>5. Modificações do Serviço</Text>
-					<Text style={styles.text}>
+					<Text style={styles(theme).section}>5. Modificações do Serviço</Text>
+					<Text style={styles(theme).text}>
 						Reservamos o direito de modificar ou descontinuar o serviço a
 						qualquer momento, com ou sem aviso prévio.
 					</Text>
 
-					<Text style={styles.section}>6. Limitação de Responsabilidade</Text>
-					<Text style={styles.text}>
+					<Text style={styles(theme).section}>6. Limitação de Responsabilidade</Text>
+					<Text style={styles(theme).text}>
 						Não nos responsabilizamos por danos indiretos, incidentais ou
 						consequentes decorrentes do uso do serviço.
 					</Text>
 
-					<Text style={styles.lastUpdate}>
+					<Text style={styles(theme).lastUpdate}>
 						Última atualização: Janeiro 2024
 					</Text>
 				</View>
@@ -81,10 +82,10 @@ export default function TermsScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
+const styles= (theme: 'dark' | 'light') => StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: Colors.background,
+		backgroundColor: Colors[theme].colors.background,
 	},
 	content: {
 		padding: 20,
@@ -92,27 +93,27 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: FontSize.sm,
 		fontFamily: fontFamily.poppins.bold,
-		color: Colors.primary,
+		color: Colors[theme].colors.primary,
 		marginBottom: 25,
 	},
 	section: {
 		fontSize: FontSize.sm,
 		fontFamily: fontFamily.poppins.semibold,
-		color: Colors.primary,
+		color: Colors[theme].colors.primary,
 		marginTop: 20,
 		marginBottom: 10,
 	},
 	text: {
 		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
-		color: Colors.text,
+		color: Colors[theme].colors.text,
 		lineHeight: 24,
 		marginBottom: 15,
 	},
 	lastUpdate: {
 		fontSize: FontSize.xs,
 		fontFamily: fontFamily.poppins.regular,
-		color: Colors.textLight,
+		color: Colors[theme].colors.text,
 		marginTop: 30,
 		textAlign: 'center',
 		fontStyle: 'italic',

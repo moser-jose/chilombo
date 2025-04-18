@@ -6,7 +6,6 @@ import {
 } from 'react-native'
 import { Text, View } from '../Themed'
 import { TextInput } from 'react-native'
-import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
@@ -18,6 +17,8 @@ import * as Haptics from 'expo-haptics'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import Button from './Button'
 import { maskEmail } from '@/src/utils/maskEmail'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { ThemeColors } from '@/src/types/themeColors'
 interface ModalSSOProps {
 	openModal: boolean
 	isDark: boolean
@@ -25,12 +26,7 @@ interface ModalSSOProps {
 	isPasswordStrong: boolean
 }
 
-export function ModalSSO({
-	openModal,
-	isDark,
-	emailAddress,
-	isPasswordStrong,
-}: ModalSSOProps) {
+export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 	const { isLoaded, signUp, setActive } = useSignUp()
 
 	const codeOneRef = useRef<TextInput>(null)
@@ -56,6 +52,9 @@ export function ModalSSO({
 	const [isCodeFiveFocused, setIsCodeFiveFocused] = useState(false)
 	const [isCodeSixFocused, setIsCodeSixFocused] = useState(false)
 
+	const { themeColors } = useCustomTheme()
+	const styles = makeStyles(themeColors as ThemeColors)
+
 	const onVerifyPress = async () => {
 		if (!isLoaded) return
 		if (process.env.EXPO_OS === 'ios') {
@@ -68,13 +67,10 @@ export function ModalSSO({
 				code: codeOne + codeTwo + codeThree + codeFour + codeFive + codeSix,
 			})
 
-			// If verification was completed, set the session to active
-			// and redirect the user
 			if (signUpAttempt.status === 'complete') {
 				await setActive({ session: signUpAttempt.createdSessionId })
 				router.replace('/(main)')
 			} else {
-				// If the status is not complete, set an error to inform the user
 				setErrors([
 					{
 						code: 'verification_incomplete',
@@ -122,7 +118,7 @@ export function ModalSSO({
 			transparent={true}
 			animationType="slide"
 		>
-			<View style={styles(isDark).contentModal}>
+			<View style={styles.contentModal}>
 				{errors.map(error => (
 					<View
 						key={error.longMessage}
@@ -162,11 +158,11 @@ export function ModalSSO({
 				))}
 
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<View style={styles(isDark).cardModal}>
-						<Text style={styles(isDark).titleModal}>
+					<View style={styles.cardModal}>
+						<Text style={styles.titleModal}>
 							Insira o Código de verificação
 						</Text>
-						<Text style={styles(isDark).descModal}>
+						<Text style={styles.descModal}>
 							Enviamos um código de verificação para o e-mail{' '}
 							<Text style={{ fontFamily: fontFamily.poppins.bold }}>
 								{maskEmail(emailAddress)}
@@ -182,11 +178,11 @@ export function ModalSSO({
 						>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeOneFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -203,18 +199,18 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeOneFocused(true)}
 									onBlur={() => setIsCodeOneFocused(false)}
 								/>
 							</View>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeTwoFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -233,18 +229,18 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeTwoFocused(true)}
 									onBlur={() => setIsCodeTwoFocused(false)}
 								/>
 							</View>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeThreeFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -263,18 +259,18 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeThreeFocused(true)}
 									onBlur={() => setIsCodeThreeFocused(false)}
 								/>
 							</View>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeFourFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -293,18 +289,18 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeFourFocused(true)}
 									onBlur={() => setIsCodeFourFocused(false)}
 								/>
 							</View>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeFiveFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -323,18 +319,18 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeFiveFocused(true)}
 									onBlur={() => setIsCodeFiveFocused(false)}
 								/>
 							</View>
 							<View
 								style={[
-									styles(isDark).inputVerify,
+									styles.inputVerify,
 									isCodeSixFocused && {
 										borderColor: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
+											? themeColors.colors.secondary
+											: themeColors.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -351,7 +347,7 @@ export function ModalSSO({
 									numberOfLines={1}
 									maxLength={1}
 									keyboardType="numeric"
-									style={[styles(isDark).textInputVerify]}
+									style={[styles.textInputVerify]}
 									onFocus={() => setIsCodeSixFocused(true)}
 									onBlur={() => setIsCodeSixFocused(false)}
 								/>
@@ -366,7 +362,7 @@ export function ModalSSO({
 							variant="filled"
 							size="lg"
 						>
-							Verificar
+							<Text>Verificar</Text>
 						</Button>
 					</View>
 				</TouchableWithoutFeedback>
@@ -384,7 +380,9 @@ export function ModalSSO({
 					<Ionicons
 						name="close-circle"
 						size={40}
-						color={isDark ? Colors.dark.secondary : Colors.light.primary}
+						color={
+							isDark ? themeColors.colors.secondary : themeColors.colors.primary
+						}
 					/>
 				</Pressable>
 			</View>
@@ -392,7 +390,7 @@ export function ModalSSO({
 	)
 }
 
-const styles = (isDark: boolean) =>
+const makeStyles = (themeColors: ThemeColors) =>
 	StyleSheet.create({
 		descModal: {
 			fontSize: 15,
@@ -411,17 +409,12 @@ const styles = (isDark: boolean) =>
 		cardModal: {
 			width: '90%',
 			padding: 20,
-			//backgroundColor: 'red',
-			//backgroundColor: isDark ? Colors.dark.background : Colors.light.background,
-			//borderRadius: 20,
 		},
 		contentModal: {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: isDark
-				? Colors.dark.background
-				: Colors.light.background,
+			backgroundColor: themeColors.colors.background,
 		},
 		textModal: {
 			fontWeight: '600',
@@ -440,7 +433,6 @@ const styles = (isDark: boolean) =>
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			//backgroundColor:'red'
 		},
 		button: {
 			padding: '3.8%',
@@ -458,22 +450,19 @@ const styles = (isDark: boolean) =>
 			letterSpacing: 0.5,
 		},
 		inputVerify: {
-			//padding: '3.9%',
 			borderRadius: 16,
 			width: '15%',
 			flexDirection: 'row',
-			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+			borderColor: themeColors.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 20,
-
-			//backgroundColor: isDark ? Colors.dark.ImputBackgroundColors : Colors.light.ImputBackgroundColors,
 		},
 		textInputVerify: {
 			fontSize: 24,
 			padding: 12,
 			fontFamily: fontFamily.poppins.bold,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: themeColors.colors.text,
 			width: '100%',
 			overflow: 'hidden',
 			textAlign: 'center',

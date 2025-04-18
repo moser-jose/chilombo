@@ -1,13 +1,20 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native'
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	StyleProp,
+	ViewStyle,
+} from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
-import Colors from '../../constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 interface CompletedServiceCardProps {
 	data: any
@@ -18,6 +25,9 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	data,
 	style,
 }) => {
+	const { themeColors } = useCustomTheme()
+	const styles = makeStyles(themeColors)
+
 	return (
 		<TouchableOpacity
 			activeOpacity={0.8}
@@ -45,7 +55,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 					<Ionicons
 						name="location-outline"
 						size={14}
-						color={Colors.secondary}
+						color={themeColors.colors.primary}
 					/>
 					<Text style={styles.locationText} numberOfLines={1}>
 						{data.address}
@@ -63,92 +73,94 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		width: 260,
-		backgroundColor: 'white',
-		borderRadius: 16,
-		overflow: 'hidden',
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.1,
-		shadowRadius: 4,
-		elevation: 3,
-		marginBottom: 10,
-	},
-	headerContainerTopStar: {
-		borderRadius: 14,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: 'rgba(255, 255, 255, 0.2)',
-		borderWidth: 1,
-		borderColor: 'rgba(255, 255, 255, 0.4)',
-		paddingVertical: 2,
-		paddingHorizontal: 4,
-
-		position: 'absolute',
-		top: 10,
-		right: 10,
-	},
-	imageContainer: {
-		position: 'relative',
-		width: '100%',
-		height: 150,
-	},
-	image: {
-		width: '100%',
-		height: '100%',
-	},
-	starContainer: {
-		position: 'absolute',
-		top: 10,
-		right: 10,
-	},
-	starText: {
-		color: 'white',
-		fontFamily: fontFamily.poppins.semibold,
-		fontSize: FontSize.xss,
-		marginLeft: 4,
-	},
-	contentContainer: {
-		padding: 12,
-	},
-	title: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: Colors.primary,
-		marginBottom: 4,
-	},
-	locationContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 6,
-	},
-	locationText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666',
-		marginLeft: 4,
-		flex: 1,
-	},
-	description: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#444',
-		marginBottom: 8,
-		lineHeight: 16,
-	},
-	likesContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	likesText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666',
-		marginLeft: 4,
-	},
-})
+const makeStyles = (themeColors: any) =>
+	StyleSheet.create({
+		container: {
+			width: 260,
+			borderRadius: 16,
+			overflow: 'hidden',
+			borderWidth: 1,
+			borderColor: themeColors.colors.tint,
+			backgroundColor: themeColors.colors.ImputBackgroundColors,
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.1,
+			shadowRadius: 4,
+			elevation: 3,
+			marginBottom: 10,
+		},
+		headerContainerTopStar: {
+			borderRadius: 14,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor: 'rgba(255, 255, 255, 0.2)',
+			borderWidth: 1,
+			borderColor: 'rgba(255, 255, 255, 0.4)',
+			paddingVertical: 2,
+			paddingHorizontal: 4,
+			position: 'absolute',
+			top: 10,
+			right: 10,
+		},
+		imageContainer: {
+			position: 'relative',
+			width: '100%',
+			height: 150,
+		},
+		image: {
+			width: '100%',
+			height: '100%',
+		},
+		starContainer: {
+			position: 'absolute',
+			top: 10,
+			right: 10,
+		},
+		starText: {
+			color: 'white',
+			fontFamily: fontFamily.poppins.semibold,
+			fontSize: FontSize.xss,
+			marginLeft: 4,
+		},
+		contentContainer: {
+			padding: 12,
+		},
+		title: {
+			fontSize: FontSize.base,
+			fontFamily: fontFamily.poppins.semibold,
+			marginBottom: 1,
+			color: themeColors.colors.text,
+		},
+		locationContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginBottom: 5,
+		},
+		locationText: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			marginLeft: 4,
+			flex: 1,
+			color: themeColors.colors.colorIconInput,
+		},
+		description: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			marginBottom: 6,
+			lineHeight: 16,
+			color: themeColors.colors.colorIconInput,
+		},
+		likesContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		likesText: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			marginLeft: 4,
+			color: themeColors.colors.muted,
+		},
+	})
 
 export default CompletedServiceCard

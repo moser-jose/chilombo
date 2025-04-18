@@ -1,4 +1,9 @@
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	useColorScheme,
+} from 'react-native'
 import { Text, View } from '@/src/components/Themed'
 import { router, Stack } from 'expo-router'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -7,6 +12,7 @@ import Colors from '@/src/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 
 export default function PrivacyPolicyScreen() {
+	const theme = useColorScheme() ?? 'light'
 	const policies = [
 		{
 			title: 'Coleta de Dados',
@@ -81,21 +87,26 @@ export default function PrivacyPolicyScreen() {
 					),
 				}}
 			/>
-			<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-				<View style={styles.content}>
-					<Text style={styles.intro}>
+			<ScrollView
+				style={styles(theme).container}
+				showsVerticalScrollIndicator={false}
+			>
+				<View style={styles(theme).content}>
+					<Text style={styles(theme).intro}>
 						Sua privacidade é importante para nós. Esta política descreve como
 						tratamos suas informações pessoais.
 					</Text>
 
 					{policies.map((policy, index) => (
-						<View key={index} style={styles.policyItem}>
-							<Text style={styles.policyTitle}>{policy.title}</Text>
-							<Text style={styles.policyText}>{policy.description}</Text>
+						<View key={index} style={styles(theme).policyItem}>
+							<Text style={styles(theme).policyTitle}>
+								{index + 1 + '.  ' + policy.title}
+							</Text>
+							<Text style={styles(theme).policyText}>{policy.description}</Text>
 						</View>
 					))}
 
-					<Text style={styles.footer}>
+					<Text style={styles(theme).footer}>
 						Última atualização: {new Date().toLocaleDateString()}
 					</Text>
 				</View>
@@ -104,41 +115,42 @@ export default function PrivacyPolicyScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	content: {
-		padding: 20,
-	},
-	intro: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.regular,
-		marginBottom: 20,
-		color: Colors.text,
-		lineHeight: 24,
-	},
-	policyItem: {
-		marginBottom: 20,
-		backgroundColor: 'transparent',
-	},
-	policyTitle: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.bold,
-		marginBottom: 8,
-		color: Colors.primary,
-	},
-	policyText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors.text,
-		lineHeight: 20,
-	},
-	footer: {
-		marginTop: 20,
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors.textLight,
-		textAlign: 'center',
-	},
-})
+const styles = (theme: 'light' | 'dark') =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+		},
+		content: {
+			padding: 20,
+		},
+		intro: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.regular,
+			marginBottom: 20,
+			color: Colors[theme].colors.text,
+			lineHeight: 24,
+		},
+		policyItem: {
+			marginBottom: 20,
+			backgroundColor: 'transparent',
+		},
+		policyTitle: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.bold,
+			marginBottom: 8,
+			color: Colors[theme].colors.primary,
+		},
+		policyText: {
+			fontSize: FontSize.xsB,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.text,
+			lineHeight: 20,
+		},
+		footer: {
+			marginTop: 20,
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.text,
+			textAlign: 'center',
+		},
+	})

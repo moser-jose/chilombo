@@ -5,12 +5,13 @@ import UserProfile from '@/src/components/front/EmployersCard'
 import { useUser } from '@clerk/clerk-expo'
 import { Stack } from 'expo-router'
 import React from 'react'
-import { View, Text, FlatList, ScrollView, StyleSheet } from 'react-native'
+import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
-
+import { View } from '@/src/components/Themed'
+import { Text } from '@/src/components/ui/Text'
 const users = [
 	{
 		id: 1,
@@ -59,7 +60,8 @@ const users = [
 const services = [
 	{
 		id: 1,
-		icon: require('../../../assets/icons/emp.png'),
+		icon: require('../../../assets/icons/light/limpeza_residencial.png'),
+		iconDark: require('../../../assets/icons/light/limpeza_residencial.png'),
 		service: 'Limpeza de Residência',
 		route: '/service-details',
 		name: 'Limpeza de Residência',
@@ -174,7 +176,8 @@ const services = [
 	},
 	{
 		id: 2,
-		icon: require('../../../assets/icons/garden.png'),
+		icon: require('../../../assets/icons/light/tratamento_jardim.png'),
+		iconDark: require('../../../assets/icons/light/tratamento_jardim.png'),
 		service: 'Tratamento de Jardim',
 		route: '/services/tratamento-jardim',
 		name: 'Tratamento de Jardim',
@@ -289,7 +292,8 @@ const services = [
 	},
 	{
 		id: 3,
-		icon: require('../../../assets/icons/houseclean.png'),
+		icon: require('../../../assets/icons/light/limpeza_cadeiroes.png'),
+		iconDark: require('../../../assets/icons/light/limpeza_cadeiroes.png'),
 		service: 'Limpeza de Cadeirões',
 		route: '/services/limpeza-residencial',
 		image: require('../../../assets/empresa/cadeiroes.png'),
@@ -404,7 +408,8 @@ const services = [
 	},
 	{
 		id: 4,
-		icon: require('../../../assets/icons/toolsclean.png'),
+		icon: require('../../../assets/icons/light/limpeza_empresa.png'),
+		iconDark: require('../../../assets/icons/light/limpeza_empresa.png'),
 		service: 'Limpeza Empresarial',
 		route: '/services/limpeza-empresarial',
 		image: require('../../../assets/empresa/empresa.png'),
@@ -520,6 +525,8 @@ const services = [
 ]
 
 import Services from '@/src/components/front/Services'
+import Colors from '@/src/constants/Colors'
+import { FontSize } from '@/src/constants/FontSize'
 
 const completedServices = [
 	{
@@ -736,16 +743,15 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
 	textUser: {
-		fontSize: 18,
-		color: '#000',
+		fontSize: FontSize.smB,
 		marginTop: 20,
 		paddingHorizontal: 16,
 		fontFamily: fontFamily.poppins.medium,
+		color: Colors.dark.colors.primary,
 	},
 	textTitle: {
 		fontSize: 26,
 		fontFamily: fontFamily.poppins.bold,
-		color: '#172B4D',
 		paddingHorizontal: 16,
 	},
 })

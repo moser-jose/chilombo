@@ -1,8 +1,18 @@
 /* eslint-disable react-native/no-color-literals */
-import { Ionicons } from '@expo/vector-icons'
-import { View, Text, StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native'
+
+import {
+	View,
+	StyleSheet,
+	TouchableOpacity,
+	StyleProp,
+	ViewStyle,
+} from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
+import { Ionicons } from '@expo/vector-icons'
+import Colors from '@/src/constants/Colors'
+import { Text } from '../ui/Text'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 type SeparadorProps = {
 	onPress?: () => void
@@ -11,7 +21,8 @@ type SeparadorProps = {
 	style?: StyleProp<ViewStyle>
 }
 
-export const Separador = ({ onPress, text, style, more  }: SeparadorProps) => {
+export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
+	const { themeColors } = useCustomTheme()
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.separator} />
@@ -25,7 +36,11 @@ export const Separador = ({ onPress, text, style, more  }: SeparadorProps) => {
 					{more && (
 						<>
 							<Text style={styles.vermaisText}>Ver mais</Text>
-							<Ionicons name="chevron-forward-outline" size={18} />
+							<Ionicons
+								name="chevron-forward-outline"
+								size={18}
+								color={themeColors.colors.text}
+							/>
 						</>
 					)}
 				</TouchableOpacity>
@@ -44,7 +59,7 @@ const styles = StyleSheet.create({
 	separator: {
 		width: 5,
 		height: 25,
-		backgroundColor: '#EC7FB6',
+		backgroundColor: Colors.dark.colors.primary,
 		marginRight: 8,
 		borderRadius: 10,
 	},
@@ -66,5 +81,6 @@ const styles = StyleSheet.create({
 	vermaisText: {
 		fontSize: FontSize.xsB,
 		fontFamily: fontFamily.poppins.regular,
+		color: Colors.dark.colors.primary,
 	},
 })

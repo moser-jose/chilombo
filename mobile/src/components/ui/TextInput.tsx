@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
 	TextInput,
-	useColorScheme,
 	StyleSheet,
 	Pressable,
 	TextInputProps,
@@ -16,6 +15,8 @@ import { FontSize } from '@/src/constants/FontSize'
 
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { ThemeColors } from '@/src/types/themeColors'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -45,16 +46,17 @@ export default function TextInputUI({
 	onFocus,
 	isPasswordStrong,
 	onBlur,
-	...props
 }: TextInputUIProps) {
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<{
 		message: string
 		type: string
 	} | null>(null)
-	const theme = useColorScheme()
-	const isDark = theme === 'dark'
+
+	const { themeColors } = useCustomTheme()
 	const [showPassword, setShowPassword] = useState(false)
+
+	const styles = makeStyles(themeColors as ThemeColors)
 
 	const handleChangeText = (text: string) => {
 		if (text.length > 0) {
@@ -80,7 +82,7 @@ export default function TextInputUI({
 				<Ionicons
 					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
 					size={22}
-					color={styles(isDark).colorIconInput.color}
+					color={themeColors.colors.colorIconInput}
 				/>
 			) : null}
 		</View>
@@ -169,12 +171,12 @@ export default function TextInputUI({
 
 	return (
 		<View style={style}>
-			{label && <Text style={styles(isDark).label}>{label}</Text>}
+			{label && <Text style={styles.label}>{label}</Text>}
 			<View
 				style={[
-					styles(isDark).input,
+					styles.input,
 					isInputFocused && {
-						borderColor: isDark ? Colors.dark.secondary : Colors.light.primary,
+						borderColor: themeColors.colors.secondary,
 						borderWidth: 1.8,
 					},
 				]}
@@ -184,13 +186,13 @@ export default function TextInputUI({
 						name={icon}
 						style={{ marginRight: 4 }}
 						size={20}
-						color={styles(isDark).colorIconInput.color}
+						color={styles.colorIconInput.color}
 					/>
 				)}
 				<TextInput
 					placeholder={placeholder}
-					placeholderTextColor={styles(isDark).colorIconInput.color}
-					style={styles(isDark).textInput}
+					placeholderTextColor={themeColors.colors.colorIconInput}
+					style={styles.textInput}
 					secureTextEntry={type === 'password' && !showPassword}
 					numberOfLines={1}
 					onFocus={() => {
@@ -211,13 +213,13 @@ export default function TextInputUI({
 				)}
 			</View>
 			{shouldShowError() && errorMessage && (
-				<Text style={styles(isDark).errorText}>{errorMessage.message}</Text>
+				<Text style={styles.errorText}>{errorMessage.message}</Text>
 			)}
 		</View>
 	)
 }
 
-const styles = (isDark: boolean) =>
+const makeStyles = (themeColors: ThemeColors) =>
 	StyleSheet.create({
 		headerText: {
 			fontWeight: '300',
@@ -236,7 +238,7 @@ const styles = (isDark: boolean) =>
 		textInput: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.regular,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: themeColors.colors.text,
 			flex: 1,
 		},
 		input: {
@@ -244,28 +246,24 @@ const styles = (isDark: boolean) =>
 			width: '100%',
 			borderRadius: 10,
 			flexDirection: 'row',
-			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+			borderColor: themeColors.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 10,
-			backgroundColor: isDark
-				? Colors.dark.ImputBackgroundColors
-				: Colors.light.ImputBackgroundColors,
+			backgroundColor: themeColors.colors.ImputBackgroundColors,
 		},
 		textEnd: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: themeColors.colors.text,
 			fontWeight: '300',
 			fontSize: 14,
 		},
 		colorIconInput: {
-			color: isDark
-				? Colors.dark.colorIconInput
-				: Colors.light.colorIconInput.toString(),
+			color: themeColors.colors.colorIconInput,
 		},
 		label: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.medium,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: themeColors.colors.text,
 			marginBottom: 4,
 		},
 	})

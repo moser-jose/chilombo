@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	FlatList,
 	Dimensions,
+	useColorScheme,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -120,7 +121,7 @@ type SearchResultsModalProps = {
 	onClose: () => void
 }
 
-const SeparatorList = ({ title }: { title: string }) => {
+const SeparatorList = ({ title, theme }: { title: string; theme: 'light' | 'dark' }) => {
 	return (
 		<View
 			style={{
@@ -136,7 +137,7 @@ const SeparatorList = ({ title }: { title: string }) => {
 					style={{
 						fontSize: FontSize.xsB,
 						fontFamily: fontFamily.poppins.medium,
-						color: '#172B4D',
+						color: Colors[theme].colors.text,
 					}}
 				>
 					{title}
@@ -149,6 +150,8 @@ const SeparatorList = ({ title }: { title: string }) => {
 
 const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 	const [searchTerm, setSearchTerm] = useState('')
+
+	const theme = useColorScheme() ?? 'light'
 
 	const filteredServices = useMemo(() => {
 		if (!searchTerm) return []
@@ -191,47 +194,51 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 
 		return (
 			<>
-				{isFirstService && <SeparatorList title="💎 Nossos Serviços" />}
+				{isFirstService && (
+					<SeparatorList theme={theme} title="💎 Nossos Serviços" />
+				)}
 
 				{isFirstCompletedService && (
-					<SeparatorList title="⌛️ Serviços realizados" />
+					<SeparatorList theme={theme} title="⌛️ Serviços realizados" />
 				)}
 
 				<TouchableOpacity
-					style={styles.resultItem}
+					style={styles(theme).resultItem}
 					onPress={handlePress}
 					activeOpacity={0.7}
 				>
 					{isService ? (
-						<View style={styles.serviceItem}>
+						<View style={styles(theme).serviceItem}>
 							<FastImage
 								source={item.icon}
-								style={styles.serviceIcon}
+								style={styles(theme).serviceIcon}
 								resizeMode={FastImage.resizeMode.contain}
 							/>
-							<View style={styles.serviceInfo}>
-								<Text style={styles.serviceName}>{item.service}</Text>
+							<View style={styles(theme).serviceInfo}>
+								<Text style={styles(theme).serviceName}>{item.service}</Text>
 							</View>
 						</View>
 					) : (
-						<View style={styles.completedServiceItem}>
+						<View style={styles(theme).completedServiceItem}>
 							<FastImage
 								source={{ uri: item.image }}
-								style={styles.completedServiceImage}
+								style={styles(theme).completedServiceImage}
 								resizeMode={FastImage.resizeMode.cover}
 							/>
-							<View style={styles.completedServiceInfo}>
-								<Text style={styles.completedServiceTitle}>{item.title}</Text>
+							<View style={styles(theme).completedServiceInfo}>
+								<Text style={styles(theme).completedServiceTitle}>
+									{item.title}
+								</Text>
 								<Text
-									style={styles.completedServiceDescription}
+									style={styles(theme).completedServiceDescription}
 									numberOfLines={2}
 								>
 									{item.description}
 								</Text>
-								<View style={styles.ratingContainer}>
+								<View style={styles(theme).ratingContainer}>
 									<Ionicons name="star" size={16} color="#fbd602" />
-									<Text style={styles.ratingText}>{item.stars}</Text>
-									<Text style={styles.likesText}>({item.likes})</Text>
+									<Text style={styles(theme).ratingText}>{item.stars}</Text>
+									<Text style={styles(theme).likesText}>({item.likes})</Text>
 								</View>
 							</View>
 						</View>
@@ -252,12 +259,15 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 			transparent={true}
 			onRequestClose={onClose}
 		>
-			<View style={styles.modalContainer}>
-				<View style={styles.modalContent}>
-					<View style={styles.header}>
-						<Text style={styles.title}>Encontre os serviços</Text>
-						<View style={styles.closeButtonContainer}>
-							<TouchableOpacity onPress={onClose} style={styles.closeButton}>
+			<View style={styles(theme).modalContainer}>
+				<View style={styles(theme).modalContent}>
+					<View style={styles(theme).header}>
+						<Text style={styles(theme).title}>Encontre os serviços</Text>
+						<View style={styles(theme).closeButtonContainer}>
+							<TouchableOpacity
+								onPress={onClose}
+								style={styles(theme).closeButton}
+							>
 								<Ionicons name="close" size={18} color={Colors.white} />
 							</TouchableOpacity>
 						</View>
@@ -279,7 +289,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 							onChangeText={handleSearch}
 							style={{ flex: 1 }}
 						/>
-						<View style={styles.filterButtonContainer}>
+						<View style={styles(theme).filterButtonContainer}>
 							<TouchableOpacity>
 								<Ionicons name="options-outline" size={24} color="#666D80" />
 							</TouchableOpacity>
@@ -293,13 +303,13 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 								renderItem={renderItem}
 								keyExtractor={keyExtractor}
 								showsVerticalScrollIndicator={false}
-								contentContainerStyle={styles.listContent}
+								contentContainerStyle={styles(theme).listContent}
 							/>
 						</>
 					) : (
-						<View style={styles.noResultsContainer}>
+						<View style={styles(theme).noResultsContainer}>
 							<Ionicons name="search-outline" size={48} color="#666D80" />
-							<Text style={styles.noResultsText}>
+							<Text style={styles(theme).noResultsText}>
 								Nenhum resultado encontrado
 							</Text>
 						</View>
@@ -310,182 +320,183 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 	)
 }
 
-const styles = StyleSheet.create({
-	modalContainer: {
-		flex: 1,
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-		justifyContent: 'flex-end',
-	},
+const styles = (theme: 'light' | 'dark') =>
+	StyleSheet.create({
+		modalContainer: {
+			flex: 1,
+			backgroundColor: 'rgba(0, 0, 0, 0.5)',
+			justifyContent: 'flex-end',
+		},
 
-	rightContainer: {
-		marginVertical: 16,
-		padding: 12,
-		backgroundColor: '#1A1B25',
-		borderRadius: 14,
-		borderWidth: 1,
-		borderColor: '#262733',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		width: width * 0.7,
-	},
-	inputText: {
-		flex: 1,
-		marginLeft: 10,
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors.white,
-		width: width * 0.7,
-	},
-	leftContainerRight: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 10,
-	},
-	rightContainerRightFilter: {
-		borderLeftWidth: 1,
-		borderLeftColor: '#262733',
-		paddingLeft: 14,
-	},
+		rightContainer: {
+			marginVertical: 16,
+			padding: 12,
+			backgroundColor: '#1A1B25',
+			borderRadius: 14,
+			borderWidth: 1,
+			borderColor: '#262733',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			width: width * 0.7,
+		},
+		inputText: {
+			flex: 1,
+			marginLeft: 10,
+			fontSize: FontSize.xsB,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors.white,
+			width: width * 0.7,
+		},
+		leftContainerRight: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 10,
+		},
+		rightContainerRightFilter: {
+			borderLeftWidth: 1,
+			borderLeftColor: '#262733',
+			paddingLeft: 14,
+		},
 
-	modalContent: {
-		backgroundColor: Colors.white,
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-		height: height * 0.87,
-	},
-	header: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		paddingHorizontal: 16,
-		marginBottom: 5,
-		paddingVertical: 12,
-		backgroundColor: 'rgba(28, 34, 44, 0.86)',
-		borderTopLeftRadius: 20,
-		borderTopRightRadius: 20,
-	},
-	title: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: Colors.white,
-	},
-	closeButtonContainer: {
-		backgroundColor: 'rgba(214, 30, 30, 0.58)',
-		borderColor: 'rgba(199, 17, 17, 0.58)',
-		borderWidth: 1,
-		borderRadius: 12,
-		width: 30,
-		height: 30,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	filterButtonContainer: {
-		backgroundColor: 'rgba(0, 0, 0, 0.1)',
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		borderWidth: 1,
-		borderRadius: 15,
-		width: 45,
-		height: 45,
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginBottom: 12,
-	},
-	closeButton: {
-		padding: 8,
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: 35,
-		height: 35,
-	},
-	listContent: {
-		paddingHorizontal: 16,
-		paddingBottom: 20,
-	},
-	resultItem: {
-		marginBottom: 16,
-		backgroundColor: '#fff',
-		borderRadius: 10,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		borderWidth: 1.2,
-		shadowRadius: 3.84,
-		elevation: 5,
-	},
-	serviceItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 12,
-	},
-	serviceIcon: {
-		width: 40,
-		height: 40,
-		borderRadius: 3,
-	},
-	serviceInfo: {
-		marginLeft: 12,
-		flex: 1,
-	},
-	serviceName: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#172B4D',
-	},
-	completedServiceItem: {
-		flexDirection: 'row',
-		//borderRadius: 12,
-		overflow: 'hidden',
-	},
-	completedServiceImage: {
-		width: 90,
-		height: '100%',
-		borderBottomLeftRadius: 8,
-		borderTopLeftRadius: 8,
-	},
-	completedServiceInfo: {
-		flex: 1,
-		padding: 12,
-	},
-	completedServiceTitle: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#172B4D',
-		marginBottom: 2,
-	},
-	completedServiceDescription: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666D80',
-		marginBottom: 4,
-	},
-	ratingContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	ratingText: {
-		marginLeft: 4,
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#172B4D',
-	},
-	likesText: {
-		marginLeft: 4,
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666D80',
-	},
-	noResultsContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingBottom: height * 0.1,
-	},
-	noResultsText: {
-		marginTop: 16,
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#666D80',
-		textAlign: 'center',
-	},
-})
+		modalContent: {
+			backgroundColor: 'rgba(0, 0, 0, 0.98)',
+			borderTopLeftRadius: 20,
+			borderTopRightRadius: 20,
+			height: height * 0.87,
+		},
+		header: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			paddingHorizontal: 16,
+			marginBottom: 5,
+			paddingVertical: 12,
+			backgroundColor: 'rgba(201, 199, 199, 0.77)', //'rgba(28, 34, 44, 0.86)',
+			borderTopLeftRadius: 20,
+			borderTopRightRadius: 20,
+		},
+		title: {
+			fontSize: FontSize.base,
+			fontFamily: fontFamily.poppins.semibold,
+			color: Colors.white,
+		},
+		closeButtonContainer: {
+			backgroundColor: 'rgba(214, 30, 30, 0.58)',
+			borderColor: 'rgba(199, 17, 17, 0.58)',
+			borderWidth: 1,
+			borderRadius: 12,
+			width: 30,
+			height: 30,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		filterButtonContainer: {
+			backgroundColor: Colors[theme].colors.ImputBackgroundColors, // 'rgba(0, 0, 0, 0.1)',
+			borderColor: Colors[theme].colors.borderInput,
+			borderWidth: 1,
+			borderRadius: 15,
+			width: 45,
+			height: 45,
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginBottom: 12,
+		},
+		closeButton: {
+			padding: 8,
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: 35,
+			height: 35,
+		},
+		listContent: {
+			paddingHorizontal: 16,
+			paddingBottom: 20,
+		},
+		resultItem: {
+			marginBottom: 16,
+			backgroundColor: Colors[theme].colors.ImputBackgroundColors,
+			borderColor: Colors[theme].colors.borderInput,
+			borderRadius: 10,
+			borderWidth: 1.2,
+			shadowRadius: 3.84,
+			elevation: 5,
+		},
+		serviceItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			padding: 12,
+		},
+		serviceIcon: {
+			width: 40,
+			height: 40,
+			borderRadius: 3,
+		},
+		serviceInfo: {
+			marginLeft: 12,
+			flex: 1,
+		},
+		serviceName: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.semibold,
+			color: Colors[theme].colors.text,
+		},
+		completedServiceItem: {
+			flexDirection: 'row',
+			//borderRadius: 12,
+			overflow: 'hidden',
+		},
+		completedServiceImage: {
+			width: 90,
+			height: '100%',
+			borderBottomLeftRadius: 8,
+			borderTopLeftRadius: 8,
+		},
+		completedServiceInfo: {
+			flex: 1,
+			padding: 12,
+		},
+		completedServiceTitle: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.semibold,
+			color: Colors[theme].colors.text,
+			marginBottom: 2,
+		},
+		completedServiceDescription: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.colorIconInput,
+			marginBottom: 4,
+		},
+		ratingContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		ratingText: {
+			marginLeft: 4,
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.medium,
+			color: Colors[theme].colors.text,
+		},
+		likesText: {
+			marginLeft: 4,
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.colorIconInput,
+		},
+		noResultsContainer: {
+			flex: 1,
+			alignItems: 'center',
+			justifyContent: 'center',
+			paddingBottom: height * 0.1,
+		},
+		noResultsText: {
+			marginTop: 16,
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.medium,
+			color: '#666D80',
+			textAlign: 'center',
+		},
+	})
 
 export default SearchResultsModal

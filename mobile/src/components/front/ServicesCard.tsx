@@ -1,15 +1,19 @@
 /* eslint-disable react-native/no-color-literals */
-import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { router } from 'expo-router'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { Text } from '../ui/Text'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { ThemeColors } from '@/src/types/themeColors'
 
 type ServicesCardProps = {
 	data: any
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
+	const { themeColors, themePreference } = useCustomTheme()
+	const styles = makeStyles(themeColors as ThemeColors)
 	const handlePress = () => {
 		router.push({
 			pathname: '/(services)/service-details',
@@ -27,7 +31,10 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 			onPress={handlePress}
 		>
 			<View style={styles.containerIcon}>
-				<Image source={data.icon} style={styles.icon} />
+				<Image
+					source={themePreference === 'dark' ? data.iconDark : data.icon}
+					style={styles.icon}
+				/>
 			</View>
 			<Text style={styles.title}>{data.service}</Text>
 		</TouchableOpacity>
@@ -36,31 +43,32 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 
 export default ServicesCard
 
-const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-		width: 88,
-		gap: 10,
-	},
-	containerIcon: {
-		backgroundColor: 'rgba(189, 189, 232, 0.15)',
-		borderRadius: 18,
-		width: 70,
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: 70,
-		marginBottom: -5,
-		borderWidth: 1,
-		borderColor: 'rgba(189, 189, 232, 0.53)',
-	},
-	title: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		textAlign: 'center',
-		color: Colors.primary,
-	},
-	icon: {
-		width: 45,
-		height: 45,
-	},
-})
+const makeStyles = (themeColors: ThemeColors) =>
+	StyleSheet.create({
+		container: {
+			alignItems: 'center',
+			width: 88,
+			gap: 10,
+		},
+		containerIcon: {
+			borderRadius: 18,
+			width: 70,
+			justifyContent: 'center',
+			alignItems: 'center',
+			height: 70,
+			marginBottom: -5,
+			borderWidth: 1,
+			backgroundColor: themeColors.colors.ImputBackgroundColors,
+			borderColor: themeColors.colors.tint,
+		},
+		title: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.medium,
+			textAlign: 'center',
+			color: themeColors.colors.text,
+		},
+		icon: {
+			width: 45,
+			height: 45,
+		},
+	})

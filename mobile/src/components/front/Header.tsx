@@ -70,7 +70,7 @@ const Header = () => {
 							</Text>
 							{address && (
 								<View style={styles.locationContainer}>
-									<Ionicons name="location-outline" size={18} color="#EC7FB6" />
+									<Ionicons name="location-outline" size={18} color={Colors.dark.colors.primary} />
 									<Text style={styles.locationText}>
 										{address?.city}, {address?.isoCountryCode}
 									</Text>
@@ -88,7 +88,7 @@ const Header = () => {
 								<Ionicons
 									name="search-outline"
 									size={24}
-									color={Colors.white}
+									color={Colors.text}
 								/>
 							</TouchableOpacity>
 						</View>
@@ -103,7 +103,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: Colors.primary,
+		backgroundColor: Colors.black,
 		paddingHorizontal: 16,
 		paddingBottom: 16,
 		paddingTop: 12,
@@ -112,15 +112,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		gap: 10,
 		alignItems: 'center',
-
 	},
 	imageContainer: {
 		width: 45,
 		height: 45,
-		borderRadius: 16,
+		borderRadius: 18,
 		overflow: 'hidden',
 		borderWidth: 2,
-		borderColor: 'rgba(202, 202, 234, 0.62)',
+		borderColor: Colors.dark.colors.primary,
+		marginTop: 8,
 		
 	},
 	profileImage: {
@@ -136,9 +136,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	leftContainerLeftText: {
-		color: Colors.white,
+		color: Colors.dark.colors.text,
 		fontSize: FontSize.smB,
-		fontFamily: fontFamily.poppins.bold,
+		fontFamily: fontFamily.poppins.semibold,
 	},
 	leftContainerLeft: {
 		gap: 10,
@@ -155,22 +155,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	inputText: {
-		flex: 1,
-		marginLeft: 10,
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors.white,
-	},
+	
 	leftContainerRight: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 10,
-	},
-	rightContainerRightFilter: {
-		borderLeftWidth: 1,
-		borderLeftColor: '#262733',
-		paddingLeft: 14,
 	},
 
 	styleButton: {
@@ -184,10 +173,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		gap: 5,
-		marginTop: -8,
+		marginTop: -12,
 	},
 	locationText: {
-		color: Colors.white,
+		color: Colors.text,
 		fontSize: FontSize.xs,
 		fontFamily: fontFamily.poppins.regular,
 	},
