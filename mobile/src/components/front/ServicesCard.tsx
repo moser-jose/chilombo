@@ -5,15 +5,15 @@ import { router } from 'expo-router'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Text } from '../ui/Text'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 
 type ServicesCardProps = {
 	data: any
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
-	const { themeColors, themePreference } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { theme, themePreference } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 	const handlePress = () => {
 		router.push({
 			pathname: '/(services)/service-details',
@@ -43,7 +43,7 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 
 export default ServicesCard
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			alignItems: 'center',
@@ -58,14 +58,14 @@ const makeStyles = (themeColors: ThemeColors) =>
 			height: 70,
 			marginBottom: -5,
 			borderWidth: 1,
-			backgroundColor: themeColors.colors.ImputBackgroundColors,
-			borderColor: themeColors.colors.tint,
+			backgroundColor: theme.colors.ImputBackgroundColors,
+			borderColor: theme.colors.tint,
 		},
 		title: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.medium,
 			textAlign: 'center',
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 		},
 		icon: {
 			width: 45,

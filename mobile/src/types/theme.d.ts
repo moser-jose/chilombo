@@ -1,4 +1,6 @@
-export type ThemeColors = {
+import { Theme as NavigationTheme } from '@react-navigation/native'
+
+export type Theme = {
 	dark: boolean
 	colors: {
 		text: string
@@ -12,7 +14,6 @@ export type ThemeColors = {
 		colorIconInput: string
 		secondaryMuted: string
 		primary: string
-		primaryMuted: string
 		secondary: string
 		card: string
 		border: string
@@ -21,6 +22,7 @@ export type ThemeColors = {
 		tabBarBackgroundColor: string
 		tabBarActiveTintColor: string
 		modal: string
+		backgroundHeader: string
 	}
-	fonts: unknown
+	fonts: NavigationTheme['fonts']
 }

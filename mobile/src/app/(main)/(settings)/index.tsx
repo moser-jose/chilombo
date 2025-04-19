@@ -11,14 +11,14 @@ import { useState } from 'react'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import Constants from 'expo-constants'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 
 export default function SettingsScreen() {
 	const { signOut } = useClerk()
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
-	const { themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 	const handleSignOut = async () => {
 		try {
 			await signOut()
@@ -51,7 +51,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="sunny-outline"
 									size={24}
-									color={themeColors.colors.colorIconInput}
+									color={theme.colors.colorIconInput}
 								/>
 								<Text style={styles.menuText}>Aparência</Text>
 							</View>
@@ -67,7 +67,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="help-circle-outline"
 									size={24}
-									color={themeColors.colors.colorIconInput}
+									color={theme.colors.colorIconInput}
 								/>
 								<Text style={styles.menuText}>Ajuda</Text>
 							</View>
@@ -83,7 +83,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="share-social-outline"
 									size={24}
-									color={themeColors.colors.colorIconInput}
+									color={theme.colors.colorIconInput}
 								/>
 								<Text style={styles.menuText}>Compartilhar</Text>
 							</View>
@@ -94,7 +94,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="star-outline"
 									size={24}
-									color={themeColors.colors.colorIconInput}
+									color={theme.colors.colorIconInput}
 								/>
 								<Text style={styles.menuText}>Avalie o App</Text>
 							</View>
@@ -108,7 +108,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="log-out-outline"
 									size={24}
-									color={themeColors.colors.primary}
+									color={theme.colors.primary}
 								/>
 								<Text style={[styles.menuText, styles.logoutText]}>Sair</Text>
 							</View>
@@ -138,7 +138,7 @@ export default function SettingsScreen() {
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		scrollView: {
 			flex: 1,
@@ -189,7 +189,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 			fontSize: 16,
 			marginLeft: 15,
 			fontFamily: fontFamily.poppins.regular,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 		},
 		logoutText: {
 			fontFamily: fontFamily.poppins.medium,

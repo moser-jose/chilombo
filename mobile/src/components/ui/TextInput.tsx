@@ -16,7 +16,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -53,10 +53,10 @@ export default function TextInputUI({
 		type: string
 	} | null>(null)
 
-	const { themeColors } = useCustomTheme()
+	const { theme } = useCustomTheme()
 	const [showPassword, setShowPassword] = useState(false)
 
-	const styles = makeStyles(themeColors as ThemeColors)
+	const styles = makeStyles(theme as Theme)
 
 	const handleChangeText = (text: string) => {
 		if (text.length > 0) {
@@ -82,7 +82,7 @@ export default function TextInputUI({
 				<Ionicons
 					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
 					size={22}
-					color={themeColors.colors.colorIconInput}
+					color={theme.colors.colorIconInput}
 				/>
 			) : null}
 		</View>
@@ -176,7 +176,7 @@ export default function TextInputUI({
 				style={[
 					styles.input,
 					isInputFocused && {
-						borderColor: themeColors.colors.secondary,
+						borderColor: theme.colors.secondary,
 						borderWidth: 1.8,
 					},
 				]}
@@ -191,7 +191,7 @@ export default function TextInputUI({
 				)}
 				<TextInput
 					placeholder={placeholder}
-					placeholderTextColor={themeColors.colors.colorIconInput}
+					placeholderTextColor={theme.colors.colorIconInput}
 					style={styles.textInput}
 					secureTextEntry={type === 'password' && !showPassword}
 					numberOfLines={1}
@@ -219,7 +219,7 @@ export default function TextInputUI({
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		headerText: {
 			fontWeight: '300',
@@ -238,7 +238,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 		textInput: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.regular,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 			flex: 1,
 		},
 		input: {
@@ -246,24 +246,24 @@ const makeStyles = (themeColors: ThemeColors) =>
 			width: '100%',
 			borderRadius: 10,
 			flexDirection: 'row',
-			borderColor: themeColors.colors.borderInput,
+			borderColor: theme.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 10,
-			backgroundColor: themeColors.colors.ImputBackgroundColors,
+			backgroundColor: theme.colors.ImputBackgroundColors,
 		},
 		textEnd: {
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 			fontWeight: '300',
 			fontSize: 14,
 		},
 		colorIconInput: {
-			color: themeColors.colors.colorIconInput,
+			color: theme.colors.colorIconInput,
 		},
 		label: {
 			fontSize: FontSize.xsB,
 			fontFamily: fontFamily.poppins.medium,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 			marginBottom: 4,
 		},
 	})

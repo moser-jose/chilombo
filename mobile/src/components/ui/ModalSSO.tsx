@@ -18,7 +18,7 @@ import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import Button from './Button'
 import { maskEmail } from '@/src/utils/maskEmail'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 interface ModalSSOProps {
 	openModal: boolean
 	isDark: boolean
@@ -52,8 +52,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 	const [isCodeFiveFocused, setIsCodeFiveFocused] = useState(false)
 	const [isCodeSixFocused, setIsCodeSixFocused] = useState(false)
 
-	const { themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 
 	const onVerifyPress = async () => {
 		if (!isLoaded) return
@@ -181,8 +181,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeOneFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -209,8 +209,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeTwoFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -239,8 +239,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeThreeFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -269,8 +269,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeFourFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -299,8 +299,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeFiveFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -329,8 +329,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 									styles.inputVerify,
 									isCodeSixFocused && {
 										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
+											? theme.colors.secondary
+											: theme.colors.primary,
 										borderWidth: 1.8,
 									},
 								]}
@@ -380,9 +380,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 					<Ionicons
 						name="close-circle"
 						size={40}
-						color={
-							isDark ? themeColors.colors.secondary : themeColors.colors.primary
-						}
+						color={isDark ? theme.colors.secondary : theme.colors.primary}
 					/>
 				</Pressable>
 			</View>
@@ -390,7 +388,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		descModal: {
 			fontSize: 15,
@@ -414,7 +412,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: themeColors.colors.background,
+			backgroundColor: theme.colors.background,
 		},
 		textModal: {
 			fontWeight: '600',
@@ -453,7 +451,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 			borderRadius: 16,
 			width: '15%',
 			flexDirection: 'row',
-			borderColor: themeColors.colors.borderInput,
+			borderColor: theme.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 20,
@@ -462,7 +460,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 			fontSize: 24,
 			padding: 12,
 			fontFamily: fontFamily.poppins.bold,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 			width: '100%',
 			overflow: 'hidden',
 			textAlign: 'center',

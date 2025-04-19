@@ -8,7 +8,7 @@ export default function SettingsLayout() {
 		<Stack
 			screenOptions={{
 				headerShown: true,
-				headerTitle: 'Configurações',
+				headerTitle: 'Meus Serviços',
 				headerTitleStyle: {
 					fontSize: FontSize.smB,
 					fontFamily: fontFamily.poppins.bold,

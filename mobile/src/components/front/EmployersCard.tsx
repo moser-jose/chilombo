@@ -4,15 +4,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 
 interface UserProfileProps {
 	data: any
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ data }) => {
-	const { themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 	const name = `${data.firstname} ${data.lastname}`
 	const image =
 		data.image ||
@@ -28,7 +28,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ data }) => {
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			alignItems: 'center',
@@ -37,8 +37,8 @@ const makeStyles = (themeColors: ThemeColors) =>
 			paddingVertical: 10,
 			borderRadius: 22,
 			borderWidth: 1,
-			backgroundColor: themeColors.colors.ImputBackgroundColors,
-			borderColor: themeColors.colors.tint,
+			backgroundColor: theme.colors.ImputBackgroundColors,
+			borderColor: theme.colors.tint,
 		},
 		imageContainer: {
 			width: 55,
@@ -47,7 +47,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 			overflow: 'hidden',
 			marginBottom: 8,
 			borderWidth: 2,
-			borderColor: themeColors.colors.tint,
+			borderColor: theme.colors.tint,
 		},
 		image: {
 			width: '100%',
@@ -59,12 +59,12 @@ const makeStyles = (themeColors: ThemeColors) =>
 			marginBottom: 2,
 			textAlign: 'center',
 			fontFamily: fontFamily.poppins.bold,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 		},
 		role: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
-			color: themeColors.colors.colorIconInput,
+			color: theme.colors.colorIconInput,
 		},
 	})
 
