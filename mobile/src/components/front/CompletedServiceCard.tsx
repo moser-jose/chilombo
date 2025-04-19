@@ -25,8 +25,8 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	data,
 	style,
 }) => {
-	const { themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors)
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 
 	return (
 		<TouchableOpacity
@@ -55,7 +55,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 					<Ionicons
 						name="location-outline"
 						size={14}
-						color={themeColors.colors.primary}
+						color={theme.colors.primary}
 					/>
 					<Text style={styles.locationText} numberOfLines={1}>
 						{data.address}
@@ -73,15 +73,15 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	)
 }
 
-const makeStyles = (themeColors: any) =>
+const makeStyles = (theme: any) =>
 	StyleSheet.create({
 		container: {
 			width: 260,
 			borderRadius: 16,
 			overflow: 'hidden',
 			borderWidth: 1,
-			borderColor: themeColors.colors.tint,
-			backgroundColor: themeColors.colors.ImputBackgroundColors,
+			borderColor: theme.colors.tint,
+			backgroundColor: theme.colors.card,
 			shadowColor: '#000',
 			shadowOffset: { width: 0, height: 2 },
 			shadowOpacity: 0.1,
@@ -130,7 +130,7 @@ const makeStyles = (themeColors: any) =>
 			fontSize: FontSize.base,
 			fontFamily: fontFamily.poppins.semibold,
 			marginBottom: 1,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 		},
 		locationContainer: {
 			flexDirection: 'row',
@@ -142,14 +142,14 @@ const makeStyles = (themeColors: any) =>
 			fontFamily: fontFamily.poppins.regular,
 			marginLeft: 4,
 			flex: 1,
-			color: themeColors.colors.colorIconInput,
+			color: theme.colors.muted,
 		},
 		description: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
 			marginBottom: 6,
 			lineHeight: 16,
-			color: themeColors.colors.colorIconInput,
+			color: theme.colors.text,
 		},
 		likesContainer: {
 			flexDirection: 'row',
@@ -159,7 +159,7 @@ const makeStyles = (themeColors: any) =>
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
 			marginLeft: 4,
-			color: themeColors.colors.muted,
+			color: theme.colors.muted,
 		},
 	})
 

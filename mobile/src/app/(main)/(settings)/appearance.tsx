@@ -6,14 +6,14 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Stack, useRouter } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
 
 type ThemeOption = 'light' | 'dark' | 'system'
 
 export default function AppearanceScreen() {
 	const router = useRouter()
-	const { themePreference, setThemePreference, themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { themePreference, setThemePreference, theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 
 	const handleSelectTheme = async (option: ThemeOption) => {
 		await setThemePreference(option)
@@ -32,7 +32,7 @@ export default function AppearanceScreen() {
 					<Ionicons
 						name="checkmark-circle"
 						size={24}
-						color={themeColors.colors.primary}
+						color={theme.colors.primary}
 					/>
 				)}
 			</TouchableOpacity>
@@ -81,12 +81,12 @@ export default function AppearanceScreen() {
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
 			paddingTop: 20,
-			backgroundColor: themeColors.colors.background,
+			backgroundColor: theme.colors.background,
 		},
 		optionsContainer: {
 			marginTop: 20,
@@ -106,7 +106,7 @@ const makeStyles = (themeColors: ThemeColors) =>
 		optionText: {
 			fontSize: FontSize.sm,
 			fontFamily: fontFamily.poppins.regular,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 		},
 		infoText: {
 			marginTop: 15,

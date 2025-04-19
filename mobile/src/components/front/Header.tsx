@@ -11,6 +11,8 @@ import { FontSize } from '@/src/constants/FontSize'
 import SearchResultsModal from './SearchResultsModal'
 import FastImage from 'react-native-fast-image'
 import { useRouter } from 'expo-router'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 type Address = {
 	city: string
@@ -21,7 +23,8 @@ const Header = () => {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
 	const [isModalVisible, setIsModalVisible] = useState(false)
-
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	const { user } = useUser()
 	const router = useRouter()
 	useEffect(() => {
@@ -57,7 +60,10 @@ const Header = () => {
 			<View style={styles.container}>
 				<View style={styles.leftContainer}>
 					<View style={styles.leftContainerLeftUser}>
-						<TouchableOpacity style={styles.imageContainer} onPress={() => router.push('/(user)')}>
+						<TouchableOpacity
+							style={styles.imageContainer}
+							onPress={() => router.push('/(user)')}
+						>
 							<FastImage
 								style={styles.profileImage}
 								source={{ uri: user?.imageUrl }}
@@ -70,7 +76,11 @@ const Header = () => {
 							</Text>
 							{address && (
 								<View style={styles.locationContainer}>
-									<Ionicons name="location-outline" size={18} color={Colors.dark.colors.primary} />
+									<Ionicons
+										name="location-outline"
+										size={18}
+										color={Colors.dark.colors.primary}
+									/>
 									<Text style={styles.locationText}>
 										{address?.city}, {address?.isoCountryCode}
 									</Text>
@@ -85,11 +95,7 @@ const Header = () => {
 								onPress={() => setIsModalVisible(true)}
 								style={styles.styleButton}
 							>
-								<Ionicons
-									name="search-outline"
-									size={24}
-									color={Colors.text}
-								/>
+								<Ionicons name="search-outline" size={24} color={Colors.text} />
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -101,84 +107,83 @@ const Header = () => {
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		backgroundColor: Colors.black,
-		paddingHorizontal: 16,
-		paddingBottom: 16,
-		paddingTop: 12,
-	},
-	leftContainerLeftUser: {
-		flexDirection: 'row',
-		gap: 10,
-		alignItems: 'center',
-	},
-	imageContainer: {
-		width: 45,
-		height: 45,
-		borderRadius: 18,
-		overflow: 'hidden',
-		borderWidth: 2,
-		borderColor: Colors.dark.colors.primary,
-		marginTop: 8,
-		
-	},
-	profileImage: {
-		width: '100%',
-		height: '100%',
-		borderRadius: 14,
-		
-	},
-	leftContainer: {
-		flexDirection: 'row',
-		gap: 10,
-		marginTop: 55,
-		justifyContent: 'space-between',
-	},
-	leftContainerLeftText: {
-		color: Colors.dark.colors.text,
-		fontSize: FontSize.smB,
-		fontFamily: fontFamily.poppins.semibold,
-	},
-	leftContainerLeft: {
-		gap: 10,
-	},
+const makeStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			backgroundColor: theme.colors.backgroundHeader,
+			paddingHorizontal: 16,
+			paddingBottom: 16,
+			paddingTop: 12,
+		},
+		leftContainerLeftUser: {
+			flexDirection: 'row',
+			gap: 10,
+			alignItems: 'center',
+		},
+		imageContainer: {
+			width: 45,
+			height: 45,
+			borderRadius: 18,
+			overflow: 'hidden',
+			borderWidth: 2,
+			borderColor: Colors.dark.colors.primary,
+			marginTop: 8,
+		},
+		profileImage: {
+			width: '100%',
+			height: '100%',
+			borderRadius: 14,
+		},
+		leftContainer: {
+			flexDirection: 'row',
+			gap: 10,
+			marginTop: 55,
+			justifyContent: 'space-between',
+		},
+		leftContainerLeftText: {
+			color: Colors.dark.colors.text,
+			fontSize: FontSize.smB,
+			fontFamily: fontFamily.poppins.semibold,
+		},
+		leftContainerLeft: {
+			gap: 10,
+		},
 
-	rightContainer: {
-		marginVertical: 16,
-		padding: 12,
-		backgroundColor: '#1A1B25',
-		borderRadius: 14,
-		borderWidth: 1,
-		borderColor: '#262733',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-	
-	leftContainerRight: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 10,
-	},
+		rightContainer: {
+			marginVertical: 16,
+			padding: 12,
+			backgroundColor: '#1A1B25',
+			borderRadius: 14,
+			borderWidth: 1,
+			borderColor: '#262733',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+		},
 
-	styleButton: {
-		backgroundColor: '#1A1B25',
-		padding: 8,
-		borderRadius: 18,
-		borderWidth: 1,
-		borderColor: '#262733',
-	},
-	locationContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 5,
-		marginTop: -12,
-	},
-	locationText: {
-		color: Colors.text,
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-	},
-})
+		leftContainerRight: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 10,
+		},
+
+		styleButton: {
+			backgroundColor: '#1A1B25',
+			padding: 8,
+			borderRadius: 18,
+			borderWidth: 1,
+			borderColor: '#262733',
+		},
+		locationContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 5,
+			marginTop: -12,
+		},
+		locationText: {
+			color: Colors.text,
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+		},
+	})
 export default Header

@@ -15,15 +15,15 @@ import { ClerkAPIError } from '@clerk/types'
 import { router } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
-import Button from './Button'
+import Button from './Buttons'
 import { maskEmail } from '@/src/utils/maskEmail'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { ThemeColors } from '@/src/types/themeColors'
+import { Theme } from '@/src/types/theme'
+import Colors from '@/src/constants/Colors'
 interface ModalSSOProps {
 	openModal: boolean
 	isDark: boolean
 	emailAddress: string
-	isPasswordStrong: boolean
 }
 
 export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
@@ -52,8 +52,8 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 	const [isCodeFiveFocused, setIsCodeFiveFocused] = useState(false)
 	const [isCodeSixFocused, setIsCodeSixFocused] = useState(false)
 
-	const { themeColors } = useCustomTheme()
-	const styles = makeStyles(themeColors as ThemeColors)
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 
 	const onVerifyPress = async () => {
 		if (!isLoaded) return
@@ -118,309 +118,321 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 			transparent={true}
 			animationType="slide"
 		>
-			<View style={styles.contentModal}>
-				{errors.map(error => (
-					<View
-						key={error.longMessage}
-						style={{
-							padding: 10,
-							borderRadius: 10,
-							marginBottom: 10,
-							position: 'absolute',
-							alignSelf: 'center',
-							justifyContent: 'center',
-							alignItems: 'center',
-							top: 70,
-							left: 0,
-							right: 0,
-						}}
-					>
+			<View style={styles.modalOverlay}>
+				<View style={styles.contentModal}>
+					{errors.map(error => (
 						<View
+							key={error.longMessage}
 							style={{
-								width: '90%',
-								backgroundColor: 'rgba(255, 0, 0, 0.71)',
 								padding: 10,
-								borderRadius: 12,
+								borderRadius: 10,
 								marginBottom: 10,
+								position: 'relative',
+								alignSelf: 'center',
+								justifyContent: 'center',
+								alignItems: 'center',
+								top: 70,
+								left: 0,
+								right: 0,
 							}}
 						>
-							<Text
+							<View
 								style={{
-									color: 'white',
-									fontFamily: fontFamily.poppins.regular,
-									fontSize: 16,
+									width: '90%',
+									backgroundColor: 'rgba(255, 0, 0, 0.71)',
+									padding: 10,
+									borderRadius: 12,
+									marginBottom: 10,
 								}}
 							>
-								{error.longMessage}
-							</Text>
-						</View>
-					</View>
-				))}
-
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<View style={styles.cardModal}>
-						<Text style={styles.titleModal}>
-							Insira o Código de verificação
-						</Text>
-						<Text style={styles.descModal}>
-							Enviamos um código de verificação para o e-mail{' '}
-							<Text style={{ fontFamily: fontFamily.poppins.bold }}>
-								{maskEmail(emailAddress)}
-							</Text>
-						</Text>
-						<View
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-								gap: 10,
-							}}
-						>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeOneFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeOneRef}
-									value={codeOne}
-									onChangeText={text => {
-										setCodeOne(text)
-										if (text.length === 1) {
-											codeTwoRef.current?.focus()
-										}
+								<Text
+									style={{
+										color: 'white',
+										fontFamily: fontFamily.poppins.regular,
+										fontSize: 16,
 									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeOneFocused(true)}
-									onBlur={() => setIsCodeOneFocused(false)}
-								/>
-							</View>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeTwoFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeTwoRef}
-									value={codeTwo}
-									onChangeText={text => {
-										setCodeTwo(text)
-										if (text.length === 1) {
-											codeThreeRef.current?.focus()
-										} else if (text.length === 0) {
-											codeOneRef.current?.focus()
-										}
-									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeTwoFocused(true)}
-									onBlur={() => setIsCodeTwoFocused(false)}
-								/>
-							</View>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeThreeFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeThreeRef}
-									value={codeThree}
-									onChangeText={text => {
-										setCodeThree(text)
-										if (text.length === 1) {
-											codeFourRef.current?.focus()
-										} else if (text.length === 0) {
-											codeTwoRef.current?.focus()
-										}
-									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeThreeFocused(true)}
-									onBlur={() => setIsCodeThreeFocused(false)}
-								/>
-							</View>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeFourFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeFourRef}
-									value={codeFour}
-									onChangeText={text => {
-										setCodeFour(text)
-										if (text.length === 1) {
-											codeFiveRef.current?.focus()
-										} else if (text.length === 0) {
-											codeThreeRef.current?.focus()
-										}
-									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeFourFocused(true)}
-									onBlur={() => setIsCodeFourFocused(false)}
-								/>
-							</View>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeFiveFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeFiveRef}
-									value={codeFive}
-									onChangeText={text => {
-										setCodeFive(text)
-										if (text.length === 1) {
-											codeSixRef.current?.focus()
-										} else if (text.length === 0) {
-											codeFourRef.current?.focus()
-										}
-									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeFiveFocused(true)}
-									onBlur={() => setIsCodeFiveFocused(false)}
-								/>
-							</View>
-							<View
-								style={[
-									styles.inputVerify,
-									isCodeSixFocused && {
-										borderColor: isDark
-											? themeColors.colors.secondary
-											: themeColors.colors.primary,
-										borderWidth: 1.8,
-									},
-								]}
-							>
-								<TextInput
-									ref={codeSixRef}
-									value={codeSix}
-									onChangeText={text => {
-										setCodeSix(text)
-										if (text.length === 0) {
-											codeFiveRef.current?.focus()
-										}
-									}}
-									numberOfLines={1}
-									maxLength={1}
-									keyboardType="numeric"
-									style={[styles.textInputVerify]}
-									onFocus={() => setIsCodeSixFocused(true)}
-									onBlur={() => setIsCodeSixFocused(false)}
-								/>
+								>
+									{error.longMessage}
+								</Text>
 							</View>
 						</View>
+					))}
 
-						<Button
-							style={{ marginTop: 30 }}
-							disabled={isLoading}
-							loading={isLoading}
-							onPress={onVerifyPress}
-							variant="filled"
-							size="lg"
-						>
-							<Text>Verificar</Text>
-						</Button>
-					</View>
-				</TouchableWithoutFeedback>
+					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+						<View style={styles.cardModal}>
+							<Text style={styles.titleModal}>
+								Insira o Código de verificação
+							</Text>
+							<Text style={styles.descModal}>
+								Enviamos um código de verificação para o e-mail{' '}
+								<Text
+									style={{
+										fontFamily: fontFamily.poppins.medium,
+										fontSize: FontSize.xsB,
+										color: theme.colors.text,
+									}}
+								>
+									{maskEmail(emailAddress)}
+								</Text>
+							</Text>
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									justifyContent: 'center',
+									gap: 10,
+								}}
+							>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeOneFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeOneRef}
+										value={codeOne}
+										onChangeText={text => {
+											setCodeOne(text)
+											if (text.length === 1) {
+												codeTwoRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeOneFocused(true)}
+										onBlur={() => setIsCodeOneFocused(false)}
+									/>
+								</View>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeTwoFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeTwoRef}
+										value={codeTwo}
+										onChangeText={text => {
+											setCodeTwo(text)
+											if (text.length === 1) {
+												codeThreeRef.current?.focus()
+											} else if (text.length === 0) {
+												codeOneRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeTwoFocused(true)}
+										onBlur={() => setIsCodeTwoFocused(false)}
+									/>
+								</View>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeThreeFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeThreeRef}
+										value={codeThree}
+										onChangeText={text => {
+											setCodeThree(text)
+											if (text.length === 1) {
+												codeFourRef.current?.focus()
+											} else if (text.length === 0) {
+												codeTwoRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeThreeFocused(true)}
+										onBlur={() => setIsCodeThreeFocused(false)}
+									/>
+								</View>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeFourFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeFourRef}
+										value={codeFour}
+										onChangeText={text => {
+											setCodeFour(text)
+											if (text.length === 1) {
+												codeFiveRef.current?.focus()
+											} else if (text.length === 0) {
+												codeThreeRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeFourFocused(true)}
+										onBlur={() => setIsCodeFourFocused(false)}
+									/>
+								</View>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeFiveFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeFiveRef}
+										value={codeFive}
+										onChangeText={text => {
+											setCodeFive(text)
+											if (text.length === 1) {
+												codeSixRef.current?.focus()
+											} else if (text.length === 0) {
+												codeFourRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeFiveFocused(true)}
+										onBlur={() => setIsCodeFiveFocused(false)}
+									/>
+								</View>
+								<View
+									style={[
+										styles.inputVerify,
+										isCodeSixFocused && {
+											borderColor: theme.colors.primary,
+											borderWidth: 1.8,
+										},
+									]}
+								>
+									<TextInput
+										ref={codeSixRef}
+										value={codeSix}
+										onChangeText={text => {
+											setCodeSix(text)
+											if (text.length === 0) {
+												codeFiveRef.current?.focus()
+											}
+										}}
+										numberOfLines={1}
+										maxLength={1}
+										keyboardType="numeric"
+										style={[styles.textInputVerify]}
+										onFocus={() => setIsCodeSixFocused(true)}
+										onBlur={() => setIsCodeSixFocused(false)}
+									/>
+								</View>
+							</View>
 
-				<Pressable
-					onPress={closeModal}
-					style={{
-						position: 'absolute',
-						bottom: 50,
-						padding: 10,
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					<Ionicons
-						name="close-circle"
-						size={40}
-						color={
-							isDark ? themeColors.colors.secondary : themeColors.colors.primary
-						}
-					/>
-				</Pressable>
+							<Button
+								style={{ marginTop: 30 }}
+								disabled={isLoading}
+								loading={isLoading}
+								onPress={onVerifyPress}
+								variant="filled"
+								size="lg"
+							>
+								<Text>Verificar</Text>
+							</Button>
+						</View>
+					</TouchableWithoutFeedback>
+
+					<Pressable
+						onPress={closeModal}
+						style={{
+							position: 'absolute',
+							bottom: 50,
+							padding: 10,
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<Ionicons
+							name="close-circle"
+							size={40}
+							color={isDark ? theme.colors.secondary : theme.colors.primary}
+						/>
+					</Pressable>
+				</View>
 			</View>
 		</Modal>
 	)
 }
 
-const makeStyles = (themeColors: ThemeColors) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
+		modalOverlay: {
+			flex: 1,
+			backgroundColor: 'rgba(0, 0, 0, 0.6)',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 		descModal: {
-			fontSize: 15,
+			fontSize: FontSize.xsB,
 			lineHeight: 24,
 			opacity: 0.7,
 			textAlign: 'center',
 			marginBottom: 14,
 			fontFamily: fontFamily.poppins.regular,
+			color: theme.colors.text,
 		},
 		titleModal: {
-			fontSize: 18,
+			fontSize: FontSize.sm,
 			textAlign: 'center',
 			fontFamily: fontFamily.poppins.bold,
 			marginBottom: 14,
+			color: theme.colors.text,
 		},
 		cardModal: {
 			width: '90%',
 			padding: 20,
 		},
 		contentModal: {
-			flex: 1,
+			/* flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: themeColors.colors.background,
+			backgroundColor: theme.colors.background, */
+			backgroundColor: theme.colors.background,
+			borderRadius: 25,
+			padding: 25,
+			width: '85%',
+			position: 'relative',
+			alignItems: 'center',
+			shadowColor: '#000',
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			shadowRadius: 4,
+			elevation: 5,
 		},
-		textModal: {
-			fontWeight: '600',
-			fontSize: 16,
-			color: 'white',
-		},
+
 		buttonModal: {
 			width: '90%',
 			backgroundColor: 'black',
@@ -450,19 +462,19 @@ const makeStyles = (themeColors: ThemeColors) =>
 			letterSpacing: 0.5,
 		},
 		inputVerify: {
-			borderRadius: 16,
+			borderRadius: 10,
 			width: '15%',
 			flexDirection: 'row',
-			borderColor: themeColors.colors.borderInput,
+			borderColor: theme.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 20,
 		},
 		textInputVerify: {
-			fontSize: 24,
-			padding: 12,
+			fontSize: FontSize.sm,
+			padding: 10,
 			fontFamily: fontFamily.poppins.bold,
-			color: themeColors.colors.text,
+			color: theme.colors.text,
 			width: '100%',
 			overflow: 'hidden',
 			textAlign: 'center',

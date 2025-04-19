@@ -22,7 +22,7 @@ type SeparadorProps = {
 }
 
 export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
-	const { themeColors } = useCustomTheme()
+	const { theme } = useCustomTheme()
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.separator} />
@@ -39,7 +39,7 @@ export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
 							<Ionicons
 								name="chevron-forward-outline"
 								size={18}
-								color={themeColors.colors.text}
+								color={theme.colors.text}
 							/>
 						</>
 					)}

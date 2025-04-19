@@ -68,13 +68,13 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-	const { themeColors } = useCustomTheme()
+	const { navigationTheme } = useCustomTheme()
 
 	return (
 		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
-					<NavigationThemeProvider value={themeColors}>
+					<NavigationThemeProvider value={navigationTheme}>
 						<Slot />
 					</NavigationThemeProvider>
 				</ClerkLoaded>

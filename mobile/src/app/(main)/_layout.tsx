@@ -23,7 +23,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-	const { themeColors } = useCustomTheme()
+	const { theme } = useCustomTheme()
 	const { user } = useUser()
 
 	if (!user) {
@@ -33,9 +33,9 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			screenOptions={{
-				tabBarActiveTintColor: themeColors.colors.tabBarActiveTintColor,
+				tabBarActiveTintColor: theme.colors.tabBarActiveTintColor,
 				tabBarStyle: {
-					backgroundColor: themeColors.colors.tabBarBackgroundColor,
+					backgroundColor: theme.colors.tabBarBackgroundColor,
 				},
 				headerShown: useClientOnlyValue(false, true),
 				tabBarLabelStyle: {
@@ -59,9 +59,10 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="categories"
+				name="(categories)"
 				options={{
 					title: 'Categorias',
+					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
 							height={22}
@@ -73,9 +74,10 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="services"
+				name="(services)"
 				options={{
 					title: 'Meus Serviços',
+					headerShown: false,
 					tabBarIcon: ({ color }) => (
 						<TabBarIcon
 							height={22}

@@ -9,7 +9,7 @@ import React, {
 import { useColorScheme } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Colors from '@/src/constants/Colors'
-import { Theme as NavigationTheme } from '@react-navigation/native'
+import { Theme } from '../types/theme'
 
 type ThemePreference = 'light' | 'dark' | 'system'
 type EffectiveTheme = 'light' | 'dark'
@@ -19,8 +19,8 @@ interface ThemeContextProps {
 	effectiveTheme: EffectiveTheme
 	isSystemTheme: boolean
 	setThemePreference: (preference: ThemePreference) => Promise<void>
-	themeColors: typeof Colors.light | typeof Colors.dark
-	navigationTheme: NavigationTheme
+	theme: typeof Colors.light | typeof Colors.dark
+	navigationTheme: Theme
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined)
@@ -65,33 +65,24 @@ export const CustomThemeProvider: React.FC<CustomThemeProviderProps> = ({
 		}
 	}
 
-	const themeColors = useMemo(() => {
+	const theme: Theme = useMemo(() => {
 		return effectiveTheme === 'dark' ? Colors.dark : Colors.light
 	}, [effectiveTheme])
 
-	const navigationTheme = useMemo<NavigationTheme>(() => {
-		const currentColors = themeColors.colors
-
+	const navigationTheme = useMemo<Theme>(() => {
 		return {
 			dark: effectiveTheme === 'dark',
-			colors: {
-				primary: currentColors.primary,
-				background: currentColors.background,
-				card: currentColors.card || currentColors.background,
-				text: currentColors.text,
-				border: currentColors.borderInput,
-				notification: currentColors.notification || currentColors.primary,
-			},
-			fonts: themeColors.fonts,
+			colors: theme.colors,
+			fonts: theme.fonts,
 		}
-	}, [effectiveTheme, themeColors])
+	}, [effectiveTheme, theme])
 
 	const value = {
 		themePreference,
 		effectiveTheme,
 		isSystemTheme: themePreference === 'system',
 		setThemePreference,
-		themeColors,
+		theme,
 		navigationTheme,
 	}
 
