@@ -98,12 +98,20 @@ export default function TextInputUI({
 
 	useEffect(() => {
 		setErrorMessage(null)
-
 		if (!errors || errors.length === 0) return
+
+		const identifier = errors.find((error: any) => error.meta.paramName === 'identifier')
+		if (identifier) {
+			setErrorMessage({
+				message: 'E-mail não encontrado',
+				type: 'email',
+			})
+			return
+		}
 
 		const firstNameError = errors.find(
 			(error: any) => error.meta.paramName === 'first_name',
-		)
+		) || null
 		if (firstNameError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.first_name,
@@ -114,7 +122,7 @@ export default function TextInputUI({
 
 		const lastNameError = errors.find(
 			(error: any) => error.meta.paramName === 'last_name',
-		)
+		) || null
 		if (lastNameError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.last_name,
@@ -125,7 +133,7 @@ export default function TextInputUI({
 
 		const phoneError = errors.find(
 			(error: any) => error.meta.paramName === 'phone_number',
-		)
+		) || null
 		if (phoneError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.phone_number,
@@ -137,7 +145,7 @@ export default function TextInputUI({
 		const error = errors.find((error: any) => {
 			const paramName = error.meta.paramName
 			return ERROR_MESSAGES[paramName as keyof typeof ERROR_MESSAGES]
-		})
+		}) || null
 
 		if (error) {
 			const paramName = error.meta.paramName
@@ -161,7 +169,9 @@ export default function TextInputUI({
 			case 'phone':
 				return errorMessage.type === 'phone_number'
 			case 'email':
-				return errorMessage.type === 'email_address'
+				if (errorMessage.type === 'email_address') return true
+				else if (errorMessage.type === 'email') return true
+				return false
 			case 'password':
 				return errorMessage.type === 'password'
 			default:
@@ -233,7 +243,7 @@ const makeStyles = (theme: Theme) =>
 			fontFamily: fontFamily.poppins.medium,
 			color: Colors.error,
 			marginBottom: 4,
-			marginTop: -10,
+			marginTop: -8,
 		},
 		textInput: {
 			fontSize: FontSize.xsB,

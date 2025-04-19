@@ -110,7 +110,7 @@ const Header = () => {
 const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
-			backgroundColor: Colors.black,
+			backgroundColor: theme.colors.backgroundHeader,
 			paddingHorizontal: 16,
 			paddingBottom: 16,
 			paddingTop: 12,

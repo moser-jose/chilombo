@@ -1,6 +1,4 @@
 import {
-	Image,
-	TextInput,
 	StyleSheet,
 	Keyboard,
 	TouchableWithoutFeedback,
@@ -8,11 +6,8 @@ import {
 	Platform,
 	Animated,
 	useWindowDimensions,
-	Pressable,
-	useColorScheme,
-	ScrollView,
+	Pressable, ScrollView
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { Text, View } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
@@ -31,12 +26,14 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'
 import { ModalSSO } from '@/src/components/ui/ModalSSO'
 import TextInputUI from '@/src/components/ui/TextInput'
-
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
+import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 export default function SignUp() {
 	const { isLoaded, signUp } = useSignUp()
 	const router = useRouter()
-	const theme = useColorScheme()
-	const isDark = theme === 'dark'
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	const { width, height } = useWindowDimensions()
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
@@ -116,10 +113,10 @@ export default function SignUp() {
 		else if (strength.score > 25) barColor = Colors.orange
 
 		return (
-			<View style={styles(isDark).strengthBarContainer}>
+			<View style={styles.strengthBarContainer}>
 				<View
 					style={[
-						styles(isDark).strengthBar,
+						styles.strengthBar,
 						{ width: `${barWidth}%`, backgroundColor: barColor },
 					]}
 				/>
@@ -128,10 +125,10 @@ export default function SignUp() {
 	}
 
 	const renderRequirements = () => (
-		<View style={styles(isDark).requirementsContainer}>
+		<View style={styles.requirementsContainer}>
 			<Text
 				style={[
-					styles(isDark).requirement,
+					styles.requirement,
 					{ color: requirements.hasNumber ? Colors.success : Colors.error },
 				]}
 			>
@@ -139,7 +136,7 @@ export default function SignUp() {
 			</Text>
 			<Text
 				style={[
-					styles(isDark).requirement,
+					styles.requirement,
 					{ color: requirements.hasSymbol ? Colors.success : Colors.error },
 				]}
 			>
@@ -147,7 +144,7 @@ export default function SignUp() {
 			</Text>
 			<Text
 				style={[
-					styles(isDark).requirement,
+					styles.requirement,
 					{ color: requirements.hasUpperCase ? Colors.success : Colors.error },
 				]}
 			>
@@ -155,7 +152,7 @@ export default function SignUp() {
 			</Text>
 			<Text
 				style={[
-					styles(isDark).requirement,
+					styles.requirement,
 					{ color: requirements.hasLowerCase ? Colors.success : Colors.error },
 				]}
 			>
@@ -163,7 +160,7 @@ export default function SignUp() {
 			</Text>
 			<Text
 				style={[
-					styles(isDark).requirement,
+					styles.requirement,
 					{ color: requirements.hasMinLength ? Colors.success : Colors.error },
 				]}
 			>
@@ -207,8 +204,7 @@ export default function SignUp() {
 		return (
 			<ModalSSO
 				openModal={openModal}
-				isDark={isDark}
-				isPasswordStrong={isPasswordStrong}
+				isDark={theme.dark}
 				emailAddress={emailAddress}
 			/>
 		)
@@ -220,35 +216,31 @@ export default function SignUp() {
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={Platform.OS === 'ios' ? 18 : 0}
 				style={[
-					styles(isDark).container,
+					styles.container,
 					{
 						height: height,
 						flex: 1,
-						backgroundColor: isDark
-							? Colors.dark.background
-							: Colors.light.background,
+						backgroundColor: theme.colors.background,
 					},
 				]}
 			>
 				<ScrollView
-					style={styles(isDark).scrollView}
+					style={styles.scrollView}
 					showsVerticalScrollIndicator={true}
 					contentInsetAdjustmentBehavior="automatic"
 					keyboardShouldPersistTaps="handled"
 				>
 					<Animated.View
 						style={[
-							styles(isDark).container,
+							styles.container,
 							{
 								transform: [{ translateY }],
 								paddingVertical: height * 0.01,
 							},
 						]}
 					>
-						<View style={[styles(isDark).contentContainer]}>
-							<Text
-								style={styles(isDark).headerText}
-							>
+						<View style={[styles.contentContainer]}>
+							<Text style={styles.headerText}>
 								Cria a sua conta e desfrute dos nossos serviços
 							</Text>
 
@@ -298,7 +290,7 @@ export default function SignUp() {
 									placeholder="Insira o telefone"
 									//icon="call-outline"
 									value="+244"
-									style={{ flex: .25 }}
+									style={{ flex: 0.25 }}
 								/>
 
 								<TextInputUI
@@ -330,7 +322,6 @@ export default function SignUp() {
 								errors={errors}
 								value={emailAddress}
 								onChangeText={setEmailAddress}
-								
 							/>
 
 							<TextInputUI
@@ -350,29 +341,15 @@ export default function SignUp() {
 								</View>
 							) : null}
 
-							<Pressable
+							<TouchableOpacity
+								type="primary"
 								onPress={onSignUpPress}
-								style={[
-									styles(isDark).button,
-									{
-										marginTop: 10,
-										backgroundColor:
-											isPasswordStrong && !isDark
-												? Colors.light.primary
-												: !isPasswordStrong && !isDark
-													? Colors.light.primaryMuted
-													: isPasswordStrong && isDark
-														? Colors.dark.secondary
-														: Colors.dark.textMuted,
-										//borderWidth:0
-									},
-								]}
-								//disabled={!isPasswordStrong}
+								style={styles.button}
 							>
 								<Text
 									style={[
-										styles(isDark).buttonText,
-										{
+										styles.buttonText,
+										/* {
 											color:
 												isPasswordStrong && !isDark
 													? Colors.light.background
@@ -381,29 +358,27 @@ export default function SignUp() {
 														: isPasswordStrong && isDark
 															? Colors.dark.text
 															: Colors.dark.textMuted,
-										},
+										}, */
 									]}
 								>
 									Criar conta
 								</Text>
-							</Pressable>
+							</TouchableOpacity>
 
-							<Text style={styles(isDark).textEnd}>
-								Já possui uma conta?{' '}
-								<Pressable
-									style={{
-										flexDirection: 'row',
-										alignItems: 'center',
-										justifyContent: 'center',
-									}}
-									onPress={() => router.back()}
-								>
+							<View
+								style={{
+									flexDirection: 'row',
+									flex: 1,
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<Text style={styles.textEnd}>Já possui uma conta? </Text>
+								<Pressable onPress={() => router.back()}>
 									<Text
 										style={{
 											textDecorationLine: 'underline',
-											color: isDark
-												? Colors.dark.secondary
-												: Colors.light.primary,
+											color: theme.colors.primary,
 											fontWeight: '400',
 											alignItems: 'center',
 										}}
@@ -411,7 +386,7 @@ export default function SignUp() {
 										Faça o login
 									</Text>
 								</Pressable>
-							</Text>
+							</View>
 
 							{/* {errors.map(error => (
 								<Text key={error.longMessage} style={{ color: 'red' }}>
@@ -425,13 +400,14 @@ export default function SignUp() {
 		</TouchableWithoutFeedback>
 	)
 }
-const styles = (isDark: boolean) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
 			alignItems: 'center',
-			justifyContent: 'flex-start',
+			justifyContent: 'center',
 			width: '100%',
+			backgroundColor: theme.colors.background,
 		},
 		contentContainer: {
 			width: '100%',
@@ -440,14 +416,14 @@ const styles = (isDark: boolean) =>
 		},
 		scrollView: {
 			flex: 1,
-			backgroundColor: 'white',
-			//marginBottom: 10,
+			backgroundColor: theme.colors.background,
 		},
 		headerText: {
 			fontWeight: '300',
 			marginBottom: '4%',
 			maxWidth: 300,
 			textAlign: 'center',
+			color: theme.colors.text,
 			fontFamily: fontFamily.poppins.regular,
 		},
 		/* textInput: {
@@ -471,14 +447,7 @@ const styles = (isDark: boolean) =>
 				: Colors.light.ImputBackgroundColors,
 		}, */
 		button: {
-			padding: 12,
-			borderRadius: 10,
-			width: '100%',
-			alignItems: 'center',
-			flexDirection: 'row',
-			justifyContent: 'center',
-			gap: 10,
-			marginBottom: 10,
+			marginVertical: 20,
 		},
 		buttonText: {
 			fontSize: FontSize.base,
@@ -504,37 +473,28 @@ const styles = (isDark: boolean) =>
 		dividerLine: {
 			width: '6%',
 			height: 1,
-			backgroundColor: isDark
-				? Colors.dark.borderInput
-				: Colors.light.borderInput,
+			backgroundColor: theme.colors.borderInput,
 		},
 		dividerText: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: theme.colors.text,
 			fontWeight: '300',
 			paddingHorizontal: '1.5%',
 			fontFamily: fontFamily.poppins.regular,
 		},
 		textEnd: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
-			fontWeight: '300',
+			color: theme.colors.text,
 			marginVertical: '4%',
 			fontSize: 14,
-			flexDirection: 'row',
-			alignItems: 'center',
 			gap: 4,
 			fontFamily: fontFamily.poppins.regular,
 		},
 		colorIconInput: {
-			color: isDark
-				? Colors.dark.colorIconInput
-				: Colors.light.colorIconInput.toString(),
+			color: theme.colors.colorIconInput,
 		},
 		strengthBarContainer: {
 			width: '100%',
 			height: 4,
-			backgroundColor: isDark
-				? Colors.dark.borderInput
-				: Colors.light.borderInput,
+			backgroundColor: theme.colors.borderInput,
 			borderRadius: 2,
 			overflow: 'hidden',
 		},

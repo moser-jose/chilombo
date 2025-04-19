@@ -14,9 +14,7 @@ export default function AuthLayout() {
 		headerShadowVisible: false,
 		headerTransparent: false,
 		headerStyle: {
-			backgroundColor: isDark
-				? Colors.dark.background
-				: Colors.light.background,
+			backgroundColor: Colors.dark.colors.background,
 		},
 		headerBackVisible: false,
 	}

@@ -1,22 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
 	Platform,
-	TextInput,
-	TouchableOpacity,
 	Image,
-	useColorScheme,
 	StyleSheet,
-	ScrollView,
-	Alert,
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 	Pressable,
 	Animated,
 	useWindowDimensions,
 	Keyboard,
-	ActivityIndicator,
+	ScrollView,
 } from 'react-native'
-import { useRouter, Href, Link } from 'expo-router'
+import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import { useRouter, Link, Stack } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import * as WebBrowser from 'expo-web-browser'
 import * as AuthSession from 'expo-auth-session'
@@ -38,9 +34,12 @@ import {
 import Colors from '@/src/constants/Colors'
 import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
-import Button from '@/src/components/ui/Button'
+import Button from '@/src/components/ui/Buttons'
 import { isValidEmail } from '@/src/utils/validEmail'
 import TextInputUI from '@/src/components/ui/TextInput'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
+
 // Finaliza qualquer sessão de autenticação pendente
 WebBrowser.maybeCompleteAuthSession()
 
@@ -51,9 +50,10 @@ export default function SignIn() {
 	const { startSSOFlow } = useSSO()
 	const router = useRouter()
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
-	const theme = useColorScheme()
 	const { signIn, setActive, isLoaded } = useSignIn()
-	const isDark = theme === 'dark'
+	const { signOut } = useAuth()
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme as Theme)
 	const { width, height } = useWindowDimensions()
 	const [emailAddress, setEmailAddress] = useState('')
 	const [password, setPassword] = useState('')
@@ -73,7 +73,7 @@ export default function SignIn() {
 		}
 	}
 
-	useEffect(() => {
+	/* useEffect(() => {
 		const keyboardWillShow = Keyboard.addListener(
 			Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
 			e => {
@@ -103,7 +103,7 @@ export default function SignIn() {
 			keyboardWillShow.remove()
 			keyboardWillHide.remove()
 		}
-	}, [height, translateY])
+	}, [height, translateY]) */
 
 	useEffect(() => {
 		setIsPasswordStrong(isStrongPassword(password))
@@ -134,7 +134,7 @@ export default function SignIn() {
 				<Ionicons
 					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
 					size={22}
-					color={styles(isDark).colorIconInput.color}
+					color={styles.colorIconInput.color}
 				/>
 			) : null}
 		</View>
@@ -200,22 +200,22 @@ export default function SignIn() {
 		setIsSignIn(true)
 		setErrors([])
 
-		// Start the sign-in process using the email and password provided
 		try {
+			try {
+				await signOut()
+			} catch (e) {
+				console.error(e)
+			}
+
 			const signInAttempt = await signIn.create({
 				identifier: emailAddress,
 				password,
 			})
 
-			// If sign-in process is complete, set the created session as active
-			// and redirect the user
 			if (signInAttempt.status === 'complete') {
 				await setActive({ session: signInAttempt.createdSessionId })
 				router.replace('/(main)')
 			} else {
-				// If the status isn't complete, check why. User might need to
-				// complete further steps.
-				//console.error(JSON.stringify(signInAttempt, null, 2))
 				setErrors([
 					{
 						code: 'verification_incomplete',
@@ -226,301 +226,212 @@ export default function SignIn() {
 				])
 			}
 		} catch (err) {
-			// See https://clerk.com/docs/custom-flows/error-handling
-			// for more info on error handling
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
-			//console.error(JSON.stringify(err, null, 2))
+			console.error(err)
 		} finally {
 			setIsSignIn(false)
 		}
-	}, [isLoaded, signIn, emailAddress, password, setActive, router])
+	}, [isLoaded, signIn, emailAddress, password, setActive, router, signOut])
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				style={[
-					styles(isDark).container,
-					{
-						height: height,
-						flex: 1,
-						backgroundColor: isDark
-							? Colors.dark.background
-							: Colors.light.background,
-					},
-				]}
-			>
-				<Animated.View
-					style={[
-						styles(isDark).container,
-						{
-							transform: [{ translateY }],
-							paddingVertical: height * 0.05,
-						},
-					]}
+		<>
+			<Stack.Screen options={{ headerShown: false }} />
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<KeyboardAvoidingView
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					style={styles.container}
 				>
-					<Image
-						source={{
-							uri: logoApp,
-						}}
-						resizeMode="contain"
-						style={{
-							width: logoSize.width,
-							height: logoSize.height,
-							marginBottom: height * 0.02,
-							maxWidth: logoSize.maxWidth,
-							maxHeight: logoSize.maxHeight,
-						}}
-					/>
-
-					<View style={[styles(isDark).contentContainer, { maxWidth: 500 }]}>
-						<Text
-							style={[styles(isDark).headerText, { fontSize: width * 0.04 }]}
-						>
-							Faça o login com o seu e-mail e senha
-						</Text>
-
-						{/* <View
-							style={[
-								styles(isDark).input,
-								isEmailFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="mail-outline"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira o e-mail ou o telefone"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								keyboardType="email-address"
-								numberOfLines={1}
-								style={[
-									styles(isDark).textInput,
-									{ flex: 1, fontWeight: '300' },
-								]}
-								onFocus={() => setIsEmailFocused(true)}
-								onBlur={() => setIsEmailFocused(false)}
-								onChangeText={text => setEmailAddress(text)}
-								value={emailAddress}
-							/>
-						</View> */}
-
-						<TextInputUI
-							type="email"
-							//label="E-mail ou telefone"
-							icon="mail-outline"
-							placeholder="Insira o e-mail"
-							value={emailAddress}
-							onChangeText={setEmailAddress}
-						/>
-
-						{/* <View
-							style={[
-								styles(isDark).input,
-								isPasswordFocused && {
-									borderColor: isDark
-										? Colors.dark.secondary
-										: Colors.light.primary,
-									borderWidth: 1.8,
-								},
-							]}
-						>
-							<Ionicons
-								name="key"
-								size={22}
-								color={styles(isDark).colorIconInput.color}
-							/>
-							<TextInput
-								placeholder="Insira a senha"
-								placeholderTextColor={styles(isDark).colorIconInput.color}
-								secureTextEntry={!showPassword}
-								onChangeText={text => setPassword(text)}
-								value={password}
-								numberOfLines={1}
-								style={[styles(isDark).textInput, { flex: 1 }]}
-								onFocus={() => setIsPasswordFocused(true)}
-								onBlur={() => setIsPasswordFocused(false)}
-							/> 
-							<Pressable onPress={() => setShowPassword(!showPassword)}>
-								{renderPasswordIcon()}
-							</Pressable>
-						</View> */}
-
-						<TextInputUI
-							type="password"
-							icon="key"
-							placeholder="Insira a senha"
-							value={password}
-							onChangeText={setPassword}
-						/>
-
-						<Pressable style={{ width: '100%', alignItems: 'flex-end' }}>
-							<Link href={'/sign-up'}>
-								<Text
-									style={{
-										color: isDark
-											? Colors.dark.secondary
-											: Colors.light.primary,
-										fontWeight: '500',
-										fontSize: width * 0.035,
-									}}
-								>
-									Esqueceu sua senha?
-								</Text>
-							</Link>
-						</Pressable>
-
-						<Button
-							onPress={onSignInPress}
-							disabled={!isPasswordStrong}
-							loading={isSignIn}
-							variant="filled"
-							size="lg"
-							style={{ marginTop: 20 }}
-						>
-							<Text
-								style={{
-									color:
-										isPasswordStrong && isEmailValid && !isDark
-											? Colors.light.background
-											: (!isPasswordStrong || !isEmailValid) && !isDark
-												? Colors.light.primaryMuted
-												: isPasswordStrong && isEmailValid && isDark
-													? Colors.dark.text
-													: Colors.dark.textMuted,
-								}}
-							>
-								Entrar
-							</Text>
-						</Button>
-
-						<View style={styles(isDark).divider}>
-							<View style={styles(isDark).dividerLine} />
-							<Text style={styles(isDark).dividerText}>
-								ou continue com as suas redes sociais
-							</Text>
-							<View style={styles(isDark).dividerLine} />
-						</View>
-
-						<View
+					<ScrollView
+						style={styles.scrollView}
+						showsVerticalScrollIndicator={true}
+						contentInsetAdjustmentBehavior="automatic"
+						keyboardShouldPersistTaps="handled"
+					>
+						<Animated.View
 							style={{
-								marginVertical: 12,
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-								gap: 30,
+								transform: [{ translateY }],
+								flex: 1,
+								height: height,
+								paddingVertical: height * 0.05,
 							}}
 						>
-							<TouchableOpacity
-								onPress={handleSignInWithGoogle}
-								style={{
-									backgroundColor: isDark
-										? Colors.dark.textMuted
-										: Colors.light.secondaryMuted,
-									padding: 10,
-									borderRadius: 50,
-								}}
-							>
-								<FacebookSVG height={30} width={30} />
-							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={handleSignInWithGoogle}
-								style={{
-									backgroundColor: isDark
-										? Colors.dark.textMuted
-										: Colors.light.secondaryMuted,
-									padding: 10,
-									borderRadius: 50,
-								}}
-							>
-								<GoogleSVG height={30} width={30} />
-							</TouchableOpacity>
-						</View>
+							<View style={[styles.contentContainer, { alignItems: 'center' }]}>
+								<Image
+									source={{
+										uri: logoApp,
+									}}
+									resizeMode="contain"
+									style={{
+										width: logoSize.width,
+										height: logoSize.height,
+										marginBottom: height * 0.02,
+										maxWidth: logoSize.maxWidth,
+										maxHeight: logoSize.maxHeight,
+									}}
+								/>
+								<Text style={[styles.headerText, { fontSize: width * 0.04 }]}>
+									Faça o login com o seu e-mail e senha
+								</Text>
 
-						<Text style={styles(isDark).textEnd}>
-							Ainda não possui uma conta?{' '}
-							<Link
-								href={'/sign-up'}
-								style={{
-									textDecorationLine: 'underline',
-									color: isDark ? Colors.dark.secondary : Colors.light.primary,
-									fontWeight: '400',
-								}}
-							>
-								crie agora mesmo
-							</Link>
-						</Text>
-					</View>
-				</Animated.View>
-			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+								<TextInputUI
+									type="email"
+									icon="mail-outline"
+									placeholder="Insira o e-mail"
+									value={emailAddress}
+									onChangeText={setEmailAddress}
+									style={{
+										marginBottom: 20,
+									}}
+								/>
+
+								<TextInputUI
+									type="password"
+									icon="key"
+									placeholder="Insira a senha"
+									value={password}
+									onChangeText={setPassword}
+								/>
+
+								<Pressable style={{ width: '100%', alignItems: 'flex-end' }}>
+									<Link href={'/reset-password'}>
+										<Text
+											style={{
+												color: theme.colors.primary,
+												fontFamily: fontFamily.poppins.regular,
+												fontSize: FontSize.xs,
+											}}
+										>
+											Esqueceu sua senha?
+										</Text>
+									</Link>
+								</Pressable>
+
+								<TouchableOpacity
+									type="primary"
+									onPress={onSignInPress}
+									style={styles.button}
+								>
+									<Text style={[styles.buttonText]}>Entrar</Text>
+								</TouchableOpacity>
+
+								<View style={styles.divider}>
+									<View style={styles.dividerLine} />
+									<Text style={styles.dividerText}>
+										ou continue com as suas redes sociais
+									</Text>
+									<View style={styles.dividerLine} />
+								</View>
+
+								<View
+									style={{
+										marginVertical: 12,
+										flexDirection: 'row',
+										alignItems: 'center',
+										justifyContent: 'center',
+										gap: 30,
+									}}
+								>
+									<TouchableOpacity
+										type="secondary"
+										onPress={handleSignInWithGoogle}
+										style={{
+											backgroundColor: 'rgba(255, 255, 255, 0.06)',
+											padding: 10,
+											borderRadius: 50,
+										}}
+									>
+										<FacebookSVG height={24} width={24} />
+									</TouchableOpacity>
+									<TouchableOpacity
+										type="secondary"
+										onPress={handleSignInWithGoogle}
+										style={{
+											backgroundColor: 'rgba(255, 255, 255, 0.06)',
+											padding: 10,
+											borderRadius: 50,
+										}}
+									>
+										<GoogleSVG height={24} width={24} />
+									</TouchableOpacity>
+								</View>
+
+								<Text style={styles.textEnd}>
+									Ainda não possui uma conta?{' '}
+									<Link
+										href={'/sign-up'}
+										style={{
+											textDecorationLine: 'underline',
+											color: theme.colors.primary,
+											fontWeight: '400',
+										}}
+									>
+										crie agora mesmo
+									</Link>
+								</Text>
+							</View>
+						</Animated.View>
+					</ScrollView>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
+		</>
 	)
 }
 
-const styles = (isDark: boolean) =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
+		scrollView: {
+			backgroundColor: theme.colors.background,
+			flex: 1,
+		},
 		container: {
 			flex: 1,
 			alignItems: 'center',
-			justifyContent: 'flex-start',
-			width: '100%',
+			justifyContent: 'center',
+			height: '100%',
 		},
 		contentContainer: {
-			width: '100%',
 			alignItems: 'center',
-			paddingHorizontal: '5%',
+			justifyContent: 'center',
+			paddingHorizontal: 20,
+			flex: 1,
+			width: '100%',
+			height: '100%',
 		},
 		headerText: {
 			fontWeight: '300',
 			marginBottom: '4%',
+			color: theme.colors.text,
 			maxWidth: 300,
 			textAlign: 'center',
 			fontFamily: fontFamily.poppins.regular,
 		},
 		textInput: {
 			padding: '.7%',
-			fontSize: 16,
+			fontSize: FontSize.base,
 			marginLeft: 6,
 			fontFamily: fontFamily.poppins.regular,
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: theme.colors.text,
 		},
 		input: {
 			padding: 12,
 			borderRadius: 10,
 			width: '100%',
 			flexDirection: 'row',
-			borderColor: isDark ? Colors.dark.borderInput : Colors.light.borderInput,
+			borderColor: theme.colors.borderInput,
 			alignItems: 'center',
 			borderWidth: 1,
 			marginBottom: 20,
-			backgroundColor: isDark
-				? Colors.dark.ImputBackgroundColors
-				: Colors.light.ImputBackgroundColors,
+			backgroundColor: theme.colors.ImputBackgroundColors,
 		},
-		button: {
-			padding: 12,
-			borderRadius: 16,
-			width: '100%',
-			alignItems: 'center',
-			flexDirection: 'row',
-			justifyContent: 'center',
-			gap: 10,
-			marginBottom: 14,
-		},
+		button: { marginVertical: 20 },
 		buttonText: {
-			fontSize: FontSize.base,
+			fontSize: FontSize.sm,
 			fontFamily: fontFamily.poppins.regular,
 			letterSpacing: 0.5,
+			color: Colors.black,
 		},
 		title: {
-			fontSize: 20,
+			fontSize: FontSize.base,
 			fontFamily: fontFamily.poppins.regular,
 		},
 		separator: {
@@ -538,25 +449,22 @@ const styles = (isDark: boolean) =>
 		dividerLine: {
 			width: '6%',
 			height: 1,
-			backgroundColor: isDark
-				? Colors.dark.borderInput
-				: Colors.light.borderInput,
+			backgroundColor: theme.colors.borderInput,
 		},
 		dividerText: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: theme.colors.text,
 			fontWeight: '300',
+			fontSize: FontSize.xs,
 			paddingHorizontal: '1.5%',
 			fontFamily: fontFamily.poppins.regular,
 		},
 		textEnd: {
-			color: isDark ? Colors.dark.text : Colors.light.text,
+			color: theme.colors.text,
 			fontWeight: '300',
 			marginVertical: '4%',
-			fontSize: 14,
+			fontSize: FontSize.xs,
 		},
 		colorIconInput: {
-			color: isDark
-				? Colors.dark.colorIconInput
-				: Colors.light.colorIconInput.toString(),
+			color: theme.colors.colorIconInput,
 		},
 	})

@@ -10,6 +10,8 @@ import {
 import Colors from '@/src/constants/Colors'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 const ModalMessage = ({
 	setShowLogoutModal,
@@ -32,7 +34,8 @@ const ModalMessage = ({
 	modalIcon: keyof typeof Ionicons.glyphMap
 	cancelButton?: boolean
 }) => {
-	const theme = useColorScheme() ?? 'light'
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	return (
 		<Modal
 			animationType="fade"
@@ -40,28 +43,28 @@ const ModalMessage = ({
 			visible={showLogoutModal}
 			onRequestClose={() => setShowLogoutModal(false)}
 		>
-			<View style={styles(theme).modalOverlay}>
-				<View style={styles(theme).modalContent}>
-					<View style={styles(theme).modalIconContainer}>
-						<Ionicons name={modalIcon} size={35} color={Colors[theme].colors.text} />
+			<View style={styles.modalOverlay}>
+				<View style={styles.modalContent}>
+					<View style={styles.modalIconContainer}>
+						<Ionicons name={modalIcon} size={35} color={theme.colors.text} />
 					</View>
-					<Text style={styles(theme).modalTitle}>{modalTitle}</Text>
+					<Text style={styles.modalTitle}>{modalTitle}</Text>
 					{modalText && (
-						<Text style={styles(theme).modalText}>{modalText}</Text>
+						<Text style={styles.modalText}>{modalText}</Text>
 					)}
 
 					{children && children}
 
-					<View style={styles(theme).modalButtons}>
+					<View style={styles.modalButtons}>
 						{cancelButton && (
 							<TouchableOpacity
-								style={[styles(theme).modalButton, styles(theme).cancelButton]}
+								style={[styles.modalButton, styles.cancelButton]}
 								onPress={() => setShowLogoutModal(false)}
 							>
 								<Text
 									style={[
-										styles(theme).modalButtonText,
-										styles(theme).cancelButtonText,
+										styles.modalButtonText,
+										styles.cancelButtonText,
 									]}
 								>
 									Cancelar
@@ -69,13 +72,13 @@ const ModalMessage = ({
 							</TouchableOpacity>
 						)}
 						<TouchableOpacity
-							style={[styles(theme).modalButton, styles(theme).confirmButton]}
+							style={[styles.modalButton, styles.confirmButton]}
 							onPress={handleOk}
 						>
 							<Text
 								style={[
-									styles(theme).modalButtonText,
-									styles(theme).confirmButtonText,
+									styles.modalButtonText,
+									styles.confirmButtonText,
 								]}
 							>
 								{textButton}
@@ -90,7 +93,7 @@ const ModalMessage = ({
 
 export default ModalMessage
 
-const styles = (theme: 'dark' | 'light') =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		modalOverlay: {
 			flex: 1,
@@ -99,7 +102,7 @@ const styles = (theme: 'dark' | 'light') =>
 			alignItems: 'center',
 		},
 		modalContent: {
-			backgroundColor: Colors[theme].colors.modal,
+			backgroundColor: theme.colors.modal, //Colors[theme].colors.modal,
 			borderRadius: 25,
 			padding: 25,
 			width: '85%',
@@ -116,7 +119,7 @@ const styles = (theme: 'dark' | 'light') =>
 		modalIconContainer: {
 			width: 70,
 			height: 70,
-			backgroundColor: Colors[theme].colors.textMuted,
+			backgroundColor: theme.colors.textMuted, //Colors[theme].colors.textMuted,
 			borderRadius: 40,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -126,14 +129,14 @@ const styles = (theme: 'dark' | 'light') =>
 			fontSize: FontSize.base,
 			fontFamily: fontFamily.poppins.bold,
 			marginBottom: 15,
-			color: Colors[theme].colors.text,
+			color: theme.colors.text, //Colors[theme].colors.text,
 		},
 		modalText: {
 			fontSize: FontSize.sm,
 			fontFamily: fontFamily.poppins.regular,
 			marginBottom: 25,
 			textAlign: 'center',
-			color: Colors[theme].colors.text,
+			color: theme.colors.text, //Colors[theme].colors.text,
 			paddingHorizontal: 10,
 		},
 		modalButtons: {
@@ -159,7 +162,7 @@ const styles = (theme: 'dark' | 'light') =>
 			backgroundColor: 'rgb(111, 102, 102)'
 		},
 		confirmButton: {
-			backgroundColor: Colors.dark.colors.primary,
+			backgroundColor: theme.colors.primary,
 		},
 		modalButtonText: {
 			fontSize: FontSize.xsB,
@@ -167,7 +170,7 @@ const styles = (theme: 'dark' | 'light') =>
 			textAlign: 'center',
 		},
 		cancelButtonText: {
-			color: Colors.dark.colors.text,
+			color: theme.colors.text,
 		},
 		confirmButtonText: {
 			color: 'white',
