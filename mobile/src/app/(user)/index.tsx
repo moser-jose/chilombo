@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
-import { Stack, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 import { Separador } from '@/src/components/front/Separador'
@@ -83,268 +83,243 @@ export default function UserScreen() {
 	}
 
 	return (
-		<>
-			<Stack.Screen
-				options={{
-					headerTitle: 'Perfil',
-
-					headerTitleStyle: {
-						fontFamily: fontFamily.poppins.medium,
-						fontSize: FontSize.sm,
-						color: 'white',
-					},
-					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeader,
-					},
-					headerTintColor: 'white',
-					headerLeft: () => (
-						<TouchableOpacity onPress={() => router.back()}>
-							<Ionicons name="arrow-back" size={24} color="white" />
-						</TouchableOpacity>
-					),
-				}}
-			/>
-			<ScrollView
-				style={styles.scrollView}
-				showsVerticalScrollIndicator={false}
-				contentInsetAdjustmentBehavior="automatic"
-			>
-				<View style={styles.container}>
-					<View style={styles.headerContainer}>
-						<View>
-							<View style={styles.imageContainer}>
-								<Image
-									style={styles.profileImage}
-									source={{ uri: user?.imageUrl }}
-								/>
-								<View style={styles.editImageButton}>
-									<Ionicons name="ribbon-outline" size={18} color="white" />
-								</View>
-							</View>
-							<Text
-								style={[
-									styles.userName,
-									{
-										color: theme.colors.text,
-										marginBottom: -10,
-										fontFamily: fontFamily.poppins.regular,
-										fontSize: FontSize.xl,
-									},
-								]}
-							>
-								{user?.firstName}
-							</Text>
-							<Text style={styles.userName}>{user?.lastName}</Text>
-						</View>
-						<View style={styles.actionsContainer}>
-							<View
-								style={{
-									justifyContent: 'center',
-									alignItems: 'center',
-									width: '100%',
-								}}
-							>
-								<View style={styles.actionsContainerButtons}>
-									<View style={styles.actionsButton}>
-										<Ionicons
-											name="wallet-outline"
-											size={26}
-											style={styles.icon}
-											color={theme.colors.colorIconInput}
-										/>
-										<Text style={styles.actionsButtonText}>1</Text>
-									</View>
-									<View style={styles.actionsButton}>
-										<Ionicons
-											name="chatbubbles-outline"
-											size={26}
-											style={styles.icon}
-											color={theme.colors.colorIconInput}
-										/>
-										<Text style={styles.actionsButtonText}>12</Text>
-									</View>
-									<View style={styles.actionsButton}>
-										<Ionicons
-											name="heart-outline"
-											size={26}
-											style={styles.icon}
-											color={theme.colors.colorIconInput}
-										/>
-										<Text style={styles.actionsButtonText}>12</Text>
-									</View>
-
-									<View style={styles.actionsButton}>
-										<Ionicons
-											name="star-outline"
-											size={26}
-											style={styles.icon}
-											color={theme.colors.colorIconInput}
-										/>
-										<Text style={styles.actionsButtonText}>4.5</Text>
-									</View>
-								</View>
-								<View style={styles.actionsTextContainer}>
-									<View style={styles.verifyContainer}>
-										<Ionicons
-											name="ribbon-outline"
-											size={18}
-											color={theme.colors.primary}
-										/>
-										<Text style={styles.actionsText}>Perfil verificado</Text>
-									</View>
-								</View>
+		<ScrollView
+			style={styles.scrollView}
+			showsVerticalScrollIndicator={false}
+			contentInsetAdjustmentBehavior="automatic"
+		>
+			<View style={styles.container}>
+				<View style={styles.headerContainer}>
+					<View>
+						<View style={styles.imageContainer}>
+							<Image
+								style={styles.profileImage}
+								source={{ uri: user?.imageUrl }}
+							/>
+							<View style={styles.editImageButton}>
+								<Ionicons name="ribbon-outline" size={18} color="white" />
 							</View>
 						</View>
+						<Text
+							style={[
+								styles.userName,
+								{
+									color: theme.colors.text,
+									marginBottom: -10,
+									fontFamily: fontFamily.poppins.regular,
+									fontSize: FontSize.xl,
+								},
+							]}
+						>
+							{user?.firstName}
+						</Text>
+						<Text style={styles.userName}>{user?.lastName}</Text>
 					</View>
-					<Separador text="Meus Serviços" more />
-					<FlatList
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						data={completedServices}
-						keyExtractor={item => item.id.toString()}
-						renderItem={({ index, item }) => (
-							<View
-								style={{
-									marginLeft: index === 0 ? 16 : 16,
-									marginRight: index === completedServices.length - 1 ? 16 : 0,
-									flex: 1,
-								}}
-							>
-								<CompletedServiceCard data={item} />
-							</View>
-						)}
-					/>
-
-					<View style={styles.separator} />
-
-					<View style={styles.menuContainer}>
-						<TouchableOpacity
-							style={styles.menuItem}
-							onPress={() => router.push('/(user)/edit-profile')}
+					<View style={styles.actionsContainer}>
+						<View
+							style={{
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
+							}}
 						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="person-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Editar Perfil</Text>
-							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
+							<View style={styles.actionsContainerButtons}>
+								<View style={styles.actionsButton}>
+									<Ionicons
+										name="wallet-outline"
+										size={26}
+										style={styles.icon}
+										color={theme.colors.colorIconInput}
+									/>
+									<Text style={styles.actionsButtonText}>1</Text>
+								</View>
+								<View style={styles.actionsButton}>
+									<Ionicons
+										name="chatbubbles-outline"
+										size={26}
+										style={styles.icon}
+										color={theme.colors.colorIconInput}
+									/>
+									<Text style={styles.actionsButtonText}>12</Text>
+								</View>
+								<View style={styles.actionsButton}>
+									<Ionicons
+										name="heart-outline"
+										size={26}
+										style={styles.icon}
+										color={theme.colors.colorIconInput}
+									/>
+									<Text style={styles.actionsButtonText}>12</Text>
+								</View>
 
-						<TouchableOpacity
-							style={styles.menuItem}
-							onPress={() => router.push('/(user)/edit-profile')}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="location-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Adicionar Endereços</Text>
+								<View style={styles.actionsButton}>
+									<Ionicons
+										name="star-outline"
+										size={26}
+										style={styles.icon}
+										color={theme.colors.colorIconInput}
+									/>
+									<Text style={styles.actionsButtonText}>4.5</Text>
+								</View>
 							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
-
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="notifications-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Notificações</Text>
+							<View style={styles.actionsTextContainer}>
+								<View style={styles.verifyContainer}>
+									<Ionicons
+										name="ribbon-outline"
+										size={18}
+										color={theme.colors.primary}
+									/>
+									<Text style={styles.actionsText}>Perfil verificado</Text>
+								</View>
 							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
-
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="shield-checkmark-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Segurança e Privacidade</Text>
-							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
-
-						<TouchableOpacity style={styles.menuItem}>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="wallet-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Pagamentos</Text>
-							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							onPress={() => router.push('/(user)/privacity')}
-							style={styles.menuItem}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="lock-closed-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Política de Privacidade</Text>
-							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							onPress={() => router.push('/(user)/terms')}
-							style={styles.menuItem}
-						>
-							<View style={styles.menuLeftContent}>
-								<Ionicons
-									name="document-text-outline"
-									size={24}
-									color={theme.colors.colorIconInput}
-								/>
-								<Text style={styles.menuText}>Termos de Uso</Text>
-							</View>
-							<Ionicons
-								name="chevron-forward-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-						</TouchableOpacity>
+						</View>
 					</View>
 				</View>
-			</ScrollView>
-		</>
+				<Separador text="Meus Serviços" more />
+				<FlatList
+					horizontal
+					showsHorizontalScrollIndicator={false}
+					data={completedServices}
+					keyExtractor={item => item.id.toString()}
+					renderItem={({ index, item }) => (
+						<View
+							style={{
+								marginLeft: index === 0 ? 16 : 16,
+								marginRight: index === completedServices.length - 1 ? 16 : 0,
+								flex: 1,
+							}}
+						>
+							<CompletedServiceCard data={item} />
+						</View>
+					)}
+				/>
+
+				<View style={styles.separator} />
+
+				<View style={styles.menuContainer}>
+					<TouchableOpacity
+						style={styles.menuItem}
+						onPress={() => router.push('/(user)/edit-profile')}
+					>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="person-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Editar Perfil</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity style={styles.menuItem}>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="location-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Adicionar Endereços</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity style={styles.menuItem}>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="notifications-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Notificações</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity style={styles.menuItem}>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="shield-checkmark-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Segurança e Privacidade</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity style={styles.menuItem}>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="wallet-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Pagamentos</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity
+						onPress={() => router.push('/(user)/privacity')}
+						style={styles.menuItem}
+					>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="lock-closed-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Política de Privacidade</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+
+					<TouchableOpacity
+						onPress={() => router.push('/(user)/terms')}
+						style={styles.menuItem}
+					>
+						<View style={styles.menuLeftContent}>
+							<Ionicons
+								name="document-text-outline"
+								size={24}
+								color={theme.colors.colorIconInput}
+							/>
+							<Text style={styles.menuText}>Termos de Uso</Text>
+						</View>
+						<Ionicons
+							name="chevron-forward-outline"
+							size={24}
+							color={theme.colors.colorIconInput}
+						/>
+					</TouchableOpacity>
+				</View>
+			</View>
+		</ScrollView>
 	)
 }
 
@@ -352,6 +327,7 @@ const useStyles = (theme: Theme) =>
 	StyleSheet.create({
 		scrollView: {
 			flex: 1,
+			backgroundColor: theme.colors.background,
 		},
 		container: {
 			flex: 1,
@@ -393,7 +369,6 @@ const useStyles = (theme: Theme) =>
 			alignItems: 'center',
 			justifyContent: 'center',
 			gap: 20,
-			
 		},
 		actionsButtonText: {
 			fontSize: FontSize.xsB,
@@ -401,7 +376,6 @@ const useStyles = (theme: Theme) =>
 		},
 		actionsButton: {
 			alignItems: 'center',
-			
 		},
 		imageContainer: {
 			position: 'relative',

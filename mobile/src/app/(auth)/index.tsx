@@ -34,7 +34,6 @@ import {
 import Colors from '@/src/constants/Colors'
 import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
-import Button from '@/src/components/ui/Buttons'
 import { isValidEmail } from '@/src/utils/validEmail'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useCustomTheme } from '@/src/context/ThemeContext'

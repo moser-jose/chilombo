@@ -15,6 +15,7 @@ import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
+import { red } from 'react-native-reanimated/lib/typescript/Colors'
 
 interface CompletedServiceCardProps {
 	data: any
@@ -65,8 +66,33 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 					{data.description}
 				</Text>
 				<View style={styles.likesContainer}>
-					<Ionicons name="heart" size={14} color="#FF5959" />
-					<Text style={styles.likesText}>{data.likes} pessoas gostaram</Text>
+					<View style={styles.likesContainer}>
+						<Ionicons name="heart" size={14} color="#FF5959" />
+						<Text style={styles.likesText}>{data.likes}</Text>
+					</View>
+					<View style={styles.imageContainerLike}>
+						<View style={styles.imageLikeView}>
+							<FastImage
+								source={{ uri: 'https://randomuser.me/api/portraits/men/5.jpg' }}
+								style={styles.likesImage}
+								resizeMode={FastImage.resizeMode.cover}
+							/>
+						</View>
+						<View style={styles.imageLikeView}>
+							<FastImage
+								source={{ uri: 'https://randomuser.me/api/portraits/men/6.jpg' }}
+								style={styles.likesImage}
+								resizeMode={FastImage.resizeMode.cover}
+							/>
+						</View>
+						<View style={styles.imageLikeView}>
+							<FastImage
+								source={{ uri: 'https://randomuser.me/api/portraits/men/7.jpg' }}
+								style={styles.likesImage}
+								resizeMode={FastImage.resizeMode.cover}
+							/>
+						</View>
+					</View>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -154,12 +180,38 @@ const makeStyles = (theme: any) =>
 		likesContainer: {
 			flexDirection: 'row',
 			alignItems: 'center',
+			justifyContent: 'space-between',
+		},
+		imageContainerLike: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			
+		},
+		imageLikeView: {
+			width: 18,
+			height: 18,
+			borderRadius: 10,
+			//padding: 8,
+			//backgroundColor: theme.colors.background,
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginLeft: -6,
+			overflow: 'hidden',
+			
 		},
 		likesText: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
 			marginLeft: 4,
 			color: theme.colors.muted,
+		},
+		likesImage: {
+			width: 18,
+			height: 18,
+			borderRadius: 10,
+			borderColor: theme.colors.background,
+			borderWidth: 2,
 		},
 	})
 

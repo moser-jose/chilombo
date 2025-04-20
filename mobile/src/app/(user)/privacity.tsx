@@ -71,20 +71,6 @@ export default function PrivacyPolicyScreen() {
 			<Stack.Screen
 				options={{
 					headerTitle: 'Politica de Privacidade',
-					headerTitleStyle: {
-						fontFamily: fontFamily.poppins.medium,
-						fontSize: FontSize.sm,
-						color: 'white',
-					},
-					headerStyle: {
-						backgroundColor: Colors.primary,
-					},
-					headerTintColor: 'white',
-					headerLeft: () => (
-						<TouchableOpacity onPress={() => router.back()}>
-							<Ionicons name="arrow-back" size={24} color="white" />
-						</TouchableOpacity>
-					),
 				}}
 			/>
 			<ScrollView

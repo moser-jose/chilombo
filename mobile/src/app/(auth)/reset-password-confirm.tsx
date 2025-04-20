@@ -1,7 +1,7 @@
 import { View } from '@/src/components/Themed'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useRef, useState } from 'react'
-import { Alert, StyleSheet, TextInput } from 'react-native'
+import { StyleSheet, TextInput } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Text } from '@/src/components/ui/Text'

@@ -10,7 +10,6 @@ import { isClerkAPIResponseError, useSignIn, useSSO } from '@clerk/clerk-expo'
 import { ClerkAPIError } from '@clerk/types'
 import * as WebBrowser from 'expo-web-browser'
 import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
-import * as AuthSession from 'expo-auth-session'
 
 // Handle any pending authentication sessions
 WebBrowser.maybeCompleteAuthSession()
@@ -51,7 +50,7 @@ export default function SignInEmail() {
 			// and redirect the user
 			if (signInAttempt.status === 'complete') {
 				await setActive({ session: signInAttempt.createdSessionId })
-				router.replace('/(main)/home')
+				router.replace('/(main)')
 			} else {
 				// If the status isn't complete, check why. User might need to
 				// complete further steps.
