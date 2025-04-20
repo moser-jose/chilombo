@@ -60,14 +60,15 @@ const users = [
 const services = [
 	{
 		id: 1,
-		icon: require('../../../assets/icons/light/limpeza_residencial.png'),
-		iconDark: require('../../../assets/icons/light/limpeza_residencial.png'),
-		service: 'Limpeza de Residência',
+		icon: require('../../../assets/icons/light/empregada_domestica.png'),
+		iconDark: require('../../../assets/icons/dark/empregada_domestica.png'),
+		service: 'Empregada Doméstica',
 		route: '/service-details',
-		name: 'Limpeza de Residência',
+		name: 'Empregada Doméstica',
 		image: require('../../../assets/empresa/empregada.png'),
 		rating: 4.7,
 		reviews: 124,
+		tags: ['Limpeza', 'Empregada', 'Doméstica', 'Residência'],
 		description:
 			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
 		duration: '2-4h',
@@ -176,14 +177,15 @@ const services = [
 	},
 	{
 		id: 2,
-		icon: require('../../../assets/icons/light/tratamento_jardim.png'),
-		iconDark: require('../../../assets/icons/light/tratamento_jardim.png'),
-		service: 'Tratamento de Jardim',
-		route: '/services/tratamento-jardim',
-		name: 'Tratamento de Jardim',
-		image: require('../../../assets/empresa/tapete.jpg'),
+		icon: require('../../../assets/icons/light/limpeza_residencial.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_residencial.png'),
+		service: 'Limpeza de Residência',
+		route: '/service-details',
+		name: 'Limpeza de Residência',
+		image: require('../../../assets/empresa/empregada.png'),
 		rating: 4.7,
 		reviews: 124,
+		tags: ['Limpeza', 'Empregada', 'Doméstica', 'Residência'],
 		description:
 			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
 		duration: '2-4h',
@@ -292,12 +294,130 @@ const services = [
 	},
 	{
 		id: 3,
+		icon: require('../../../assets/icons/light/tratamento_jardim.png'),
+		iconDark: require('../../../assets/icons/dark/tratamento_jardim.png'),
+		service: 'Tratamento de Jardim',
+		route: '/service-details',
+		name: 'Tratamento de Jardim',
+		image: require('../../../assets/empresa/jardim.png'),
+		rating: 4.7,
+		reviews: 124,
+		tags: ['Limpeza', 'Jardim', 'Tratamento', 'Jardim'],
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
+	},
+	{
+		id: 4,
 		icon: require('../../../assets/icons/light/limpeza_cadeiroes.png'),
-		iconDark: require('../../../assets/icons/light/limpeza_cadeiroes.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_cadeiroes.png'),
 		service: 'Limpeza de Cadeirões',
-		route: '/services/limpeza-residencial',
+		route: '/service-details',
 		image: require('../../../assets/empresa/cadeiroes.png'),
 		name: 'Limpeza de Cadeirões',
+		tags: ['Limpeza', 'Cadeiroes', 'Cadeirão', 'Residência'],
 		rating: 4.7,
 		reviews: 124,
 		description:
@@ -407,15 +527,16 @@ const services = [
 		],
 	},
 	{
-		id: 4,
+		id: 5,
 		icon: require('../../../assets/icons/light/limpeza_empresa.png'),
-		iconDark: require('../../../assets/icons/light/limpeza_empresa.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_empresa.png'),
 		service: 'Limpeza Empresarial',
-		route: '/services/limpeza-empresarial',
+		route: '/service-details',
 		image: require('../../../assets/empresa/empresa.png'),
 		name: 'Limpeza Empresarial',
 		rating: 4.7,
 		reviews: 124,
+		tags: ['Limpeza', 'Empresa', 'Empresarial'],
 		description:
 			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
 		duration: '2-4h',
@@ -701,9 +822,8 @@ export default function HomeScreen() {
 						</TouchableOpacity>
 					)}
 				/> */}
-
 				{services
-					.filter(service => service.service.includes('Limpeza'))
+					.filter(service => service.tags.some(tag => service.service.includes(tag)))
 					.slice(0, 4)
 					.reduce<Array<Array<(typeof services)[0]>>>((rows, item, index) => {
 						if (index % 2 === 0) {

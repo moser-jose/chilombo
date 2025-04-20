@@ -12,7 +12,7 @@ type ServicesCardProps = {
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
-	const { theme, themePreference } = useCustomTheme()
+	const { theme, themePreference,effectiveTheme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	const handlePress = () => {
 		router.push({
@@ -32,7 +32,7 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 		>
 			<View style={styles.containerIcon}>
 				<Image
-					source={themePreference === 'dark' ? data.iconDark : data.icon}
+					source={effectiveTheme === 'dark' ? data.iconDark : data.icon}
 					style={styles.icon}
 				/>
 			</View>

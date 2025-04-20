@@ -24,6 +24,7 @@ export default {
 			tabBarActiveTintColor: '#da6c18',
 			modal: '#fff',
 			backgroundHeader: '#0D0D12',
+			backgroundIcon: 'rgba(43, 39, 39, 0.1)'
 		},
 		fonts,
 	},
@@ -51,6 +52,7 @@ export default {
 			tabBarActiveTintColor: '#da6c18',
 			modal: '#0D0D12',
 			backgroundHeader: 'rgba(187, 184, 186, 0.03)',
+			backgroundIcon: 'rgba(43, 39, 39, 0.25)',
 		},
 		fonts,
 	},
