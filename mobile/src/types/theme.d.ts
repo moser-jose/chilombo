@@ -24,6 +24,7 @@ export type Theme = {
 		modal: string
 		backgroundHeader: string
 		backgroundIcon: string
+		backgroundHeaderScreen: string
 	}
 	fonts: NavigationTheme['fonts']
 }

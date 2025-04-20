@@ -2,7 +2,6 @@ import {
 	StyleSheet,
 	Image,
 	ScrollView,
-	TouchableOpacity,
 	Alert,
 	Platform,
 	Keyboard,
@@ -17,13 +16,14 @@ import { useUser, useSession } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Stack, useRouter } from 'expo-router'
-import Colors from '@/src/constants/Colors'
 import { useState, useRef, useEffect } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import * as ImagePicker from 'expo-image-picker'
 import TextInputUI from '@/src/components/ui/TextInput'
 import ModalMessage from '@/src/components/ui/ModalMessage'
-
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
+import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 export default function EditProfileScreen() {
 	const { user } = useUser()
 	const { session } = useSession()
@@ -37,6 +37,10 @@ export default function EditProfileScreen() {
 	const [errorMessage, setErrorMessage] = useState('')
 	const [updateSave, setUpdateSave] = useState(false)
 	const slideAnim = useRef(new Animated.Value(0)).current
+
+	const { theme } = useCustomTheme()
+
+	const styles = makeStyles(theme)
 
 	useEffect(() => {
 		const keyboardWillShow = (e: KeyboardEvent) => {
@@ -196,30 +200,19 @@ export default function EditProfileScreen() {
 			<Stack.Screen
 				options={{
 					headerTitle: 'Editar Perfil',
-					headerTitleStyle: {
-						fontFamily: fontFamily.poppins.medium,
-						fontSize: FontSize.sm,
-						color: 'white',
-					},
-					headerStyle: {
-						backgroundColor: Colors.primary,
-					},
-					headerTintColor: 'white',
-					headerLeft: () => (
-						<TouchableOpacity onPress={() => router.back()}>
-							<Ionicons name="arrow-back" size={24} color="white" />
-						</TouchableOpacity>
-					),
 				}}
 			/>
 
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+			<TouchableWithoutFeedback
+				style={{ flex: 1, backgroundColor: theme.colors.background }}
+				onPress={Keyboard.dismiss}
+			>
 				<KeyboardAvoidingView
 					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-					style={{ flex: 1 }}
+					style={{ flex: 1, backgroundColor: theme.colors.background }}
 					keyboardVerticalOffset={Platform.OS === 'ios' ? 78 : 0}
 				>
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, backgroundColor: theme.colors.background }}>
 						<ScrollView
 							style={styles.scrollView}
 							showsVerticalScrollIndicator={true}
@@ -231,6 +224,7 @@ export default function EditProfileScreen() {
 									<View style={styles.imageContainer}>
 										<Image
 											style={styles.profileImage}
+											resizeMode="cover"
 											source={{ uri: profileImage }}
 										/>
 
@@ -269,17 +263,6 @@ export default function EditProfileScreen() {
 											onChangeText={setLastName}
 										/>
 									</View>
-
-									<View style={styles.inputGroup}>
-										<TextInputUI
-											type="email"
-											label="E-mail"
-											icon="mail-outline"
-											placeholder="Insira o seu e-mail"
-											value={email}
-											onChangeText={setEmail}
-										/>
-									</View>
 								</View>
 							</View>
 						</ScrollView>
@@ -309,137 +292,136 @@ export default function EditProfileScreen() {
 							</TouchableOpacity>
 						</Animated.View>
 					</View>
-
-					<ModalMessage
-						setShowLogoutModal={setUpdateSave}
-						showLogoutModal={updateSave}
-						modalIcon="checkmark-circle-outline"
-						modalTitle="Sucesso!"
-						modalText="Perfil atualizado com sucesso!"
-						handleOk={handleOk}
-						cancelButton={false}
-					/>
-
-					<ModalMessage
-						setShowLogoutModal={setError}
-						showLogoutModal={error}
-						modalIcon="close-circle-outline"
-						modalTitle="Erro!"
-						modalText={errorMessage}
-						handleOk={() => setError(false)}
-						cancelButton={false}
-					/>
 				</KeyboardAvoidingView>
 			</TouchableWithoutFeedback>
+
+			<ModalMessage
+				setShowLogoutModal={setUpdateSave}
+				showLogoutModal={updateSave}
+				modalIcon="checkmark-circle-outline"
+				modalTitle="Sucesso!"
+				modalText="Perfil atualizado com sucesso!"
+				handleOk={handleOk}
+				cancelButton={false}
+			/>
+
+			<ModalMessage
+				setShowLogoutModal={setError}
+				showLogoutModal={error}
+				modalIcon="close-circle-outline"
+				modalTitle="Erro!"
+				modalText={errorMessage}
+				handleOk={() => setError(false)}
+				cancelButton={false}
+			/>
 		</>
 	)
 }
 
-const styles = StyleSheet.create({
-	scrollView: {
-		flex: 1,
-		backgroundColor: 'white',
-		marginBottom: 30,
-	},
-	container: {
-		flex: 1,
-		padding: 20,
-		paddingBottom: 80,
-	},
-	header: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: 30,
-	},
-	headerTitle: {
-		fontSize: FontSize.lg,
-		fontFamily: fontFamily.poppins.bold,
-	},
-	saveButtonContainer: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		right: 0,
-		backgroundColor: 'white',
-		padding: 12,
-		borderTopWidth: 1,
-		borderTopColor: '#eee',
-	},
-	headerContainer: {
-		alignItems: 'center',
-		paddingVertical: 20,
-	},
-	userName: {
-		fontSize: FontSize.lg,
-		marginBottom: 1,
-		fontFamily: fontFamily.poppins.bold,
-	},
-	saveButtonWrapper: {
-		backgroundColor: Colors.primary,
-		padding: 10,
-		borderRadius: 12,
-		alignItems: 'center',
-	},
-	userEmail: {
-		fontSize: FontSize.sm,
-		color: '#666',
-		fontFamily: fontFamily.poppins.regular,
-	},
-	saveButton: {
-		color: 'white',
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-	},
-	imageContainer: {
-		alignItems: 'center',
-		marginBottom: 10,
-		position: 'relative',
-	},
-	profileImage: {
-		width: 100,
-		height: 100,
-		borderRadius: "100%",
-		shadowColor: 'black',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
-		elevation: 5,
-		borderWidth: 1.5,
-		borderColor: Colors.secondaryMuted,
-		padding:2
-	},
-	editImageButton: {
-		position: 'absolute',
-		right: '1%',
-		bottom: 0,
-		backgroundColor: Colors.primary,
-		width: 32,
-		height: 32,
-		borderRadius: 18,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderWidth: 2,
-		borderColor: 'white',
-	},
-	formContainer: {},
-	inputGroup: {
-		justifyContent: 'flex-start',
-		textAlign: 'left',
-	},
-	label: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#666',
-		textAlign: 'left',
-		backgroundColor: 'red',
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: '#ddd',
-		borderRadius: 12,
-		padding: 12,
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.regular,
-	},
-})
+const makeStyles = (theme: Theme) =>
+	StyleSheet.create({
+		scrollView: {
+			flex: 1,
+			marginBottom: 30,
+			backgroundColor: theme.colors.background,
+		},
+		container: {
+			flex: 1,
+			padding: 20,
+			paddingBottom: 80,
+			backgroundColor: theme.colors.background,
+		},
+		header: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			marginBottom: 30,
+		},
+		headerTitle: {
+			fontSize: FontSize.lg,
+			fontFamily: fontFamily.poppins.bold,
+		},
+		saveButtonContainer: {
+			position: 'absolute',
+			bottom: 0,
+			left: 0,
+			right: 0,
+			backgroundColor: theme.colors.background,
+			padding: 12,
+			borderTopWidth: 1,
+			borderTopColor: theme.colors.card,
+			//borderTopColor: '#eee',
+		},
+		headerContainer: {
+			alignItems: 'center',
+			paddingVertical: 20,
+		},
+		userName: {
+			fontSize: FontSize.lg,
+			marginBottom: 1,
+			fontFamily: fontFamily.poppins.bold,
+		},
+		saveButtonWrapper: {},
+		userEmail: {
+			fontSize: FontSize.sm,
+			color: '#666',
+			fontFamily: fontFamily.poppins.regular,
+		},
+		saveButton: {
+			color: theme.colors.background,
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.medium,
+		},
+		imageContainer: {
+			alignItems: 'center',
+			marginBottom: 10,
+			position: 'relative',
+			width: 100,
+			height: 100,
+		},
+		profileImage: {
+			width: '100%',
+			height: '100%',
+			borderRadius: '100%',
+			shadowColor: 'black',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.25,
+			shadowRadius: 3.84,
+			elevation: 5,
+			borderWidth: 4,
+			borderColor: theme.colors.primary,
+		},
+		editImageButton: {
+			position: 'absolute',
+			right: '1%',
+			bottom: 0,
+			backgroundColor: theme.colors.primary,
+			width: 32,
+			height: 32,
+			borderRadius: 18,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderWidth: 4,
+			borderColor: theme.colors.background,
+		},
+		formContainer: {},
+		inputGroup: {
+			justifyContent: 'flex-start',
+			textAlign: 'left',
+		},
+		label: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.medium,
+			color: '#666',
+			textAlign: 'left',
+			backgroundColor: 'red',
+		},
+		input: {
+			borderWidth: 1,
+			borderColor: '#ddd',
+			borderRadius: 12,
+			padding: 12,
+			fontSize: FontSize.base,
+			fontFamily: fontFamily.poppins.regular,
+		},
+	})

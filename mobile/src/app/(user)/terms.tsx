@@ -1,38 +1,24 @@
 import { StyleSheet, ScrollView, useColorScheme } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { FontSize } from '@/src/constants/FontSize'
 import { fontFamily } from '@/src/constants/FontFamily'
 import Colors from '@/src/constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import { TouchableOpacity } from 'react-native'
 
 export default function TermsScreen() {
-	const theme =useColorScheme() ?? 'light'
-	const router = useRouter()
+	const theme = useColorScheme() ?? 'light'
 
 	return (
 		<>
 			<Stack.Screen
 				options={{
 					headerTitle: 'Termos de Uso',
-					headerTitleStyle: {
-						fontFamily: fontFamily.poppins.medium,
-						fontSize: FontSize.sm,
-						color: 'white',
-					},
-					headerStyle: {
-						backgroundColor: Colors.primary,
-					},
-					headerTintColor: 'white',
-					headerLeft: () => (
-						<TouchableOpacity onPress={() => router.back()}>
-							<Ionicons name="arrow-back" size={24} color="white" />
-						</TouchableOpacity>
-					),
 				}}
 			/>
-			<ScrollView style={styles(theme).container} showsVerticalScrollIndicator={false}>
+			<ScrollView
+				style={styles(theme).container}
+				showsVerticalScrollIndicator={false}
+			>
 				<View style={styles(theme).content}>
 					<Text style={styles(theme).section}>1. Aceitação dos Termos</Text>
 					<Text style={styles(theme).text}>
@@ -67,7 +53,9 @@ export default function TermsScreen() {
 						qualquer momento, com ou sem aviso prévio.
 					</Text>
 
-					<Text style={styles(theme).section}>6. Limitação de Responsabilidade</Text>
+					<Text style={styles(theme).section}>
+						6. Limitação de Responsabilidade
+					</Text>
 					<Text style={styles(theme).text}>
 						Não nos responsabilizamos por danos indiretos, incidentais ou
 						consequentes decorrentes do uso do serviço.
@@ -82,40 +70,41 @@ export default function TermsScreen() {
 	)
 }
 
-const styles= (theme: 'dark' | 'light') => StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Colors[theme].colors.background,
-	},
-	content: {
-		padding: 20,
-	},
-	title: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.bold,
-		color: Colors[theme].colors.primary,
-		marginBottom: 25,
-	},
-	section: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.semibold,
-		color: Colors[theme].colors.primary,
-		marginTop: 20,
-		marginBottom: 10,
-	},
-	text: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors[theme].colors.text,
-		lineHeight: 24,
-		marginBottom: 15,
-	},
-	lastUpdate: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: Colors[theme].colors.text,
-		marginTop: 30,
-		textAlign: 'center',
-		fontStyle: 'italic',
-	},
-})
+const styles = (theme: 'dark' | 'light') =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: Colors[theme].colors.background,
+		},
+		content: {
+			padding: 20,
+		},
+		title: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.bold,
+			color: Colors[theme].colors.primary,
+			marginBottom: 25,
+		},
+		section: {
+			fontSize: FontSize.sm,
+			fontFamily: fontFamily.poppins.semibold,
+			color: Colors[theme].colors.primary,
+			marginTop: 20,
+			marginBottom: 10,
+		},
+		text: {
+			fontSize: FontSize.xsB,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.text,
+			lineHeight: 24,
+			marginBottom: 15,
+		},
+		lastUpdate: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.regular,
+			color: Colors[theme].colors.text,
+			marginTop: 30,
+			textAlign: 'center',
+			fontStyle: 'italic',
+		},
+	})

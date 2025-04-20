@@ -15,7 +15,7 @@ export default function SettingsLayout() {
 					color: Colors.dark.colors.text,
 				},
 				headerStyle: {
-					backgroundColor: Colors.black,
+					backgroundColor: Colors.dark.colors.backgroundHeader,
 				},
 			}}
 		/>
