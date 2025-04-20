@@ -23,6 +23,7 @@ export type Theme = {
 		tabBarActiveTintColor: string
 		modal: string
 		backgroundHeader: string
+		backgroundIcon: string
 	}
 	fonts: NavigationTheme['fonts']
 }
