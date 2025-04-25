@@ -334,7 +334,7 @@ export default function SignIn() {
 										type="secondary"
 										onPress={handleSignInWithGoogle}
 										style={{
-											backgroundColor: 'rgba(255, 255, 255, 0.06)',
+											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,
 											borderRadius: 50,
 										}}
@@ -345,7 +345,7 @@ export default function SignIn() {
 										type="secondary"
 										onPress={handleSignInWithGoogle}
 										style={{
-											backgroundColor: 'rgba(255, 255, 255, 0.06)',
+											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,
 											borderRadius: 50,
 										}}

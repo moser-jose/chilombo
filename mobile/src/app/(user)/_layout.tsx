@@ -1,23 +1,22 @@
-import Colors from '@/src/constants/Colors'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import { Stack } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 export default function UserLayout() {
+	const { theme } = useCustomTheme()
 	return (
 		<Stack
 			screenOptions={{
 				headerTitle: 'Perfil',
 				headerShown: true,
 				headerTitleStyle: {
-					fontFamily: fontFamily.poppins.medium,
-					fontSize: FontSize.smB,
-					color: 'white',
+					fontFamily: theme.fonts.medium.fontFamily,
+					fontSize: theme.size.smB,
+					color: theme.colors.textHeader,
 				},
 				headerStyle: {
-					backgroundColor: Colors.dark.colors.backgroundHeaderScreen,
+					backgroundColor: theme.colors.backgroundHeaderScreen,
 				},
 				headerLeft: () => (
 					<TouchableOpacity onPress={() => router.back()}>

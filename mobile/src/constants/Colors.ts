@@ -1,4 +1,5 @@
-import { fonts } from '@react-navigation/native/src/theming/fonts'
+import { fonts } from './FontFamily'
+import { FontSize } from './FontSize'
 
 export default {
 	light: {
@@ -24,10 +25,13 @@ export default {
 			tabBarActiveTintColor: '#da6c18',
 			modal: '#fff',
 			backgroundHeader: '#0D0D12',
-			backgroundIcon: 'rgba(43, 39, 39, 0.1)',
-			backgroundHeaderScreen: 'rgba(1, 2, 8, 0.94)',
+			backgroundIcon: 'rgba(43, 39, 39, 0.89)',
+			backgroundHeaderScreen: 'rgba(1, 2, 8, 0.06)',
+			textHeader: '#0D0D12',
+			backgroundIconIndex: 'rgba(43, 39, 39, 0.09)',
 		},
 		fonts,
+		size: FontSize,
 	},
 
 	dark: {
@@ -55,8 +59,11 @@ export default {
 			backgroundHeader: 'rgba(187, 184, 186, 0.03)',
 			backgroundHeaderScreen: 'rgba(1, 2, 8, 0.94)',
 			backgroundIcon: 'rgba(43, 39, 39, 0.25)',
+			textHeader: 'rgba(255, 255, 255, 0.77)',
+			backgroundIconIndex: 'rgba(43, 39, 39, 0.35)',
 		},
 		fonts,
+		size: FontSize,
 	},
 	black: '#0D0D12',
 	card: 'rgba(187, 184, 186, 0.03)',

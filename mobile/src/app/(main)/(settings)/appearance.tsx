@@ -43,12 +43,12 @@ export default function AppearanceScreen() {
 		headerTitle: 'Aparência',
 		headerShown: true,
 		headerTitleStyle: {
-			fontFamily: fontFamily.poppins.medium,
-			fontSize: FontSize.sm,
-			color: 'white',
+			fontFamily: theme.fonts.medium.fontFamily,
+			fontSize: theme.size.sm,
+			color: theme.colors.textHeader,
 		},
 		headerStyle: {
-			backgroundColor: Colors.black,
+			backgroundColor: theme.colors.backgroundHeader,
 		},
 		headerTintColor: 'white',
 		headerLeft: () => (
@@ -104,15 +104,15 @@ const makeStyles = (theme: Theme) =>
 			borderBottomColor: 'rgba(147, 137, 137, 0.15)',
 		},
 		optionText: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.text,
 		},
 		infoText: {
 			marginTop: 15,
 			marginHorizontal: 20,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: '#444',
 			textAlign: 'center',
 		},
