@@ -1,21 +1,20 @@
-import { FontSize } from '@/src/constants/FontSize'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { Stack } from 'expo-router'
-import Colors from '@/src/constants/Colors'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 export default function SettingsLayout() {
+	const { theme } = useCustomTheme()
 	return (
 		<Stack
 			screenOptions={{
 				headerShown: true,
 				headerTitle: 'Categorias',
 				headerTitleStyle: {
-					fontSize: FontSize.smB,
-					fontFamily: fontFamily.poppins.bold,
-					color: Colors.dark.colors.text,
+					fontSize: theme.size.smB,
+					fontFamily: theme.fonts.bold.fontFamily,
+					color: theme.colors.textHeader,
 				},
 				headerStyle: {
-					backgroundColor: Colors.dark.colors.backgroundHeader,
+					backgroundColor: theme.colors.backgroundHeader,
 				},
 			}}
 		/>

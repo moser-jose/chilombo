@@ -6,7 +6,6 @@ import { useUser } from '@clerk/clerk-expo'
 import { Stack } from 'expo-router'
 import React from 'react'
 import { FlatList, ScrollView, StyleSheet } from 'react-native'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
@@ -647,7 +646,8 @@ const services = [
 
 import Services from '@/src/components/front/Services'
 import Colors from '@/src/constants/Colors'
-import { FontSize } from '@/src/constants/FontSize'
+import { Theme } from '@/src/types/theme'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 const completedServices = [
 	{
@@ -696,6 +696,8 @@ const completedServices = [
 
 export default function HomeScreen() {
 	const { user } = useUser()
+	const { theme } = useCustomTheme()
+	const styles = makeStyle(theme as Theme)
 
 	return (
 		<>
@@ -823,7 +825,9 @@ export default function HomeScreen() {
 					)}
 				/> */}
 				{services
-					.filter(service => service.tags.some(tag => service.service.includes(tag)))
+					.filter(service =>
+						service.tags.some(tag => service.service.includes(tag)),
+					)
 					.slice(0, 4)
 					.reduce<Array<Array<(typeof services)[0]>>>((rows, item, index) => {
 						if (index % 2 === 0) {
@@ -861,17 +865,18 @@ export default function HomeScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	textUser: {
-		fontSize: FontSize.smB,
-		marginTop: 20,
-		paddingHorizontal: 16,
-		fontFamily: fontFamily.poppins.medium,
-		color: Colors.dark.colors.primary,
-	},
-	textTitle: {
-		fontSize: 26,
-		fontFamily: fontFamily.poppins.bold,
-		paddingHorizontal: 16,
-	},
-})
+const makeStyle = (theme: Theme) =>
+	StyleSheet.create({
+		textUser: {
+			fontSize: theme.size.smB,
+			marginTop: 20,
+			paddingHorizontal: 16,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: Colors.dark.colors.primary,
+		},
+		textTitle: {
+			fontSize: theme.size.lgX,
+			fontFamily: theme.fonts.bold.fontFamily,
+			paddingHorizontal: 16,
+		},
+	})

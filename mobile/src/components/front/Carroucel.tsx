@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-color-literals */
 import Colors from '@/src/constants/Colors'
-import { window } from '../../constants/sizes'
+import { window } from '../../constants/SizeScreen'
 import * as React from 'react'
-import { View, Text, Animated, TouchableOpacity } from 'react-native'
+import { View, Animated, TouchableOpacity } from 'react-native'
 import {
 	Extrapolation,
 	interpolate,

@@ -6,10 +6,13 @@ import {
 	Platform,
 	Animated,
 	useWindowDimensions,
-	Pressable, ScrollView
+	Pressable,
+	ScrollView,
+	View
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
-import { Text, View } from '@/src/components/Themed'
+import { Ionicons } from '@expo/vector-icons'
+import { Text } from '@/src/components/ui/Text'
 import { FontSize } from '@/src/constants/FontSize'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
@@ -21,7 +24,7 @@ import {
 	isStrongPassword,
 } from '../../utils/strenghPasswordForce'
 import { formatPhoneNumber } from '@/src/utils/formatPhone'
-
+import { Stack } from 'expo-router'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'
 import { ModalSSO } from '@/src/components/ui/ModalSSO'
@@ -211,145 +214,169 @@ export default function SignUp() {
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 18 : 0}
-				style={[
-					styles.container,
-					{
-						height: height,
-						flex: 1,
-						backgroundColor: theme.colors.background,
+		<>
+			<Stack.Screen
+				options={{
+					headerShown: true,
+					title: 'Criar conta',
+					headerTitleStyle: {
+						fontFamily: theme.fonts.bold.fontFamily,
+						fontSize: theme.size.smB,
+						color: theme.colors.textHeader,
 					},
-				]}
-			>
-				<ScrollView
-					style={styles.scrollView}
-					showsVerticalScrollIndicator={true}
-					contentInsetAdjustmentBehavior="automatic"
-					keyboardShouldPersistTaps="handled"
+					headerStyle: {
+						backgroundColor: theme.colors.backgroundHeaderScreen,
+					},
+					headerLeft: () => (
+						<Pressable onPress={() => router.back()}>
+							<Ionicons
+								name="chevron-back"
+								size={24}
+								color={theme.colors.textHeader}
+							/>
+						</Pressable>
+					),
+				}}
+			/>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<KeyboardAvoidingView
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					keyboardVerticalOffset={Platform.OS === 'ios' ? 18 : 0}
+					style={[
+						styles.container,
+						{
+							height: height,
+							flex: 1,
+							backgroundColor: theme.colors.background,
+						},
+					]}
 				>
-					<Animated.View
-						style={[
-							styles.container,
-							{
-								transform: [{ translateY }],
-								paddingVertical: height * 0.01,
-							},
-						]}
+					<ScrollView
+						style={styles.scrollView}
+						showsVerticalScrollIndicator={true}
+						contentInsetAdjustmentBehavior="automatic"
+						keyboardShouldPersistTaps="handled"
 					>
-						<View style={[styles.contentContainer]}>
-							<Text style={styles.headerText}>
-								Cria a sua conta e desfrute dos nossos serviços
-							</Text>
+						<Animated.View
+							style={[
+								styles.container,
+								{
+									transform: [{ translateY }],
+									paddingVertical: height * 0.01,
+								},
+							]}
+						>
+							<View style={[styles.contentContainer]}>
+								<Text style={styles.headerText}>
+									Cria a sua conta e desfrute dos nossos serviços
+								</Text>
 
-							<View
-								style={{
-									width: '100%',
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									gap: 6,
-								}}
-							>
-								<TextInputUI
-									type="text"
-									label="Nome"
-									placeholder="Insira o nome"
-									icon="person-outline"
-									value={firstName}
-									onChangeText={setFirstName}
-									style={{ flex: 1 }}
-									errors={errors}
-								/>
-								<TextInputUI
-									type="text"
-									label="Sobrenome"
-									placeholder="Insira o sobrenome"
-									icon="person-outline"
-									value={lastName}
-									onChangeText={setLastName}
-									style={{ flex: 1 }}
-									errors={errors}
-								/>
-							</View>
-
-							<View
-								style={{
-									width: '100%',
-									flexDirection: 'row',
-									justifyContent: 'space-between',
-									gap: 6,
-								}}
-							>
-								<TextInputUI
-									type="text"
-									label="DDI"
-									readOnly={true}
-									editable={false}
-									placeholder="Insira o telefone"
-									//icon="call-outline"
-									value="+244"
-									style={{ flex: 0.25 }}
-								/>
-
-								<TextInputUI
-									type="phone"
-									label="Telefone"
-									placeholder="Insira o telefone"
-									icon="call-outline"
-									value={phone}
-									onChangeText={setPhone}
-									style={{ flex: 1 }}
-									errors={errors}
-								/>
-							</View>
-
-							<TextInputUI
-								type="text"
-								label="Endereço"
-								placeholder="Insira o endereço"
-								icon="location-outline"
-								value={address}
-								onChangeText={setAddress}
-								errors={errors}
-							/>
-							<TextInputUI
-								type="email"
-								label="E-mail"
-								placeholder="Insira o e-mail"
-								icon="mail-outline"
-								errors={errors}
-								value={emailAddress}
-								onChangeText={setEmailAddress}
-							/>
-
-							<TextInputUI
-								type="password"
-								label="Senha"
-								placeholder="Insira a senha"
-								icon="key-outline"
-								value={password}
-								onChangeText={setPassword}
-								errors={errors}
-								isPasswordStrong={isPasswordStrong}
-							/>
-							{!isPasswordStrong && password.length > 0 ? (
-								<View style={{ width: '100%', gap: 10, marginBottom: 10 }}>
-									{renderStrengthBar()}
-									{renderRequirements()}
+								<View
+									style={{
+										width: '100%',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										gap: 6,
+									}}
+								>
+									<TextInputUI
+										type="text"
+										label="Nome"
+										placeholder="Insira o nome"
+										icon="person-outline"
+										value={firstName}
+										onChangeText={setFirstName}
+										style={{ flex: 1 }}
+										errors={errors}
+									/>
+									<TextInputUI
+										type="text"
+										label="Sobrenome"
+										placeholder="Insira o sobrenome"
+										icon="person-outline"
+										value={lastName}
+										onChangeText={setLastName}
+										style={{ flex: 1 }}
+										errors={errors}
+									/>
 								</View>
-							) : null}
 
-							<TouchableOpacity
-								type="primary"
-								onPress={onSignUpPress}
-								style={styles.button}
-							>
-								<Text
-									style={[
-										styles.buttonText,
-										/* {
+								<View
+									style={{
+										width: '100%',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										gap: 6,
+									}}
+								>
+									<TextInputUI
+										type="text"
+										label="DDI"
+										readOnly={true}
+										editable={false}
+										placeholder="Insira o telefone"
+										//icon="call-outline"
+										value="+244"
+										style={{ flex: 0.25 }}
+									/>
+
+									<TextInputUI
+										type="phone"
+										label="Telefone"
+										placeholder="Insira o telefone"
+										icon="call-outline"
+										value={phone}
+										onChangeText={setPhone}
+										style={{ flex: 1 }}
+										errors={errors}
+									/>
+								</View>
+
+								<TextInputUI
+									type="text"
+									label="Endereço"
+									placeholder="Insira o endereço"
+									icon="location-outline"
+									value={address}
+									onChangeText={setAddress}
+									errors={errors}
+								/>
+								<TextInputUI
+									type="email"
+									label="E-mail"
+									placeholder="Insira o e-mail"
+									icon="mail-outline"
+									errors={errors}
+									value={emailAddress}
+									onChangeText={setEmailAddress}
+								/>
+
+								<TextInputUI
+									type="password"
+									label="Senha"
+									placeholder="Insira a senha"
+									icon="key-outline"
+									value={password}
+									onChangeText={setPassword}
+									errors={errors}
+									isPasswordStrong={isPasswordStrong}
+								/>
+								{!isPasswordStrong && password.length > 0 ? (
+									<View style={{ width: '100%', gap: 10, marginBottom: 10 }}>
+										{renderStrengthBar()}
+										{renderRequirements()}
+									</View>
+								) : null}
+
+								<TouchableOpacity
+									type="primary"
+									onPress={onSignUpPress}
+									style={styles.button}
+								>
+									<Text
+										style={[
+											styles.buttonText,
+											/* {
 											color:
 												isPasswordStrong && !isDark
 													? Colors.light.background
@@ -359,45 +386,46 @@ export default function SignUp() {
 															? Colors.dark.text
 															: Colors.dark.textMuted,
 										}, */
-									]}
-								>
-									Criar conta
-								</Text>
-							</TouchableOpacity>
-
-							<View
-								style={{
-									flexDirection: 'row',
-									flex: 1,
-									justifyContent: 'center',
-									alignItems: 'center',
-								}}
-							>
-								<Text style={styles.textEnd}>Já possui uma conta? </Text>
-								<Pressable onPress={() => router.back()}>
-									<Text
-										style={{
-											textDecorationLine: 'underline',
-											color: theme.colors.primary,
-											fontWeight: '400',
-											alignItems: 'center',
-										}}
+										]}
 									>
-										Faça o login
+										Criar conta
 									</Text>
-								</Pressable>
-							</View>
+								</TouchableOpacity>
 
-							{/* {errors.map(error => (
+								<View
+									style={{
+										flexDirection: 'row',
+										flex: 1,
+										justifyContent: 'center',
+										alignItems: 'center',
+									}}
+								>
+									<Text style={styles.textEnd}>Já possui uma conta? </Text>
+									<Pressable onPress={() => router.back()}>
+										<Text
+											style={{
+												textDecorationLine: 'underline',
+												color: theme.colors.primary,
+												fontWeight: '400',
+												alignItems: 'center',
+											}}
+										>
+											Faça o login
+										</Text>
+									</Pressable>
+								</View>
+
+								{/* {errors.map(error => (
 								<Text key={error.longMessage} style={{ color: 'red' }}>
 									{error.longMessage}
 								</Text>
 							))} */}
-						</View>
-					</Animated.View>
-				</ScrollView>
-			</KeyboardAvoidingView>
-		</TouchableWithoutFeedback>
+							</View>
+						</Animated.View>
+					</ScrollView>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
+		</>
 	)
 }
 const makeStyles = (theme: Theme) =>

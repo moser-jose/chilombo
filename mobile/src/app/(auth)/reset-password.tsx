@@ -12,7 +12,7 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import Colors from '@/src/constants/Colors'
 import { ClerkAPIError } from '@clerk/types'
-
+import { Ionicons } from '@expo/vector-icons'
 export default function ResetPassword() {
 	const { client } = useClerk()
 	const [email, setEmail] = useState('')
@@ -48,7 +48,27 @@ export default function ResetPassword() {
 	return (
 		<>
 			<Stack.Screen
-				options={{ headerShown: true, title: 'Recuperar Password' }}
+				options={{
+					headerShown: true,
+					title: 'Recuperar Password',
+					headerTitleStyle: {
+						fontFamily: theme.fonts.bold.fontFamily,
+						fontSize: theme.size.smB,
+						color: theme.colors.textHeader,
+					},
+					headerStyle: {
+						backgroundColor: theme.colors.backgroundHeaderScreen,
+					},
+					headerLeft: () => (
+						<Pressable onPress={() => router.back()}>
+							<Ionicons
+								name="chevron-back"
+								size={24}
+								color={theme.colors.textHeader}
+							/>
+						</Pressable>
+					),
+				}}
 			/>
 			<View style={{ padding: 16 }}>
 				<Text style={styles.headerText}>

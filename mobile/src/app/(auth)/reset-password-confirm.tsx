@@ -1,7 +1,7 @@
-import { View } from '@/src/components/Themed'
+import { Ionicons } from '@expo/vector-icons'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useRef, useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Text } from '@/src/components/ui/Text'
@@ -11,7 +11,7 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useSignUp } from '@clerk/clerk-expo'
 import Colors from '@/src/constants/Colors'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
 
 export default function ResetPasswordConfirm() {
@@ -72,6 +72,25 @@ export default function ResetPasswordConfirm() {
 
 	return (
 		<>
+			<Stack.Screen
+				options={{
+					headerShown: true,
+					title: 'Recuperar Password',
+					headerTitleStyle: {
+						fontFamily: theme.fonts.medium.fontFamily,
+						fontSize: theme.size.smB,
+						color: theme.colors.textHeader,
+					},
+					headerStyle: {
+						backgroundColor: theme.colors.backgroundHeaderScreen,
+					},
+					headerLeft: () => (
+						<Pressable onPress={() => router.back()}>
+							<Ionicons name="chevron-back" size={24} color={theme.colors.textHeader} />
+						</Pressable>
+					),
+				}}
+			/>
 			<View style={{ padding: 16 }}>
 				<Text style={styles.headerText}>Insira a nova password</Text>
 
