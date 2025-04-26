@@ -219,14 +219,6 @@ export default function SignUp() {
 				options={{
 					headerShown: true,
 					title: 'Criar conta',
-					headerTitleStyle: {
-						fontFamily: theme.fonts.bold.fontFamily,
-						fontSize: theme.size.smB,
-						color: theme.colors.textHeader,
-					},
-					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeaderScreen,
-					},
 					headerLeft: () => (
 						<Pressable onPress={() => router.back()}>
 							<Ionicons

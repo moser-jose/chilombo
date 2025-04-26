@@ -6,8 +6,6 @@ import { Ionicons } from '@expo/vector-icons'
 import * as Location from 'expo-location'
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import SearchResultsModal from './SearchResultsModal'
 import FastImage from 'react-native-fast-image'
 import { useRouter } from 'expo-router'
@@ -143,24 +141,12 @@ const makeStyles = (theme: Theme) =>
 			justifyContent: 'space-between',
 		},
 		leftContainerLeftText: {
-			color: theme.colors.text,
-			fontSize: FontSize.smB,
-			fontFamily: fontFamily.poppins.semibold,
+			color: theme.colors.textHeader,
+			fontSize: theme.size.smB,
+			fontFamily: theme.fonts.semibold.fontFamily,
 		},
 		leftContainerLeft: {
 			gap: 10,
-		},
-
-		rightContainer: {
-			marginVertical: 16,
-			padding: 12,
-			backgroundColor: '#1A1B25',
-			borderRadius: 14,
-			borderWidth: 1,
-			borderColor: '#262733',
-			flexDirection: 'row',
-			justifyContent: 'space-between',
-			alignItems: 'center',
 		},
 
 		leftContainerRight: {
@@ -183,7 +169,7 @@ const makeStyles = (theme: Theme) =>
 			marginTop: -12,
 		},
 		locationText: {
-			color: theme.colors.text,
+			color: theme.colors.textHeader,
 			fontSize: theme.size.xs,
 			fontFamily: theme.fonts.regular.fontFamily,
 		},

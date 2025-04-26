@@ -61,7 +61,7 @@ export default {
 			backgroundHeader: 'rgba(187, 184, 186, 0.03)',
 			backgroundHeaderScreen: 'rgba(1, 2, 8, 0.94)',
 			backgroundIcon: 'rgba(98, 98, 98, 0.13)',
-			textHeader: 'rgba(255, 255, 255, 0.77)',
+			textHeader: '#ffffff',
 			backgroundIconIndex: 'rgba(43, 39, 39, 0.35)',
 			buttonHeader: '#1A1B25',
 			borderBottomHeader: '#262733',

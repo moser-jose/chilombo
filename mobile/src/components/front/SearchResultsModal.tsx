@@ -4,43 +4,603 @@ import {
 	Text,
 	StyleSheet,
 	Modal,
-	TouchableOpacity,
-	FlatList,
-	Dimensions,
-	useColorScheme,
+	TouchableOpacity, Dimensions, ScrollView
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
-import Colors from '@/src/constants/Colors'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import TextInputUI from '../ui/TextInput'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
+import CompletedServiceCard from './CompletedServiceCard'
 const { width, height } = Dimensions.get('window')
 const services = [
 	{
 		id: 1,
-		icon: require('../../../assets/icons/emp.png'),
-		service: 'Empregadas Domésticas',
-		route: '/services/empregada-domestica',
+		icon: require('../../../assets/icons/light/empregada_domestica.png'),
+		iconDark: require('../../../assets/icons/dark/empregada_domestica.png'),
+		service: 'Empregada Doméstica',
+		route: '/service-details',
+		name: 'Empregada Doméstica',
+		image: require('../../../assets/empresa/empregada.png'),
+		rating: 4.7,
+		reviews: 124,
+		tags: ['Limpeza', 'Empregada', 'Doméstica', 'Residência'],
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 2,
-		icon: require('../../../assets/icons/garden.png'),
-		service: 'Tratamento de Jardim',
-		route: '/services/tratamento-jardim',
+		icon: require('../../../assets/icons/light/limpeza_residencial.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_residencial.png'),
+		service: 'Limpeza de Residência',
+		route: '/service-details',
+		name: 'Limpeza de Residência',
+		image: require('../../../assets/empresa/empregada.png'),
+		rating: 4.7,
+		reviews: 124,
+		tags: ['Limpeza', 'Empregada', 'Doméstica', 'Residência'],
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 3,
-		icon: require('../../../assets/icons/houseclean.png'),
-		service: 'Limpeza Residencial',
-		route: '/services/limpeza-residencial',
+		icon: require('../../../assets/icons/light/tratamento_jardim.png'),
+		iconDark: require('../../../assets/icons/dark/tratamento_jardim.png'),
+		service: 'Tratamento de Jardim',
+		route: '/service-details',
+		name: 'Tratamento de Jardim',
+		image: require('../../../assets/empresa/jardim.png'),
+		rating: 4.7,
+		reviews: 124,
+		tags: ['Limpeza', 'Jardim', 'Tratamento', 'Jardim'],
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 	{
 		id: 4,
-		icon: require('../../../assets/icons/toolsclean.png'),
+		icon: require('../../../assets/icons/light/limpeza_cadeiroes.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_cadeiroes.png'),
+		service: 'Limpeza de Cadeirões',
+		route: '/service-details',
+		image: require('../../../assets/empresa/cadeiroes.png'),
+		name: 'Limpeza de Cadeirões',
+		tags: ['Limpeza', 'Cadeiroes', 'Cadeirão', 'Residência'],
+		rating: 4.7,
+		reviews: 124,
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
+	},
+	{
+		id: 5,
+		icon: require('../../../assets/icons/light/limpeza_empresa.png'),
+		iconDark: require('../../../assets/icons/dark/limpeza_empresa.png'),
 		service: 'Limpeza Empresarial',
-		route: '/services/limpeza-empresarial',
+		route: '/service-details',
+		image: require('../../../assets/empresa/empresa.png'),
+		name: 'Limpeza Empresarial',
+		rating: 4.7,
+		reviews: 124,
+		tags: ['Limpeza', 'Empresa', 'Empresarial'],
+		description:
+			'Profissionais experientes para cuidar da limpeza completa da sua residência. Os preços aplicam-se aos serviços de limpeza de residências e domésticos, com diferentes planos para atender às necessidades.',
+		duration: '2-4h',
+		professionals: 250,
+		services: 2500,
+		benefits: [
+			'Garantia de satisfação',
+			'Profissionais verificados',
+			'Agendamento flexível',
+			'Produtos de qualidade',
+		],
+		activities: [
+			'Limpeza Geral',
+			'Higienização da Roupa',
+			'Limpeza de 4 divisões',
+		],
+		price: 50000,
+		tag: 'Popular',
+		plan: {
+			diario: {
+				id: 1,
+				title: 'Diário',
+				subplan: [
+					{
+						id: 1,
+						title: 'Básico',
+						price: 50000,
+						type: 'Popular',
+						description: 'Ideal para famílias com um agregado reduzido.',
+						activities: [
+							'Limpeza Geral',
+							'Higienização da Roupa',
+							'Limpeza de 4 divisões',
+						],
+					},
+					{
+						id: 2,
+						title: 'Pro',
+						type: 'Recomendado',
+						price: 65000,
+						description: 'Ideal para famílias com 5 a 6 membros.',
+						activities: [
+							'Tudo do Plano Básico',
+							'Preparo de duas Refeições',
+							'Limpeza de Janelas',
+						],
+					},
+					{
+						id: 3,
+						title: 'Premium',
+						type: 'Melhor Valor',
+						price: 80000,
+						description: 'Ideal para famílias com mais de 6 membros.',
+						activities: [
+							'Tudo do Plano Pro',
+							'Cuidar de Crianças',
+							'Organização de Armários',
+							'Limpeza Profunda',
+						],
+					},
+				],
+			},
+			semanal: {
+				title: 'Semanal',
+				price: 100000,
+			},
+		},
+		comments: [
+			{
+				id: 1,
+				name: 'João Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				rating: 5,
+				text: 'Excelente serviço, muito profissional e pontual! As limpezas são sempre perfeitas e a equipe é muito atenciosa.',
+				date: '15/03/2023',
+				likes: 12,
+			},
+			{
+				id: 2,
+				name: 'Maria Oliveira',
+				image: 'https://randomuser.me/api/portraits/women/17.jpg',
+				rating: 4,
+				text: 'Muito bom, mas poderia melhorar na pontualidade. A qualidade do serviço é excelente.',
+				date: '22/05/2023',
+				likes: 8,
+			},
+			{
+				id: 3,
+				name: 'Carlos Mendes',
+				image: 'https://randomuser.me/api/portraits/men/32.jpg',
+				rating: 5,
+				text: 'Serviço impecável! A profissional foi muito atenciosa e deixou minha casa extremamente limpa e organizada.',
+				date: '10/07/2023',
+				likes: 15,
+			},
+			{
+				id: 4,
+				name: 'Ana Beatriz',
+				image: 'https://randomuser.me/api/portraits/women/28.jpg',
+				rating: 5,
+				text: 'Contratei o serviço mensal e estou muito satisfeita. Vale cada kwanza investido!',
+				date: '03/09/2023',
+				likes: 9,
+			},
+		],
 	},
 ]
 
@@ -97,6 +657,7 @@ type Service = {
 	id: number
 	service?: string
 	icon?: any
+	iconDark?: any
 	route?: string
 	title?: string
 	image?: string
@@ -121,7 +682,7 @@ type SearchResultsModalProps = {
 	onClose: () => void
 }
 
-const SeparatorList = ({ title, theme }: { title: string; theme: 'light' | 'dark' }) => {
+const SeparatorList = ({ title, theme }: { title: string; theme: Theme }) => {
 	return (
 		<View
 			style={{
@@ -135,15 +696,17 @@ const SeparatorList = ({ title, theme }: { title: string; theme: 'light' | 'dark
 			<View style={{ flex: 0 }}>
 				<Text
 					style={{
-						fontSize: FontSize.xsB,
-						fontFamily: fontFamily.poppins.medium,
-						color: Colors[theme].colors.text,
+						fontSize: theme.size.xsB,
+						fontFamily: theme.fonts.medium.fontFamily,
+						color: theme.colors.text,
 					}}
 				>
 					{title}
 				</Text>
 			</View>
-			<View style={{ flex: 1, height: 1, backgroundColor: '#E0E0E0' }} />
+			<View
+				style={{ flex: 1, height: 1, backgroundColor: theme.colors.border }}
+			/>
 		</View>
 	)
 }
@@ -151,7 +714,9 @@ const SeparatorList = ({ title, theme }: { title: string; theme: 'light' | 'dark
 const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 	const [searchTerm, setSearchTerm] = useState('')
 
-	const theme = useColorScheme() ?? 'light'
+	const { theme } = useCustomTheme()
+
+	const styles = useStyles(theme)
 
 	const filteredServices = useMemo(() => {
 		if (!searchTerm) return []
@@ -192,64 +757,75 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 		const isFirstCompletedService =
 			!isService && !allResults.slice(0, index).some(i => !('service' in i))
 
-		return (
-			<>
-				{isFirstService && (
-					<SeparatorList theme={theme} title="💎 Nossos Serviços" />
-				)}
-
-				{isFirstCompletedService && (
-					<SeparatorList theme={theme} title="⌛️ Serviços realizados" />
-				)}
-
-				<TouchableOpacity
-					style={styles(theme).resultItem}
-					onPress={handlePress}
-					activeOpacity={0.7}
-				>
-					{isService ? (
-						<View style={styles(theme).serviceItem}>
+		if (isService) {
+			return (
+				<>
+					{isFirstService && (
+						<SeparatorList theme={theme} title="💎 Nossos Serviços" />
+					)}
+					<TouchableOpacity
+						style={styles.resultItem}
+						onPress={handlePress}
+						activeOpacity={0.7}
+					>
+						<View style={styles.serviceItem}>
 							<FastImage
-								source={item.icon}
-								style={styles(theme).serviceIcon}
+								source={theme.dark ? item.iconDark : item.icon}
+								style={styles.serviceIcon}
 								resizeMode={FastImage.resizeMode.contain}
 							/>
-							<View style={styles(theme).serviceInfo}>
-								<Text style={styles(theme).serviceName}>{item.service}</Text>
+							<View style={styles.serviceInfo}>
+								<Text style={styles.serviceName}>{item.service}</Text>
 							</View>
 						</View>
-					) : (
-						<View style={styles(theme).completedServiceItem}>
-							<FastImage
-								source={{ uri: item.image }}
-								style={styles(theme).completedServiceImage}
-								resizeMode={FastImage.resizeMode.cover}
-							/>
-							<View style={styles(theme).completedServiceInfo}>
-								<Text style={styles(theme).completedServiceTitle}>
-									{item.title}
-								</Text>
-								<Text
-									style={styles(theme).completedServiceDescription}
-									numberOfLines={2}
-								>
-									{item.description}
-								</Text>
-								<View style={styles(theme).ratingContainer}>
-									<Ionicons name="star" size={16} color="#fbd602" />
-									<Text style={styles(theme).ratingText}>{item.stars}</Text>
-									<Text style={styles(theme).likesText}>({item.likes})</Text>
-								</View>
+					</TouchableOpacity>
+				</>
+			)
+		}
+
+		// For completed services
+		const isEvenIndex = index % 2 === 0
+
+		return (
+			<>
+				{isFirstCompletedService && (
+					<View style={{ width: '100%' }}>
+						<SeparatorList theme={theme} title="⌛️ Serviços realizados" />
+					</View>
+				)}
+				<View style={styles.completedServicesWrapper}>
+					<TouchableOpacity
+						style={[
+							styles.completedServiceItem,
+							isEvenIndex ? styles.leftItem : styles.rightItem,
+						]}
+						onPress={handlePress}
+						activeOpacity={0.7}
+					>
+						<FastImage
+							source={{ uri: item.image }}
+							resizeMode={FastImage.resizeMode.cover}
+						/>
+						<View style={styles.completedServiceInfo}>
+							<Text style={styles.completedServiceTitle} numberOfLines={1}>
+								{item.title}
+							</Text>
+							<Text
+								style={styles.completedServiceDescription}
+								numberOfLines={2}
+							>
+								{item.description}
+							</Text>
+							<View style={styles.ratingContainer}>
+								<Ionicons name="star" size={14} color="#fbd602" />
+								<Text style={styles.ratingText}>{item.stars}</Text>
+								<Text style={styles.likesText}>({item.likes})</Text>
 							</View>
 						</View>
-					)}
-				</TouchableOpacity>
+					</TouchableOpacity>
+				</View>
 			</>
 		)
-	}
-
-	const keyExtractor = (item: Service | CompletedService) => {
-		return item.id.toString() + item.title
 	}
 
 	return (
@@ -259,28 +835,18 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 			transparent={true}
 			onRequestClose={onClose}
 		>
-			<View style={styles(theme).modalContainer}>
-				<View style={styles(theme).modalContent}>
-					<View style={styles(theme).header}>
-						<Text style={styles(theme).title}>Encontre os serviços</Text>
-						<View style={styles(theme).closeButtonContainer}>
-							<TouchableOpacity
-								onPress={onClose}
-								style={styles(theme).closeButton}
-							>
-								<Ionicons name="close" size={18} color={Colors.white} />
+			<View style={styles.modalContainer}>
+				<View style={styles.modalContent}>
+					<View style={styles.header}>
+						<Text style={styles.title}>Encontre os serviços</Text>
+						<View style={styles.closeButtonContainer}>
+							<TouchableOpacity onPress={onClose} style={styles.closeButton}>
+								<Ionicons name="close" size={18} color={theme.colors.text} />
 							</TouchableOpacity>
 						</View>
 					</View>
 
-					<View
-						style={{
-							flexDirection: 'row',
-							gap: 16,
-							alignItems: 'center',
-							padding: 16,
-						}}
-					>
+					<View style={styles.searchContainer}>
 						<TextInputUI
 							type="text"
 							placeholder="Pesquisar por serviços"
@@ -289,38 +855,183 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 							onChangeText={handleSearch}
 							style={{ flex: 1 }}
 						/>
-						<View style={styles(theme).filterButtonContainer}>
+						<View style={styles.filterButtonContainer}>
 							<TouchableOpacity>
 								<Ionicons name="options-outline" size={24} color="#666D80" />
 							</TouchableOpacity>
 						</View>
 					</View>
 
-					{allResults.length > 0 ? (
-						<>
-							<FlatList
-								data={allResults}
-								renderItem={renderItem}
-								keyExtractor={keyExtractor}
-								showsVerticalScrollIndicator={false}
-								contentContainerStyle={styles(theme).listContent}
-							/>
-						</>
-					) : (
-						<View style={styles(theme).noResultsContainer}>
-							<Ionicons name="search-outline" size={48} color="#666D80" />
-							<Text style={styles(theme).noResultsText}>
-								Nenhum resultado encontrado
-							</Text>
-						</View>
-					)}
+					<ScrollView
+						style={styles.scrollContainer}
+						showsVerticalScrollIndicator={false}
+						contentContainerStyle={styles.scrollContent}
+					>
+						{allResults.length > 0 ? (
+							<>
+								{/* Regular Services */}
+								{filteredServices.length > 0 && (
+									<View style={styles.sectionContainer}>
+										<SeparatorList theme={theme} title="💎 Nossos Serviços" />
+										{filteredServices.map(item => (
+											<TouchableOpacity
+												key={item.id}
+												style={styles.resultItem}
+												onPress={() => {
+													router.push({
+														pathname: item.route as any,
+														params: { id: item.id },
+													})
+													onClose()
+												}}
+												activeOpacity={0.7}
+											>
+												<View style={styles.serviceItem}>
+													<FastImage
+														source={ item.icon}
+														style={styles.serviceIcon}
+														resizeMode={FastImage.resizeMode.contain}
+													/>
+													<View style={styles.serviceInfo}>
+														<Text style={styles.serviceName}>
+															{item.service}
+														</Text>
+													</View>
+												</View>
+											</TouchableOpacity>
+										))}
+									</View>
+								)}
+
+								{/* Completed Services */}
+								{filteredCompletedServices.length > 0 && (
+									<View style={styles.sectionContainer}>
+										<SeparatorList
+											theme={theme}
+											title="⌛️ Serviços realizados"
+										/>
+										<View style={styles.completedServicesGrid}>
+											{filteredCompletedServices.map((item, index) => (
+												<CompletedServiceCard
+													key={item.id}
+													data={item}
+													style={[
+														styles.completedServiceItem,
+														index % 2 === 0
+															? styles.leftItem
+															: styles.rightItem,
+													]}
+													styleContainer={styles.styleContainer}
+													styleTitle={styles.completedServiceTitle}
+												/>
+												
+											))}
+										</View>
+									</View>
+								)}
+							</>
+						) : (
+							<View style={styles.noResultsContainer}>
+								<Ionicons name="search-outline" size={48} color="#666D80" />
+								<Text style={styles.noResultsText}>
+									Nenhum resultado encontrado
+								</Text>
+							</View>
+						)}
+					</ScrollView>
 				</View>
 			</View>
 		</Modal>
 	)
 }
-
-const styles = (theme: 'light' | 'dark') =>
+{/* <TouchableOpacity
+	key={item.id}
+	style={[
+		styles.completedServiceItem,
+		index % 2 === 0
+			? styles.leftItem
+			: styles.rightItem,
+	]}
+	onPress={() => {
+		router.push({
+			pathname: item.route as any,
+			params: { id: item.id },
+		})
+		onClose()
+	}}
+	activeOpacity={0.7}
+>
+	<FastImage
+		source={{ uri: item.image }}
+		style={styles.completedServiceImage}
+		resizeMode={FastImage.resizeMode.cover}
+	/>
+	<View style={styles.completedServiceInfo}>
+		<Text
+			style={styles.completedServiceTitle}
+			numberOfLines={1}
+		>
+			{item.title}
+		</Text>
+		<Text
+			style={styles.completedServiceDescription}
+			numberOfLines={2}
+		>
+			{item.description}
+		</Text>
+		<View style={styles.ratingContainer}>
+			<Ionicons name="star" size={14} color="#fbd602" />
+			<Text style={styles.ratingText}>
+				{item.stars}
+			</Text>
+			<Text style={styles.likesText}>
+				({item.likes})
+			</Text>
+		</View>
+		<View style={styles.likesContainer}>
+			<View style={styles.likesContainer}>
+				<Ionicons
+					name="heart"
+					size={14}
+					color="#FF5959"
+				/>
+				<Text style={styles.likesText}>
+					{item.likes}
+				</Text>
+			</View>
+			<View style={styles.imageContainerLike}>
+				<View style={styles.imageLikeView}>
+					<FastImage
+						source={{
+							uri: 'https://randomuser.me/api/portraits/men/5.jpg',
+						}}
+						style={styles.likesImage}
+						resizeMode={FastImage.resizeMode.cover}
+					/>
+				</View>
+				<View style={styles.imageLikeView}>
+					<FastImage
+						source={{
+							uri: 'https://randomuser.me/api/portraits/men/6.jpg',
+						}}
+						style={styles.likesImage}
+						resizeMode={FastImage.resizeMode.cover}
+					/>
+				</View>
+				<View style={styles.imageLikeView}>
+					<FastImage
+						source={{
+							uri: 'https://randomuser.me/api/portraits/men/7.jpg',
+						}}
+						style={styles.likesImage}
+						resizeMode={FastImage.resizeMode.cover}
+					/>
+				</View>
+			</View>
+		</View>
+	</View>
+</TouchableOpacity> */} 
+const useStyles = (theme: Theme) =>
 	StyleSheet.create({
 		modalContainer: {
 			flex: 1,
@@ -328,25 +1039,16 @@ const styles = (theme: 'light' | 'dark') =>
 			justifyContent: 'flex-end',
 		},
 
-		rightContainer: {
-			marginVertical: 16,
-			padding: 12,
-			backgroundColor: '#1A1B25',
-			borderRadius: 14,
-			borderWidth: 1,
-			borderColor: '#262733',
-			flexDirection: 'row',
-			justifyContent: 'space-between',
-			alignItems: 'center',
-			width: width * 0.7,
-		},
 		inputText: {
 			flex: 1,
 			marginLeft: 10,
-			fontSize: FontSize.xsB,
-			fontFamily: fontFamily.poppins.regular,
-			color: Colors.white,
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: 'red',
 			width: width * 0.7,
+		},
+		completedServiceTitle: {
+			fontSize: FontSize.sm,
 		},
 		leftContainerRight: {
 			flexDirection: 'row',
@@ -360,7 +1062,7 @@ const styles = (theme: 'light' | 'dark') =>
 		},
 
 		modalContent: {
-			backgroundColor: 'rgba(0, 0, 0, 0.98)',
+			backgroundColor: theme.colors.background,
 			borderTopLeftRadius: 20,
 			borderTopRightRadius: 20,
 			height: height * 0.87,
@@ -377,9 +1079,9 @@ const styles = (theme: 'light' | 'dark') =>
 			borderTopRightRadius: 20,
 		},
 		title: {
-			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.semibold,
-			color: Colors.white,
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			color: theme.colors.text,
 		},
 		closeButtonContainer: {
 			backgroundColor: 'rgba(214, 30, 30, 0.58)',
@@ -392,8 +1094,8 @@ const styles = (theme: 'light' | 'dark') =>
 			justifyContent: 'center',
 		},
 		filterButtonContainer: {
-			backgroundColor: Colors[theme].colors.ImputBackgroundColors, // 'rgba(0, 0, 0, 0.1)',
-			borderColor: Colors[theme].colors.borderInput,
+			backgroundColor: theme.colors.ImputBackgroundColors, // 'rgba(0, 0, 0, 0.1)',
+			borderColor: theme.colors.borderInput,
 			borderWidth: 1,
 			borderRadius: 15,
 			width: 45,
@@ -409,14 +1111,33 @@ const styles = (theme: 'light' | 'dark') =>
 			width: 35,
 			height: 35,
 		},
-		listContent: {
+		searchContainer: {
+			flexDirection: 'row',
+			gap: 16,
+			alignItems: 'center',
+			padding: 16,
+		},
+		scrollContainer: {
+			flex: 1,
+		},
+		scrollContent: {
 			paddingHorizontal: 16,
 			paddingBottom: 20,
 		},
+		sectionContainer: {
+			marginBottom: 16,
+		},
+		completedServicesGrid: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'space-between',
+			marginTop: 8,
+		},
+		
 		resultItem: {
 			marginBottom: 16,
-			backgroundColor: Colors[theme].colors.ImputBackgroundColors,
-			borderColor: Colors[theme].colors.borderInput,
+			backgroundColor: theme.colors.ImputBackgroundColors,
+			borderColor: theme.colors.borderInput,
 			borderRadius: 10,
 			borderWidth: 1.2,
 			shadowRadius: 3.84,
@@ -439,33 +1160,45 @@ const styles = (theme: 'light' | 'dark') =>
 		serviceName: {
 			fontSize: FontSize.sm,
 			fontFamily: fontFamily.poppins.semibold,
-			color: Colors[theme].colors.text,
+			color: theme.colors.text,
+		},
+		completedServicesWrapper: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'space-between',
+			paddingHorizontal: 8,
 		},
 		completedServiceItem: {
-			flexDirection: 'row',
-			//borderRadius: 12,
+			width: (width - 48) / 2, // Account for padding and gap
+			backgroundColor: theme.colors.ImputBackgroundColors,
+			borderColor: theme.colors.borderInput,
+			borderRadius: 10,
+			borderWidth: 1.2,
+			marginBottom: 16,
 			overflow: 'hidden',
 		},
-		completedServiceImage: {
-			width: 90,
-			height: '100%',
-			borderBottomLeftRadius: 8,
-			borderTopLeftRadius: 8,
+		leftItem: {
+			marginRight: 4,
+		},
+		rightItem: {
+			marginLeft: 4,
+		},
+		styleContainer: {
+			height: 120,
 		},
 		completedServiceInfo: {
-			flex: 1,
-			padding: 12,
+			padding: 8,
 		},
 		completedServiceTitle: {
 			fontSize: FontSize.sm,
 			fontFamily: fontFamily.poppins.semibold,
-			color: Colors[theme].colors.text,
+			color: theme.colors.text,
 			marginBottom: 2,
 		},
 		completedServiceDescription: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
-			color: Colors[theme].colors.colorIconInput,
+			color: theme.colors.colorIconInput,
 			marginBottom: 4,
 		},
 		ratingContainer: {
@@ -476,13 +1209,13 @@ const styles = (theme: 'light' | 'dark') =>
 			marginLeft: 4,
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.medium,
-			color: Colors[theme].colors.text,
+			color: theme.colors.text,
 		},
 		likesText: {
 			marginLeft: 4,
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
-			color: Colors[theme].colors.colorIconInput,
+			color: theme.colors.colorIconInput,
 		},
 		noResultsContainer: {
 			flex: 1,

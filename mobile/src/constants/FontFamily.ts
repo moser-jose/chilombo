@@ -15,13 +15,17 @@ export const fonts = Platform.select({
 			fontFamily: WEB_FONT_STACK,
 			fontWeight: '500',
 		},
-		bold: {
+		semibold: {
 			fontFamily: WEB_FONT_STACK,
 			fontWeight: '600',
 		},
-		heavy: {
+		bold: {
 			fontFamily: WEB_FONT_STACK,
 			fontWeight: '700',
+		},
+		heavy: {
+			fontFamily: WEB_FONT_STACK,
+			fontWeight: '800',
 		},
 	},
 	ios: {
@@ -33,9 +37,13 @@ export const fonts = Platform.select({
 			fontFamily: 'PoppinsMedium',
 			fontWeight: '500',
 		},
-		bold: {
+		semibold: {
 			fontFamily: 'PoppinsSemiBold',
 			fontWeight: '600',
+		},
+		bold: {
+			fontFamily: 'PoppinsBold',
+			fontWeight: '700',
 		},
 		heavy: {
 			fontFamily: 'PoppinsBold',
@@ -51,13 +59,17 @@ export const fonts = Platform.select({
 			fontFamily: 'sans-serif-medium',
 			fontWeight: 'normal',
 		},
-		bold: {
+		semibold: {
 			fontFamily: 'sans-serif',
 			fontWeight: '600',
 		},
-		heavy: {
+		bold: {
 			fontFamily: 'sans-serif',
 			fontWeight: '700',
+		},
+		heavy: {
+			fontFamily: 'sans-serif',
+			fontWeight: '800',
 		},
 	},
 } as const satisfies Record<string, Theme['fonts']>)
