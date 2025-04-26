@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
+import { View } from 'react-native'
 
 export default function SettingsLayout() {
 	const { theme } = useCustomTheme()
@@ -13,9 +14,7 @@ export default function SettingsLayout() {
 					fontFamily: theme.fonts.bold.fontFamily,
 					color: theme.colors.textHeader,
 				},
-				headerStyle: {
-					backgroundColor: theme.colors.backgroundHeader,
-				},
+				headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
 			}}
 		/>
 	)

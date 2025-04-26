@@ -6,8 +6,6 @@ import { Ionicons } from '@expo/vector-icons'
 import * as Location from 'expo-location'
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import SearchResultsModal from './SearchResultsModal'
 import FastImage from 'react-native-fast-image'
 import { useRouter } from 'expo-router'
@@ -95,7 +93,7 @@ const Header = () => {
 								onPress={() => setIsModalVisible(true)}
 								style={styles.styleButton}
 							>
-								<Ionicons name="search-outline" size={24} color={Colors.text} />
+								<Ionicons name="search-outline" size={24} color={theme.colors.text} />
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -114,6 +112,8 @@ const makeStyles = (theme: Theme) =>
 			paddingHorizontal: 16,
 			paddingBottom: 16,
 			paddingTop: 12,
+			borderBottomWidth: .5,
+			borderBottomColor: theme.colors.border,
 		},
 		leftContainerLeftUser: {
 			flexDirection: 'row',
@@ -141,24 +141,12 @@ const makeStyles = (theme: Theme) =>
 			justifyContent: 'space-between',
 		},
 		leftContainerLeftText: {
-			color: Colors.dark.colors.text,
-			fontSize: FontSize.smB,
-			fontFamily: fontFamily.poppins.semibold,
+			color: theme.colors.textHeader,
+			fontSize: theme.size.smB,
+			fontFamily: theme.fonts.semibold.fontFamily,
 		},
 		leftContainerLeft: {
 			gap: 10,
-		},
-
-		rightContainer: {
-			marginVertical: 16,
-			padding: 12,
-			backgroundColor: '#1A1B25',
-			borderRadius: 14,
-			borderWidth: 1,
-			borderColor: '#262733',
-			flexDirection: 'row',
-			justifyContent: 'space-between',
-			alignItems: 'center',
 		},
 
 		leftContainerRight: {
@@ -168,11 +156,11 @@ const makeStyles = (theme: Theme) =>
 		},
 
 		styleButton: {
-			backgroundColor: '#1A1B25',
+			backgroundColor: theme.colors.buttonHeader,
 			padding: 8,
 			borderRadius: 18,
 			borderWidth: 1,
-			borderColor: '#262733',
+			borderColor: theme.colors.borderBottomHeader,
 		},
 		locationContainer: {
 			flexDirection: 'row',
@@ -181,9 +169,9 @@ const makeStyles = (theme: Theme) =>
 			marginTop: -12,
 		},
 		locationText: {
-			color: Colors.text,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			color: theme.colors.textHeader,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 	})
 export default Header

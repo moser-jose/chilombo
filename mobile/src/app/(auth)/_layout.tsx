@@ -1,18 +1,19 @@
 import { Redirect, Stack } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo'
 import Colors from '@/src/constants/Colors'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { View } from '@/src/components/Themed'
 export default function AuthLayout() {
+	const { theme } = useCustomTheme()
 	const { isLoaded, isSignedIn } = useAuth()
 	if (!isLoaded) return null
 	if (isSignedIn) return <Redirect href="/(main)" />
 
 	const headerOptions = {
 		headerShown: true,
-		headerShadowVisible: false,
+		headerShadowVisible: true,
 		headerTransparent: false,
-		headerStyle: {
-			backgroundColor: Colors.dark.colors.background,
-		},
+		headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
 		headerBackVisible: false,
 	}
 

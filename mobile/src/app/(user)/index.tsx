@@ -6,14 +6,12 @@ import {
 	FlatList,
 	View,
 } from 'react-native'
-import * as Linking from 'expo-linking'
 import { Text } from '@/src/components/ui/Text'
 import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
 import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 import { Separador } from '@/src/components/front/Separador'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -66,22 +64,11 @@ const completedServices = [
 export default function UserScreen() {
 	const { user } = useUser()
 	const { signOut } = useClerk()
-	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
 
 	const { theme } = useCustomTheme()
 
 	const styles = useStyles(theme as Theme)
-
-	const handleSignOut = async () => {
-		try {
-			await signOut()
-			Linking.openURL(Linking.createURL('/'))
-		} catch (err) {
-			console.error(JSON.stringify(err, null, 2))
-		}
-	}
-
 	return (
 		<ScrollView
 			style={styles.scrollView}
@@ -355,7 +342,7 @@ const useStyles = (theme: Theme) =>
 			alignItems: 'center',
 			justifyContent: 'center',
 			gap: 10,
-			backgroundColor: theme.colors.tint,
+			backgroundColor: theme.colors.backgroundIcon,
 			borderRadius: 5,
 			paddingHorizontal: 10,
 			paddingVertical: 4,
@@ -406,8 +393,8 @@ const useStyles = (theme: Theme) =>
 			borderColor: 'white',
 		},
 		userName: {
-			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.bold,
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.bold.fontFamily,
 			color: theme.colors.primary,
 		},
 		separator: {
@@ -432,9 +419,9 @@ const useStyles = (theme: Theme) =>
 			alignItems: 'center',
 		},
 		menuText: {
-			fontSize: FontSize.sm,
+			fontSize: theme.size.sm,
 			marginLeft: 15,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		icon: {
 			backgroundColor: theme.colors.backgroundIcon,

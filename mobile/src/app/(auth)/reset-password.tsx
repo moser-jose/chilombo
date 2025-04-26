@@ -51,14 +51,14 @@ export default function ResetPassword() {
 				options={{
 					headerShown: true,
 					title: 'Recuperar Password',
-					headerTitleStyle: {
+					/* headerTitleStyle: {
 						fontFamily: theme.fonts.bold.fontFamily,
 						fontSize: theme.size.smB,
 						color: theme.colors.textHeader,
 					},
 					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeaderScreen,
-					},
+						backgroundColor: theme.colors.backgroundHeader,
+					}, */
 					headerLeft: () => (
 						<Pressable onPress={() => router.back()}>
 							<Ionicons

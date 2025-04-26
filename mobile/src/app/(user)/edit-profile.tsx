@@ -200,6 +200,8 @@ export default function EditProfileScreen() {
 			<Stack.Screen
 				options={{
 					headerTitle: 'Editar Perfil',
+					headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+			
 				}}
 			/>
 

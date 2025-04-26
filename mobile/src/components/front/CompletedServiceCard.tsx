@@ -7,24 +7,28 @@ import {
 	TouchableOpacity,
 	StyleProp,
 	ViewStyle,
+	TextStyle,
 } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
-import FastImage from 'react-native-fast-image'
+import FastImage, { ImageStyle } from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { red } from 'react-native-reanimated/lib/typescript/Colors'
 
 interface CompletedServiceCardProps {
 	data: any
 	style?: StyleProp<ViewStyle>
+	styleContainer?: StyleProp<ViewStyle>
+	styleTitle?: StyleProp<TextStyle>
 }
 
 const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	data,
 	style,
+	styleContainer,
+	styleTitle
 }) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
@@ -40,7 +44,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 				})
 			}
 		>
-			<View style={styles.imageContainer}>
+			<View style={[styles.imageContainer, styleContainer]}>
 				<FastImage
 					source={{ uri: data.image }}
 					style={styles.image}
@@ -49,7 +53,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 				<Star rating={data.stars} style={styles.starContainer} />
 			</View>
 			<View style={styles.contentContainer}>
-				<Text style={styles.title} numberOfLines={1}>
+				<Text style={[styles.title, styleTitle]} numberOfLines={1}>
 					{data.title}
 				</Text>
 				<View style={styles.locationContainer}>
@@ -73,21 +77,27 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 					<View style={styles.imageContainerLike}>
 						<View style={styles.imageLikeView}>
 							<FastImage
-								source={{ uri: 'https://randomuser.me/api/portraits/men/5.jpg' }}
+								source={{
+									uri: 'https://randomuser.me/api/portraits/men/5.jpg',
+								}}
 								style={styles.likesImage}
 								resizeMode={FastImage.resizeMode.cover}
 							/>
 						</View>
 						<View style={styles.imageLikeView}>
 							<FastImage
-								source={{ uri: 'https://randomuser.me/api/portraits/men/6.jpg' }}
+								source={{
+									uri: 'https://randomuser.me/api/portraits/men/6.jpg',
+								}}
 								style={styles.likesImage}
 								resizeMode={FastImage.resizeMode.cover}
 							/>
 						</View>
 						<View style={styles.imageLikeView}>
 							<FastImage
-								source={{ uri: 'https://randomuser.me/api/portraits/men/7.jpg' }}
+								source={{
+									uri: 'https://randomuser.me/api/portraits/men/7.jpg',
+								}}
 								style={styles.likesImage}
 								resizeMode={FastImage.resizeMode.cover}
 							/>
@@ -186,7 +196,6 @@ const makeStyles = (theme: any) =>
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center',
-			
 		},
 		imageLikeView: {
 			width: 18,
@@ -198,12 +207,11 @@ const makeStyles = (theme: any) =>
 			justifyContent: 'center',
 			marginLeft: -6,
 			overflow: 'hidden',
-			
 		},
 		likesText: {
 			fontSize: FontSize.xs,
 			fontFamily: fontFamily.poppins.regular,
-			marginLeft: 4,
+			marginLeft: 2,
 			color: theme.colors.muted,
 		},
 		likesImage: {

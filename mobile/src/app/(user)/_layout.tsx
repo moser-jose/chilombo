@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -15,12 +15,10 @@ export default function UserLayout() {
 					fontSize: theme.size.smB,
 					color: theme.colors.textHeader,
 				},
-				headerStyle: {
-					backgroundColor: theme.colors.backgroundHeaderScreen,
-				},
+				headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
 				headerLeft: () => (
 					<TouchableOpacity onPress={() => router.back()}>
-						<Ionicons name="chevron-back" size={24} color="white" />
+						<Ionicons name="chevron-back" size={22} color={theme.colors.textHeader} />
 					</TouchableOpacity>
 				),
 

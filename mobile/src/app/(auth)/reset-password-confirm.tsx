@@ -16,7 +16,6 @@ import { ClerkAPIError } from '@clerk/types'
 
 export default function ResetPasswordConfirm() {
 	const { client } = useClerk()
-	const [openModal, setOpenModal] = useState(false)
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
 	const [pendingVerification, setPendingVerification] = useState(false)
 	const [password, setPassword] = useState('')
@@ -76,14 +75,6 @@ export default function ResetPasswordConfirm() {
 				options={{
 					headerShown: true,
 					title: 'Recuperar Password',
-					headerTitleStyle: {
-						fontFamily: theme.fonts.medium.fontFamily,
-						fontSize: theme.size.smB,
-						color: theme.colors.textHeader,
-					},
-					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeaderScreen,
-					},
 					headerLeft: () => (
 						<Pressable onPress={() => router.back()}>
 							<Ionicons name="chevron-back" size={24} color={theme.colors.textHeader} />
