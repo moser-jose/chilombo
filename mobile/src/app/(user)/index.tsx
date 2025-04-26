@@ -16,6 +16,9 @@ import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 import { Separador } from '@/src/components/front/Separador'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
+import ModalMessage from '@/src/components/ui/ModalMessage'
+import { useState } from 'react'
+
 const completedServices = [
 	{
 		id: 1,
@@ -63,13 +66,46 @@ const completedServices = [
 
 export default function UserScreen() {
 	const { user } = useUser()
+	const { signOut } = useClerk()
 	const router = useRouter()
 
 	const { theme } = useCustomTheme()
 
 	const userVerified =
-		user?.phoneNumbers[0].verification?.status === 'verified' &&
-		user?.emailAddresses[0].verification?.status === 'verified'
+		user?.phoneNumbers[0]?.verification?.status === 'verified' &&
+		user?.emailAddresses[0]?.verification?.status === 'verified'
+
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
+	const [deleteSuccess, setDeleteSuccess] = useState(false)
+	const [deleteError, setDeleteError] = useState(false)
+	const [deleteErrorMessage, setDeleteErrorMessage] = useState('')
+
+	const handleDelete = async () => {
+		if (!user) return
+
+		setShowDeleteModal(true)
+	}
+
+	const confirmDelete = async () => {
+		if (!user) return
+		try {
+			await user.delete()
+			await signOut()
+			setShowDeleteModal(false)
+			setDeleteSuccess(true)
+			// router.replace('/(auth)') será chamado no handleOk
+		} catch (err) {
+			console.error(err)
+			setShowDeleteModal(false)
+			setDeleteErrorMessage('Não foi possível excluir a conta.')
+			setDeleteError(true)
+		}
+	}
+
+	const handleOk = () => {
+		setDeleteSuccess(false)
+		router.replace('/(auth)')
+	}
 
 	const styles = useStyles(theme as Theme)
 	return (
@@ -153,14 +189,27 @@ export default function UserScreen() {
 								</View>
 							</View>
 							<View style={styles.actionsTextContainer}>
-								<View style={styles.verifyContainer}>
-									<Ionicons
-										name="ribbon-outline"
-										size={18}
-										color={theme.colors.primary}
-									/>
-									<Text style={styles.actionsText}>Perfil verificado</Text>
-								</View>
+								{userVerified ? (
+									<View style={styles.verifyContainer}>
+										<Ionicons
+											name="ribbon-outline"
+											size={18}
+											color={theme.colors.primary}
+										/>
+										<Text style={styles.actionsText}>Perfil verificado</Text>
+									</View>
+								) : (
+									<View style={styles.verifyContainer}>
+										<Ionicons
+											name="close-circle"
+											size={18}
+											color={theme.colors.colorIconInput}
+										/>
+										<Text style={styles.actionsText}>
+											Perfil não verificado
+										</Text>
+									</View>
+								)}
 							</View>
 						</View>
 					</View>
@@ -190,7 +239,8 @@ export default function UserScreen() {
 						</View>
 						<View style={styles.verifyItem}>
 							<View style={styles.verifyItemContent}>
-								{user?.emailAddresses[0].verification?.status === 'verified' ? (
+								{user?.emailAddresses[0]?.verification?.status ===
+								'verified' ? (
 									<Ionicons
 										name="checkmark-circle"
 										size={18}
@@ -210,7 +260,7 @@ export default function UserScreen() {
 						</View>
 						<View style={styles.verifyItem}>
 							<View style={styles.verifyItemContent}>
-								{user?.phoneNumbers[0].verification?.status === 'verified' ? (
+								{user?.phoneNumbers[0]?.verification?.status === 'verified' ? (
 									<Ionicons
 										name="checkmark-circle"
 										size={18}
@@ -223,9 +273,15 @@ export default function UserScreen() {
 										color={theme.colors.colorIconInput}
 									/>
 								)}
-								<Text style={styles.verifyItemText}>
-									{user?.phoneNumbers[0].phoneNumber}
-								</Text>
+								{user?.phoneNumbers[0]?.phoneNumber ? (
+									<Text style={styles.verifyItemText}>
+										{user.phoneNumbers[0].phoneNumber}
+									</Text>
+								) : (
+									<Text style={styles.verifyItemText}>
+										Adicione o número de telefone
+									</Text>
+								)}
 							</View>
 						</View>
 					</View>
@@ -374,7 +430,43 @@ export default function UserScreen() {
 						/>
 					</TouchableOpacity>
 				</View>
+				<TouchableOpacity
+					activeOpacity={0.8}
+					style={styles.deleteAccountButton}
+					onPress={handleDelete}
+				>
+					<Text style={styles.deleteAccountText}>Excluir minha conta</Text>
+				</TouchableOpacity>
 			</View>
+
+			<ModalMessage
+				setShowLogoutModal={setShowDeleteModal}
+				showLogoutModal={showDeleteModal}
+				handleOk={confirmDelete}
+				modalIcon="warning-outline"
+				modalTitle="Excluir conta"
+				modalText="Tem certeza? Essa ação é irreversível."
+				textButton="Sim"
+				cancelButton={true}
+			/>
+			<ModalMessage
+				setShowLogoutModal={setDeleteSuccess}
+				showLogoutModal={deleteSuccess}
+				handleOk={handleOk}
+				modalIcon="checkmark-circle-outline"
+				modalTitle="Conta excluída"
+				modalText="Sua conta foi excluída com sucesso."
+				cancelButton={false}
+			/>
+			<ModalMessage
+				setShowLogoutModal={setDeleteError}
+				showLogoutModal={deleteError}
+				handleOk={() => setDeleteError(false)}
+				modalIcon="close-circle-outline"
+				modalTitle="Erro!"
+				modalText={deleteErrorMessage}
+				cancelButton={false}
+			/>
 		</ScrollView>
 	)
 }
@@ -390,7 +482,6 @@ const useStyles = (theme: Theme) =>
 		},
 		verifyContent: {
 			paddingHorizontal: 16,
-			//paddingVertical: 16,
 		},
 		verifyTitle: {
 			fontSize: theme.size.sm,
@@ -468,7 +559,6 @@ const useStyles = (theme: Theme) =>
 			marginBottom: 0,
 			flex: 1,
 			justifyContent: 'center',
-			//alignItems: 'center',
 		},
 		profileImage: {
 			width: 80,
@@ -526,5 +616,17 @@ const useStyles = (theme: Theme) =>
 			backgroundColor: theme.colors.backgroundIcon,
 			borderRadius: 12,
 			padding: 6,
+		},
+		deleteAccountButton: {
+			padding: 6,
+			marginTop: 10,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+
+		deleteAccountText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.primary,
 		},
 	})
