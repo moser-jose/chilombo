@@ -178,7 +178,7 @@ export default function SignIn() {
 				setErrors(err.errors)
 				//console.error("Clerk API Error:", err.errors);
 			}
-			//console.error("Authentication error:", JSON.stringify(err, null, 2));
+			console.error("Authentication error:", JSON.stringify(err, null, 2));
 			setErrors([
 				{
 					code: 'verification_incomplete',

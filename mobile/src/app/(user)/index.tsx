@@ -63,10 +63,13 @@ const completedServices = [
 
 export default function UserScreen() {
 	const { user } = useUser()
-	const { signOut } = useClerk()
 	const router = useRouter()
 
 	const { theme } = useCustomTheme()
+
+	const userVerified =
+		user?.phoneNumbers[0].verification?.status === 'verified' &&
+		user?.emailAddresses[0].verification?.status === 'verified'
 
 	const styles = useStyles(theme as Theme)
 	return (
@@ -162,6 +165,72 @@ export default function UserScreen() {
 						</View>
 					</View>
 				</View>
+
+				<View style={styles.verifyContent}>
+					{userVerified ? (
+						<Text style={styles.verifyTitle}>Você tem o perfil verificado</Text>
+					) : (
+						<Text style={styles.verifyTitle}>
+							Você não tem o perfil totalmente verificado
+						</Text>
+					)}
+
+					<View style={styles.verifyItemContainer}>
+						<View style={styles.verifyItem}>
+							<View style={styles.verifyItemContent}>
+								<Ionicons
+									name="checkmark-circle"
+									size={18}
+									color={theme.colors.primary}
+								/>
+								<Text style={styles.verifyItemText}>
+									Documento de identidade
+								</Text>
+							</View>
+						</View>
+						<View style={styles.verifyItem}>
+							<View style={styles.verifyItemContent}>
+								{user?.emailAddresses[0].verification?.status === 'verified' ? (
+									<Ionicons
+										name="checkmark-circle"
+										size={18}
+										color={theme.colors.primary}
+									/>
+								) : (
+									<Ionicons
+										name="close-circle"
+										size={18}
+										color={theme.colors.colorIconInput}
+									/>
+								)}
+								<Text style={styles.verifyItemText}>
+									{user?.emailAddresses[0].emailAddress}
+								</Text>
+							</View>
+						</View>
+						<View style={styles.verifyItem}>
+							<View style={styles.verifyItemContent}>
+								{user?.phoneNumbers[0].verification?.status === 'verified' ? (
+									<Ionicons
+										name="checkmark-circle"
+										size={18}
+										color={theme.colors.primary}
+									/>
+								) : (
+									<Ionicons
+										name="close-circle"
+										size={18}
+										color={theme.colors.colorIconInput}
+									/>
+								)}
+								<Text style={styles.verifyItemText}>
+									{user?.phoneNumbers[0].phoneNumber}
+								</Text>
+							</View>
+						</View>
+					</View>
+				</View>
+
 				<Separador text="Meus Serviços" more />
 				<FlatList
 					horizontal
@@ -315,6 +384,36 @@ const useStyles = (theme: Theme) =>
 		scrollView: {
 			flex: 1,
 			backgroundColor: theme.colors.background,
+		},
+		verifyItemContainer: {
+			paddingVertical: 16,
+		},
+		verifyContent: {
+			paddingHorizontal: 16,
+			//paddingVertical: 16,
+		},
+		verifyTitle: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.primary,
+		},
+		verifyItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			marginBottom: 18,
+		},
+		verifyItemContent: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			gap: 8,
+		},
+		verifyItemText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			letterSpacing: 0.3,
 		},
 		container: {
 			flex: 1,
