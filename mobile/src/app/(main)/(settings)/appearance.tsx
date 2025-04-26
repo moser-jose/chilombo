@@ -47,16 +47,14 @@ export default function AppearanceScreen() {
 			fontSize: theme.size.sm,
 			color: theme.colors.textHeader,
 		},
-		headerStyle: {
-			backgroundColor: theme.colors.backgroundHeader,
-		},
-		headerTintColor: 'white',
+		headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+		headerTintColor: theme.colors.textHeader,
 		headerLeft: () => (
 			<TouchableOpacity onPress={() => router.back()}>
 				<Ionicons
-					name="arrow-back"
-					size={24}
-					color="white"
+					name='chevron-back'
+					size={22}
+					color={theme.colors.textHeader}
 					style={{ marginLeft: 10 }}
 				/>
 			</TouchableOpacity>

@@ -27,6 +27,8 @@ export type Theme = {
 		backgroundHeaderScreen: string
 		textHeader: string
 		backgroundIconIndex: string
+		buttonHeader: string
+		borderBottomHeader: string
 	}
 	fonts: NavigationTheme['fonts']
 	size: FontSize

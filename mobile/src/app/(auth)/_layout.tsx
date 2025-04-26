@@ -8,7 +8,7 @@ export default function AuthLayout() {
 
 	const headerOptions = {
 		headerShown: true,
-		headerShadowVisible: false,
+		headerShadowVisible: true,
 		headerTransparent: false,
 		headerStyle: {
 			backgroundColor: Colors.dark.colors.background,

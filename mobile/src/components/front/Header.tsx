@@ -95,7 +95,7 @@ const Header = () => {
 								onPress={() => setIsModalVisible(true)}
 								style={styles.styleButton}
 							>
-								<Ionicons name="search-outline" size={24} color={Colors.text} />
+								<Ionicons name="search-outline" size={24} color={theme.colors.text} />
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -114,6 +114,8 @@ const makeStyles = (theme: Theme) =>
 			paddingHorizontal: 16,
 			paddingBottom: 16,
 			paddingTop: 12,
+			borderBottomWidth: .5,
+			borderBottomColor: theme.colors.border,
 		},
 		leftContainerLeftUser: {
 			flexDirection: 'row',
@@ -141,7 +143,7 @@ const makeStyles = (theme: Theme) =>
 			justifyContent: 'space-between',
 		},
 		leftContainerLeftText: {
-			color: Colors.dark.colors.text,
+			color: theme.colors.text,
 			fontSize: FontSize.smB,
 			fontFamily: fontFamily.poppins.semibold,
 		},
@@ -168,11 +170,11 @@ const makeStyles = (theme: Theme) =>
 		},
 
 		styleButton: {
-			backgroundColor: '#1A1B25',
+			backgroundColor: theme.colors.buttonHeader,
 			padding: 8,
 			borderRadius: 18,
 			borderWidth: 1,
-			borderColor: '#262733',
+			borderColor: theme.colors.borderBottomHeader,
 		},
 		locationContainer: {
 			flexDirection: 'row',
@@ -181,9 +183,9 @@ const makeStyles = (theme: Theme) =>
 			marginTop: -12,
 		},
 		locationText: {
-			color: Colors.text,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			color: theme.colors.text,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 	})
 export default Header
