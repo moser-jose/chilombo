@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-color-literals */
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -93,7 +93,11 @@ const Header = () => {
 								onPress={() => setIsModalVisible(true)}
 								style={styles.styleButton}
 							>
-								<Ionicons name="search-outline" size={24} color={theme.colors.text} />
+								<Ionicons
+									name="search-outline"
+									size={24}
+									color={theme.colors.text}
+								/>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -112,7 +116,7 @@ const makeStyles = (theme: Theme) =>
 			paddingHorizontal: 16,
 			paddingBottom: 16,
 			paddingTop: 12,
-			borderBottomWidth: .5,
+			borderBottomWidth: 0.5,
 			borderBottomColor: theme.colors.border,
 		},
 		leftContainerLeftUser: {

@@ -1,6 +1,6 @@
-import { Theme as NavigationTheme } from '@react-navigation/native'
-import { FontSize } from '@/src/constants/FontSize'
-export type Theme = {
+import { FontSize } from '@/src/types/FontSize'
+import { FontsType } from '@/src/types/FontFamily'
+export interface Theme {
 	dark: boolean
 	colors: {
 		text: string
@@ -31,6 +31,6 @@ export type Theme = {
 		borderBottomHeader: string
 		cancelButton: string
 	}
-	fonts: NavigationTheme['fonts']
+	fonts: FontsType
 	size: FontSize
 }

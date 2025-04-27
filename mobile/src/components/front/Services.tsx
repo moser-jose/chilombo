@@ -3,8 +3,12 @@ import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
 import { fontFamily } from '@/src/constants/FontFamily'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 export default function Services({ services }: { services: any[] }) {
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	return (
 		<View
 			style={{
@@ -49,16 +53,17 @@ export default function Services({ services }: { services: any[] }) {
 	)
 }
 
-const styles = StyleSheet.create({
-	containerImage: {
-		flex: 1,
-	},
+const makeStyles = (theme: Theme) =>
+	StyleSheet.create({
+		containerImage: {
+			flex: 1,
+		},
 	backgroundImage: {
 		width: '100%',
 		height: 180,
 		borderRadius: 20,
 	},
-    header: {
+	header: {
 		position: 'absolute',
 		zIndex: 2,
 		top: 6,
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
 		padding: 4,
 		borderRadius: 14,
 	},
-    headerContainer: {
+	headerContainer: {
 		position: 'absolute',
 		left: 0,
 		right: 0,
@@ -88,16 +93,16 @@ const styles = StyleSheet.create({
 		marginHorizontal: 7,
 		marginBottom: 7,
 	},
-    categoryTitleTop: {
+	categoryTitleTop: {
 		fontSize: 10,
-		fontFamily: fontFamily.poppins.semibold,
+		fontFamily: theme.fonts.semibold.fontFamily,
 		color: '#fff',
 	},
-	
+
 	categoryTitle: {
 		fontSize: 10,
 		textAlign: 'center',
-		fontFamily: fontFamily.poppins.semibold,
+		fontFamily: theme.fonts.semibold.fontFamily,
 		color: '#fff',
 	},
 })

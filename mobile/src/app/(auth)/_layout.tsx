@@ -1,6 +1,6 @@
 import { Redirect, Stack } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { View } from '@/src/components/Themed'
 export default function AuthLayout() {
@@ -13,7 +13,17 @@ export default function AuthLayout() {
 		headerShown: true,
 		headerShadowVisible: true,
 		headerTransparent: false,
-		headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+		headerBackground: () => (
+			<View
+				style={{
+					backgroundColor: theme.colors.backgroundHeader,
+					height: '100%',
+					width: '100%',
+					borderBottomWidth: 0.5,
+					borderBottomColor: theme.colors.border,
+				}}
+			/>
+		),
 		headerBackVisible: false,
 	}
 

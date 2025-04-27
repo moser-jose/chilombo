@@ -10,7 +10,7 @@ import {
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { Text } from '../ui/Text'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 
@@ -23,6 +23,7 @@ type SeparadorProps = {
 
 export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
 	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	return (
 		<View style={[styles.container, style]}>
 			<View style={styles.separator} />
@@ -48,7 +49,7 @@ export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
 		</View>
 	)
 }
-const styles = StyleSheet.create({
+const makeStyles=(theme:Theme) => StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'row',
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.bold,
+		fontFamily: theme.fonts.bold.fontFamily,
 	},
 	vermais: {
 		flexDirection: 'row',
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
 	},
 	vermaisText: {
 		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
+		fontFamily: theme.fonts.regular.fontFamily,
 		color: Colors.dark.colors.primary,
 	},
 })

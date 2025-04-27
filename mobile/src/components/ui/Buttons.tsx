@@ -7,7 +7,7 @@ import {
 	useColorScheme,
 	ViewStyle,
 } from 'react-native'
-import Colors from '@/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { Text } from '@/src/components/Themed'
 import { fontFamily } from '@/src/constants/FontFamily'
 
@@ -35,6 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
 	style,
 	textStyle,
 }) => {
+	
 	const colorScheme = useColorScheme()
 	const isDark = colorScheme === 'dark'
 
@@ -126,7 +127,7 @@ export const Button: React.FC<ButtonProps> = ({
 							color: getTextColor(),
 							textAlign: 'center',
 							marginBottom: 0,
-							fontFamily: fontFamily.poppins.medium,
+							fontFamily: theme.fonts.medium.fontFamily,
 						},
 						textStyle,
 					])}

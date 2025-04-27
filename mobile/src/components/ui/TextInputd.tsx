@@ -8,7 +8,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native'
-import { zincColors } from '@/constants/Colors'
+import { zincColors } from '@/src/constants/Theme'
 import { Text } from '../Themed'
 
 type InputVariant = 'default' | 'filled' | 'outlined' | 'ghost'

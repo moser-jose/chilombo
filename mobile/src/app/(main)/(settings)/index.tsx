@@ -3,10 +3,9 @@ import * as Linking from 'expo-linking'
 import { Text, View } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useClerk } from '@clerk/clerk-expo'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { useRouter } from 'expo-router'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { useState } from 'react'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import Constants from 'expo-constants'
@@ -18,7 +17,7 @@ export default function SettingsScreen() {
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
 	const { theme } = useCustomTheme()
-	const styles = makeStyles(theme as Theme)
+	const styles = makeStyles(theme)
 	const handleSignOut = async () => {
 		try {
 			await signOut()
@@ -156,13 +155,13 @@ const makeStyles = (theme: Theme) =>
 		footerText: {
 			textAlign: 'center',
 			fontSize: FontSize.xss,
-			fontFamily: fontFamily.poppins.semibold,
+			fontFamily: theme.fonts.semibold.fontFamily,
 			color: '#666',
 		},
 		footerNumber: {
 			textAlign: 'center',
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: '#666',
 		},
 		separator: {
@@ -188,11 +187,11 @@ const makeStyles = (theme: Theme) =>
 		menuText: {
 			fontSize: 16,
 			marginLeft: 15,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.text,
 		},
 		logoutText: {
-			fontFamily: fontFamily.poppins.medium,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: Colors.dark.colors.primary,
 		},
 	})

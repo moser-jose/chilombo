@@ -4,12 +4,8 @@ import {
 	View,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
-	useColorScheme,
+	TouchableOpacity
 } from 'react-native'
-import Colors from '@/src/constants/Colors'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
@@ -49,9 +45,7 @@ const ModalMessage = ({
 						<Ionicons name={modalIcon} size={35} color={theme.colors.text} />
 					</View>
 					<Text style={styles.modalTitle}>{modalTitle}</Text>
-					{modalText && (
-						<Text style={styles.modalText}>{modalText}</Text>
-					)}
+					{modalText && <Text style={styles.modalText}>{modalText}</Text>}
 
 					{children && children}
 
@@ -61,12 +55,7 @@ const ModalMessage = ({
 								style={[styles.modalButton, styles.cancelButton]}
 								onPress={() => setShowLogoutModal(false)}
 							>
-								<Text
-									style={[
-										styles.modalButtonText,
-										styles.cancelButtonText,
-									]}
-								>
+								<Text style={[styles.modalButtonText, styles.cancelButtonText]}>
 									Cancelar
 								</Text>
 							</TouchableOpacity>
@@ -75,12 +64,7 @@ const ModalMessage = ({
 							style={[styles.modalButton, styles.confirmButton]}
 							onPress={handleOk}
 						>
-							<Text
-								style={[
-									styles.modalButtonText,
-									styles.confirmButtonText,
-								]}
-							>
+							<Text style={[styles.modalButtonText, styles.confirmButtonText]}>
 								{textButton}
 							</Text>
 						</TouchableOpacity>
@@ -126,14 +110,14 @@ const makeStyles = (theme: Theme) =>
 			marginBottom: 20,
 		},
 		modalTitle: {
-			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.bold,
+			fontSize:theme.size.base,
+			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 15,
 			color: theme.colors.text, //Colors[theme].colors.text,
 		},
 		modalText: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize:theme.size.sm,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 25,
 			textAlign: 'center',
 			color: theme.colors.text, //Colors[theme].colors.text,
@@ -159,14 +143,14 @@ const makeStyles = (theme: Theme) =>
 			shadowRadius: 0.41,
 		},
 		cancelButton: {
-			backgroundColor: theme.colors.cancelButton
+			backgroundColor: theme.colors.cancelButton,
 		},
 		confirmButton: {
 			backgroundColor: theme.colors.primary,
 		},
 		modalButtonText: {
-			fontSize: FontSize.xsB,
-			fontFamily: fontFamily.poppins.medium,
+			fontSize:theme.size.xsB,
+			fontFamily: theme.fonts.medium.fontFamily,
 			textAlign: 'center',
 		},
 		cancelButtonText: {

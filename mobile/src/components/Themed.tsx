@@ -9,7 +9,7 @@ import {
 	TouchableOpacity as DefaultTouchableOpacity,
 } from 'react-native'
 
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { useColorScheme } from './useColorScheme'
 import { Ionicons as DefaultIonicons } from '@expo/vector-icons'
 type ThemeProps = {
@@ -27,7 +27,7 @@ export type TouchableOpacityProps = ThemeProps &
 
 export function useThemeColor(
 	props: { light?: string; dark?: string },
-	colorName: keyof typeof Colors.light.colors & keyof typeof Colors.dark.colors
+	colorName: keyof typeof Colors.light.colors & keyof typeof Colors.dark.colors,
 ) {
 	const theme = useColorScheme() ?? 'light'
 	const colorFromProps = props[theme]

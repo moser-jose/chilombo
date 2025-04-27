@@ -13,7 +13,7 @@ import {
 import FastImage from 'react-native-fast-image'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { FontSize } from '@/src/constants/FontSize'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -884,7 +884,7 @@ const useStyles = (theme: Theme) =>
 		},
 		engagementText: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.medium,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: theme.colors.text,
 			marginTop: 6,
 		},
@@ -1143,7 +1143,7 @@ const useStyles = (theme: Theme) =>
 		},
 		ratingModalTitle: {
 			fontSize: FontSize.base + 1,
-			fontFamily: fontFamily.poppins.semibold,
+			fontFamily: theme.fonts.semibold.fontFamily,
 			color: '#222',
 			marginBottom: 20,
 		},
@@ -1213,7 +1213,7 @@ const useStyles = (theme: Theme) =>
 		},
 		testimonialDate: {
 			fontSize: FontSize.xss,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: '#777',
 		},
 		testimonialRatingSmall: {

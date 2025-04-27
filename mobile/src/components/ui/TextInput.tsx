@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { Text, View } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
@@ -100,7 +100,9 @@ export default function TextInputUI({
 		setErrorMessage(null)
 		if (!errors || errors.length === 0) return
 
-		const identifier = errors.find((error: any) => error.meta.paramName === 'identifier')
+		const identifier = errors.find(
+			(error: any) => error.meta.paramName === 'identifier',
+		)
 		if (identifier) {
 			setErrorMessage({
 				message: 'E-mail não encontrado',
@@ -109,9 +111,8 @@ export default function TextInputUI({
 			return
 		}
 
-		const firstNameError = errors.find(
-			(error: any) => error.meta.paramName === 'first_name',
-		) || null
+		const firstNameError =
+			errors.find((error: any) => error.meta.paramName === 'first_name') || null
 		if (firstNameError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.first_name,
@@ -120,9 +121,8 @@ export default function TextInputUI({
 			return
 		}
 
-		const lastNameError = errors.find(
-			(error: any) => error.meta.paramName === 'last_name',
-		) || null
+		const lastNameError =
+			errors.find((error: any) => error.meta.paramName === 'last_name') || null
 		if (lastNameError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.last_name,
@@ -131,9 +131,9 @@ export default function TextInputUI({
 			return
 		}
 
-		const phoneError = errors.find(
-			(error: any) => error.meta.paramName === 'phone_number',
-		) || null
+		const phoneError =
+			errors.find((error: any) => error.meta.paramName === 'phone_number') ||
+			null
 		if (phoneError) {
 			setErrorMessage({
 				message: ERROR_MESSAGES.phone_number,
@@ -142,10 +142,11 @@ export default function TextInputUI({
 			return
 		}
 
-		const error = errors.find((error: any) => {
-			const paramName = error.meta.paramName
-			return ERROR_MESSAGES[paramName as keyof typeof ERROR_MESSAGES]
-		}) || null
+		const error =
+			errors.find((error: any) => {
+				const paramName = error.meta.paramName
+				return ERROR_MESSAGES[paramName as keyof typeof ERROR_MESSAGES]
+			}) || null
 
 		if (error) {
 			const paramName = error.meta.paramName

@@ -31,7 +31,7 @@ import {
 	isClerkAPIResponseError,
 	useAuth,
 } from '@clerk/clerk-expo'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { isValidEmail } from '@/src/utils/validEmail'
@@ -178,7 +178,7 @@ export default function SignIn() {
 				setErrors(err.errors)
 				//console.error("Clerk API Error:", err.errors);
 			}
-			console.error("Authentication error:", JSON.stringify(err, null, 2));
+			console.error('Authentication error:', JSON.stringify(err, null, 2))
 			setErrors([
 				{
 					code: 'verification_incomplete',
@@ -296,8 +296,8 @@ export default function SignIn() {
 										<Text
 											style={{
 												color: theme.colors.primary,
-												fontFamily: fontFamily.poppins.regular,
-												fontSize: FontSize.xs,
+												fontFamily: theme.fonts.regular.fontFamily,
+												fontSize: theme.size.xs,
 											}}
 										>
 											Esqueceu sua senha?
@@ -402,13 +402,13 @@ const makeStyles = (theme: Theme) =>
 			color: theme.colors.text,
 			maxWidth: 300,
 			textAlign: 'center',
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		textInput: {
 			padding: '.7%',
 			fontSize: FontSize.base,
 			marginLeft: 6,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.text,
 		},
 		input: {
@@ -425,13 +425,13 @@ const makeStyles = (theme: Theme) =>
 		button: { marginVertical: 20 },
 		buttonText: {
 			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
 			color: Colors.black,
 		},
 		title: {
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		separator: {
 			marginVertical: 30,
@@ -455,7 +455,7 @@ const makeStyles = (theme: Theme) =>
 			fontWeight: '300',
 			fontSize: FontSize.xs,
 			paddingHorizontal: '1.5%',
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		textEnd: {
 			color: theme.colors.text,

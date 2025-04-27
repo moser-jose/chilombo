@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Stack, useRouter } from 'expo-router'
@@ -47,12 +47,22 @@ export default function AppearanceScreen() {
 			fontSize: theme.size.sm,
 			color: theme.colors.textHeader,
 		},
-		headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+		headerBackground: () => (
+			<View
+				style={{
+					backgroundColor: theme.colors.backgroundHeader,
+					height: '100%',
+					width: '100%',
+					borderBottomWidth: 0.5,
+					borderBottomColor: theme.colors.border,
+				}}
+			/>
+		),
 		headerTintColor: theme.colors.textHeader,
 		headerLeft: () => (
 			<TouchableOpacity onPress={() => router.back()}>
 				<Ionicons
-					name='chevron-back'
+					name="chevron-back"
 					size={22}
 					color={theme.colors.textHeader}
 					style={{ marginLeft: 10 }}

@@ -3,8 +3,6 @@ import { TouchableOpacity as DefaultTouchableOpacity } from 'react-native'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { StyleSheet } from 'react-native'
-import { fontFamily } from '@/src/constants/FontFamily'
-import Colors from '@/src/constants/Colors'
 import { FontSize } from '@/src/constants/FontSize'
 
 type Props = TouchableOpacityProps & {
@@ -22,8 +20,8 @@ export function TouchableOpacity(props: Props) {
 				type === 'primary'
 					? { ...styles.buttonPrimary }
 					: type === 'secondary'
-					? { ...styles.buttonSecondary }
-					: { ...styles.buttonTertiary },
+						? { ...styles.buttonSecondary }
+						: { ...styles.buttonTertiary },
 				style,
 			]}
 			{...otherProps}
@@ -35,8 +33,8 @@ const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		buttonPrimary: {
 			paddingVertical: 8,
-			borderRadius:8,
-			fontFamily: fontFamily.poppins.medium,
+			borderRadius: 8,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: theme.colors.text,
 			fontSize: FontSize.lg,
 			alignItems: 'center',

@@ -1,6 +1,5 @@
 import { fonts } from './FontFamily'
 import { FontSize } from './FontSize'
-
 export default {
 	light: {
 		dark: false,
@@ -33,7 +32,7 @@ export default {
 			borderBottomHeader: 'rgba(26, 23, 23, 0.15)',
 			cancelButton: '#cdcbcb',
 		},
-		fonts,
+		fonts:fonts,
 		size: FontSize,
 	},
 
