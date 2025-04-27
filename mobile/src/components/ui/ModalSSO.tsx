@@ -14,7 +14,7 @@ import { ClerkAPIError } from '@clerk/types'
 import { router } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
-import Button from './Buttons'
+import { TouchableOpacity } from './TouchableOpacity'
 import { maskEmail } from '@/src/utils/maskEmail'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
@@ -91,7 +91,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 		if (process.env.EXPO_OS === 'ios') {
 			await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 		}
-		router.replace('/(auth)/sign-up')
+		router.back()
 	}
 	useEffect(() => {
 		let timeoutId: NodeJS.Timeout
@@ -158,6 +158,13 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 
 					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 						<View style={styles.cardModal}>
+							<View style={styles.modalIconContainer}>
+								<Ionicons
+									name='mail'
+									size={30}
+									color={theme.colors.text}
+								/>
+							</View>
 							<Text style={styles.titleModal}>
 								Insira o Código de verificação
 							</Text>
@@ -166,7 +173,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 								<Text
 									style={{
 										fontFamily: theme.fonts.medium.fontFamily,
-										fontSize: FontSize.xsB,
+										fontSize: theme.size.xs,
 										color: theme.colors.text,
 									}}
 								>
@@ -347,35 +354,31 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 								</View>
 							</View>
 
-							<Button
-								style={{ marginTop: 30 }}
-								disabled={isLoading}
-								loading={isLoading}
-								onPress={onVerifyPress}
-								variant="filled"
-								size="lg"
+							<View
+								style={{
+									flexDirection: 'row',
+									gap: 10,
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
 							>
-								<Text>Verificar</Text>
-							</Button>
+								<TouchableOpacity
+									type="secondary"
+									style={[styles.btn, styles.cancelBtn]}
+									onPress={closeModal}
+								>
+									<Text>Cancelar</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={styles.btn}
+									type="primary"
+									onPress={onVerifyPress}
+								>
+									<Text>Verificar</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</TouchableWithoutFeedback>
-
-					<Pressable
-						onPress={closeModal}
-						style={{
-							position: 'absolute',
-							bottom: 50,
-							padding: 10,
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-					>
-						<Ionicons
-							name="close-circle"
-							size={40}
-							color={isDark ? theme.colors.secondary : theme.colors.primary}
-						/>
-					</Pressable>
 				</View>
 			</View>
 		</Modal>
@@ -390,9 +393,17 @@ const makeStyles = (theme: Theme) =>
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
+		modalIconContainer: {
+			width:60,
+			height:60,
+			backgroundColor: theme.colors.textMuted,
+			borderRadius: 40,
+			justifyContent: 'center',
+			alignItems: 'center',
+			marginBottom: 20,
+		},
 		descModal: {
-			fontSize: FontSize.xsB,
-			lineHeight: 24,
+			fontSize: theme.size.xs,
 			opacity: 0.7,
 			textAlign: 'center',
 			marginBottom: 14,
@@ -400,24 +411,28 @@ const makeStyles = (theme: Theme) =>
 			color: theme.colors.text,
 		},
 		titleModal: {
-			fontSize: FontSize.sm,
+			fontSize: theme.size.sm,
 			textAlign: 'center',
 			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 14,
 			color: theme.colors.text,
 		},
 		cardModal: {
-			width: '90%',
-			padding: 20,
+			width: '100%',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		contentModal: {
 			backgroundColor: theme.colors.background,
 			borderRadius: 25,
-			padding: 25,
+			padding: 20,
 			width: '85%',
 			position: 'relative',
 			alignItems: 'center',
+			justifyContent: 'center',
 			shadowColor: '#000',
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
 			shadowOffset: {
 				width: 0,
 				height: 2,
@@ -451,26 +466,36 @@ const makeStyles = (theme: Theme) =>
 			marginBottom: 14,
 		},
 		buttonText: {
-			fontSize: FontSize.base,
+			fontSize: theme.size.base,
 			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
 		},
 		inputVerify: {
 			borderRadius: 10,
-			width: '15%',
+			flex: 1,
 			flexDirection: 'row',
 			borderColor: theme.colors.borderInput,
 			alignItems: 'center',
+			justifyContent: 'center',
 			borderWidth: 1,
 			marginBottom: 20,
 		},
 		textInputVerify: {
-			fontSize: FontSize.sm,
+			fontSize: theme.size.sm,
 			padding: 10,
 			fontFamily: theme.fonts.bold.fontFamily,
 			color: theme.colors.text,
-			width: '100%',
 			overflow: 'hidden',
 			textAlign: 'center',
+		},
+		cancelBtn: {
+			backgroundColor: theme.colors.cancelButton,
+		},
+
+		btn: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderRadius: 8,
 		},
 	})

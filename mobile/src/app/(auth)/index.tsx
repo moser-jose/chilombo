@@ -427,7 +427,7 @@ const makeStyles = (theme: Theme) =>
 			fontSize: FontSize.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
-			color: Colors.black,
+			color: theme.colors.black,
 		},
 		title: {
 			fontSize: FontSize.base,

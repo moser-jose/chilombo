@@ -1134,7 +1134,6 @@ const useStyles = (theme: Theme) =>
 			zIndex: 999,
 		},
 		ratingModalContent: {
-			backgroundColor: theme.colors.card,
 			padding: 10,
 			borderRadius: 10,
 			width: '80%',

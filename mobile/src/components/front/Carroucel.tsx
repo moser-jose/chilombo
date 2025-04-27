@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-import Colors from '@/src/constants/Theme'
 import { window } from '../../constants/SizeScreen'
 import * as React from 'react'
 import { View, Animated, TouchableOpacity } from 'react-native'
@@ -12,6 +10,7 @@ import Carousel, {
 	ICarouselInstance,
 	Pagination,
 } from 'react-native-reanimated-carousel'
+import { useCustomTheme } from '@/src/context/ThemeContext'
 
 const carouselData = [
 	{
@@ -60,12 +59,11 @@ const carouselData = [
 function Index() {
 	const progress = useSharedValue<number>(0)
 	const ref = React.useRef<ICarouselInstance>(null)
+	const { theme } = useCustomTheme()
 
 	const renderSlide = ({ item }: { item: (typeof carouselData)[0] }) => (
 		<Animated.View
 			style={{
-				/* backgroundColor: item.backgroundColor,
-				padding: 20, */
 				borderRadius: 15,
 				height: '100%',
 				width: '100%',
@@ -92,62 +90,6 @@ function Index() {
 						padding: 20,
 					}}
 				>
-					{/* <Text
-					style={{
-						fontSize: 16,
-						color: 'white',
-						marginBottom: 5,
-					}}
-			>
-				Aproveite
-			</Text>
-
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: 10,
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 32,
-						fontWeight: 'bold',
-						color: 'white',
-						marginRight: 10,
-					}}
-				>
-					{item.title}
-				</Text>
-				<Text
-					style={{
-						fontSize: 32,
-						fontWeight: 'bold',
-						color: 'white',
-					}}
-				>
-					{item.discount}
-				</Text>
-			</View>
-
-			<Text
-				style={{
-					fontSize: 16,
-					color: 'white',
-					marginBottom: 5,
-				}}
-			>
-				{item.description}
-			</Text>
-
-			<Text
-				style={{
-					fontSize: 16,
-					color: 'white',
-				}}
-			>
-					{item.period}
-				</Text> */}
 				</View>
 			</TouchableOpacity>
 		</Animated.View>
@@ -155,10 +97,6 @@ function Index() {
 
 	const onPressPagination = (index: number) => {
 		ref.current?.scrollTo({
-			/**
-			 * Calculate the difference between the current index and the target index
-			 * to ensure that the carousel scrolls to the nearest index
-			 */
 			count: index - progress.value,
 			animated: true,
 		})
@@ -206,7 +144,7 @@ function Index() {
 						width: 12,
 						height: 6,
 						overflow: 'hidden',
-						backgroundColor: Colors.dark.colors.primary,
+						backgroundColor: theme.colors.primary,
 					}}
 					containerStyle={{
 						gap: 5,

@@ -1,10 +1,10 @@
-import { fonts } from './FontFamily'
+import { Fonts as fonts } from './FontFamily'
 import { FontSize } from './FontSize'
 export default {
 	light: {
 		dark: false,
 		colors: {
-			text: 'rgba(4, 9, 16, 0.82)', //'#0D0D12',
+			text: 'rgba(4, 9, 16, 0.82)',
 			textMuted: 'rgba(136, 133, 135, 0.14)',
 			background: '#fff',
 			tint: 'rgba(136, 133, 135, 0.31)',
@@ -31,8 +31,9 @@ export default {
 			buttonHeader: 'rgba(59, 55, 55, 0.09)',
 			borderBottomHeader: 'rgba(26, 23, 23, 0.15)',
 			cancelButton: '#cdcbcb',
+			black: '#0D0D12',
 		},
-		fonts:fonts,
+		fonts,
 		size: FontSize,
 	},
 
@@ -66,13 +67,16 @@ export default {
 			buttonHeader: '#1A1B25',
 			borderBottomHeader: '#262733',
 			cancelButton: 'rgb(111, 102, 102)',
+			black: '#0D0D12',
 		},
 		fonts,
 		size: FontSize,
 	},
-	black: '#0D0D12',
+	
 	card: 'rgba(187, 184, 186, 0.03)',
 	text: 'rgba(255, 255, 255, 0.77)',
 	error: 'rgba(190, 38, 24, 0.81)',
 	success: 'rgba(0, 255, 0, 0.62)',
+	warning: 'rgba(255, 165, 0, 0.62)',
+	orange: 'rgba(255, 165, 0, 0.62)',
 }

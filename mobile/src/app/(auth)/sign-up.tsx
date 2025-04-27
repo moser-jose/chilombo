@@ -25,13 +25,13 @@ import {
 } from '../../utils/strenghPasswordForce'
 import { formatPhoneNumber } from '@/src/utils/formatPhone'
 import { Stack } from 'expo-router'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { ClerkAPIError } from '@clerk/types'
 import { ModalSSO } from '@/src/components/ui/ModalSSO'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import ModalMessage from '@/src/components/ui/ModalMessage'
 export default function SignUp() {
 	const { isLoaded, signUp } = useSignUp()
 	const router = useRouter()
@@ -181,12 +181,13 @@ export default function SignUp() {
 
 		try {
 			const formattedPhone = formatPhoneNumber(phone)
+			console.log(formattedPhone)
 			await signUp.create({
 				emailAddress,
 				password,
 				firstName,
 				lastName,
-				phoneNumber: formattedPhone,
+				//phoneNumber: formattedPhone,
 				unsafeMetadata: {
 					address,
 				},
@@ -197,13 +198,14 @@ export default function SignUp() {
 			setPendingVerification(true)
 			setOpenModal(true)
 		} catch (err) {
+			console.log(err)
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
-	if (pendingVerification) {
+	/* if (pendingVerification) {
 		return (
 			<ModalSSO
 				openModal={openModal}
@@ -211,7 +213,7 @@ export default function SignUp() {
 				emailAddress={emailAddress}
 			/>
 		)
-	}
+	} */
 
 	return (
 		<>
@@ -417,6 +419,14 @@ export default function SignUp() {
 					</ScrollView>
 				</KeyboardAvoidingView>
 			</TouchableWithoutFeedback>
+
+			{pendingVerification && (
+				<ModalSSO
+					openModal={openModal}
+					isDark={theme.dark}
+					emailAddress={emailAddress}
+				/>
+			)}
 		</>
 	)
 }
@@ -470,9 +480,10 @@ const makeStyles = (theme: Theme) =>
 			marginVertical: 20,
 		},
 		buttonText: {
-			fontSize: FontSize.base,
+			fontSize: FontSize.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
+			color: theme.colors.black,
 		},
 		title: {
 			fontSize: 20,
