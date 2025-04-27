@@ -10,7 +10,7 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { router, Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { ClerkAPIError } from '@clerk/types'
 import { Ionicons } from '@expo/vector-icons'
 export default function ResetPassword() {
@@ -117,7 +117,7 @@ const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		headerText: {
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 20,
 		},
 		button: {
@@ -128,11 +128,11 @@ const makeStyles = (theme: Theme) =>
 			marginVertical: '4%',
 			fontSize: 14,
 			gap: 4,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		buttonText: {
 			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
 			color: Colors.black,
 		},

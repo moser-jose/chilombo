@@ -12,7 +12,7 @@ type ServicesCardProps = {
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
-	const { theme, themePreference,effectiveTheme } = useCustomTheme()
+	const { theme, themePreference, effectiveTheme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	const handlePress = () => {
 		router.push({
@@ -63,7 +63,7 @@ const makeStyles = (theme: Theme) =>
 		},
 		title: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.medium,
+			fontFamily: theme.fonts.medium.fontFamily,
 			textAlign: 'center',
 			color: theme.colors.text,
 		},

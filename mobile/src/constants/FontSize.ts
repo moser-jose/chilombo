@@ -1,4 +1,6 @@
-export const FontSize = {
+import { FontSize as FontSizeType } from "../types/fontSize";
+
+export const FontSize: FontSizeType = {
 	xss: 10,
 	xs: 12,
 	md: 14,

@@ -132,7 +132,7 @@ export default function UserScreen() {
 								{
 									color: theme.colors.text,
 									marginBottom: -10,
-									fontFamily: fontFamily.poppins.regular,
+									fontFamily: theme.fonts.regular.fontFamily,
 									fontSize: FontSize.xl,
 								},
 							]}
@@ -539,7 +539,7 @@ const useStyles = (theme: Theme) =>
 		},
 		actionsText: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		actionsContainerButtons: {
 			flexDirection: 'row',
@@ -549,7 +549,7 @@ const useStyles = (theme: Theme) =>
 		},
 		actionsButtonText: {
 			fontSize: FontSize.xsB,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		actionsButton: {
 			alignItems: 'center',

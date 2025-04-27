@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native'
+import {
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	ViewStyle,
+} from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -10,7 +17,7 @@ interface EmployerCardProps {
 	data: any
 }
 
-const EmployerCard: React.FC<EmployerCardProps> = ({ data  }) => {
+const EmployerCard: React.FC<EmployerCardProps> = ({ data }) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	const name = `${data.firstname} ${data.lastname}`
@@ -56,12 +63,12 @@ const makeStyles = (theme: Theme) =>
 			fontSize: FontSize.xsB,
 			marginBottom: 2,
 			textAlign: 'center',
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 			color: theme.colors.text,
 		},
 		role: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.colorIconInput,
 		},
 	})

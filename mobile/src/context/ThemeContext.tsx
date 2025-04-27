@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { useColorScheme } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { Theme } from '../types/theme'
 
 type ThemePreference = 'light' | 'dark' | 'system'
@@ -74,6 +74,7 @@ export const CustomThemeProvider: React.FC<CustomThemeProviderProps> = ({
 			dark: effectiveTheme === 'dark',
 			colors: theme.colors,
 			fonts: theme.fonts,
+			size: theme.size,
 		}
 	}, [effectiveTheme, theme])
 

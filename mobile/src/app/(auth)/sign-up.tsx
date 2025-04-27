@@ -8,7 +8,7 @@ import {
 	useWindowDimensions,
 	Pressable,
 	ScrollView,
-	View
+	View,
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { Ionicons } from '@expo/vector-icons'
@@ -17,7 +17,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import { useState, useEffect, useRef } from 'react'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import {
 	checkPasswordStrength,
 	getPasswordRequirements,
@@ -444,13 +444,13 @@ const makeStyles = (theme: Theme) =>
 			maxWidth: 300,
 			textAlign: 'center',
 			color: theme.colors.text,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		/* textInput: {
 			padding: '.7%',
 			fontSize: 16,
 			marginLeft: 6,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: isDark ? Colors.dark.text : Colors.light.text,
 		},
 		input: {
@@ -471,12 +471,12 @@ const makeStyles = (theme: Theme) =>
 		},
 		buttonText: {
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
 		},
 		title: {
 			fontSize: 20,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		separator: {
 			marginVertical: 30,
@@ -499,14 +499,14 @@ const makeStyles = (theme: Theme) =>
 			color: theme.colors.text,
 			fontWeight: '300',
 			paddingHorizontal: '1.5%',
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		textEnd: {
 			color: theme.colors.text,
 			marginVertical: '4%',
 			fontSize: 14,
 			gap: 4,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		colorIconInput: {
 			color: theme.colors.colorIconInput,
@@ -529,6 +529,6 @@ const makeStyles = (theme: Theme) =>
 		requirement: {
 			fontSize: 12,
 			marginBottom: 4,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 	})

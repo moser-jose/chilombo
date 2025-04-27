@@ -8,11 +8,15 @@ import { Text, View } from '@/src/components/Themed'
 import { router, Stack } from 'expo-router'
 import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { Ionicons } from '@expo/vector-icons'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 export default function PrivacyPolicyScreen() {
-	const theme = useColorScheme() ?? 'light'
+	
+	const { theme } = useCustomTheme()
+	const styles = makeStyles(theme)
 	const policies = [
 		{
 			title: 'Coleta de Dados',
@@ -74,25 +78,25 @@ export default function PrivacyPolicyScreen() {
 				}}
 			/>
 			<ScrollView
-				style={styles(theme).container}
+				style={styles.container}
 				showsVerticalScrollIndicator={false}
 			>
-				<View style={styles(theme).content}>
-					<Text style={styles(theme).intro}>
+				<View style={styles.content}>
+					<Text style={styles.intro}>
 						Sua privacidade é importante para nós. Esta política descreve como
 						tratamos suas informações pessoais.
 					</Text>
 
 					{policies.map((policy, index) => (
-						<View key={index} style={styles(theme).policyItem}>
-							<Text style={styles(theme).policyTitle}>
+						<View key={index} style={styles.policyItem}>
+							<Text style={styles.policyTitle}>
 								{index + 1 + '.  ' + policy.title}
 							</Text>
-							<Text style={styles(theme).policyText}>{policy.description}</Text>
+							<Text style={styles.policyText}>{policy.description}</Text>
 						</View>
 					))}
 
-					<Text style={styles(theme).footer}>
+					<Text style={styles.footer}>
 						Última atualização: {new Date().toLocaleDateString()}
 					</Text>
 				</View>
@@ -101,7 +105,7 @@ export default function PrivacyPolicyScreen() {
 	)
 }
 
-const styles = (theme: 'light' | 'dark') =>
+const makeStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
@@ -110,10 +114,10 @@ const styles = (theme: 'light' | 'dark') =>
 			padding: 20,
 		},
 		intro: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 20,
-			color: Colors[theme].colors.text,
+			color: theme.colors.text,
 			lineHeight: 24,
 		},
 		policyItem: {
@@ -121,22 +125,22 @@ const styles = (theme: 'light' | 'dark') =>
 			backgroundColor: 'transparent',
 		},
 		policyTitle: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.bold,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 8,
-			color: Colors[theme].colors.primary,
+			color: theme.colors.primary,
 		},
 		policyText: {
-			fontSize: FontSize.xsB,
-			fontFamily: fontFamily.poppins.regular,
-			color: Colors[theme].colors.text,
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color:theme.colors.text,
 			lineHeight: 20,
 		},
 		footer: {
 			marginTop: 20,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
-			color: Colors[theme].colors.text,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color:theme.colors.text,
 			textAlign: 'center',
 		},
 	})

@@ -6,7 +6,6 @@ import {
 } from 'react-native'
 import { Text, View } from '../Themed'
 import { TextInput } from 'react-native'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
 import { Pressable } from 'react-native'
@@ -19,7 +18,6 @@ import Button from './Buttons'
 import { maskEmail } from '@/src/utils/maskEmail'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import Colors from '@/src/constants/Colors'
 interface ModalSSOProps {
 	openModal: boolean
 	isDark: boolean
@@ -148,7 +146,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 								<Text
 									style={{
 										color: 'white',
-										fontFamily: fontFamily.poppins.regular,
+										fontFamily: theme.fonts.regular.fontFamily,
 										fontSize: 16,
 									}}
 								>
@@ -167,7 +165,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 								Enviamos um código de verificação para o e-mail{' '}
 								<Text
 									style={{
-										fontFamily: fontFamily.poppins.medium,
+										fontFamily: theme.fonts.medium.fontFamily,
 										fontSize: FontSize.xsB,
 										color: theme.colors.text,
 									}}
@@ -398,13 +396,13 @@ const makeStyles = (theme: Theme) =>
 			opacity: 0.7,
 			textAlign: 'center',
 			marginBottom: 14,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.text,
 		},
 		titleModal: {
 			fontSize: FontSize.sm,
 			textAlign: 'center',
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 14,
 			color: theme.colors.text,
 		},
@@ -413,10 +411,6 @@ const makeStyles = (theme: Theme) =>
 			padding: 20,
 		},
 		contentModal: {
-			/* flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center',
-			backgroundColor: theme.colors.background, */
 			backgroundColor: theme.colors.background,
 			borderRadius: 25,
 			padding: 25,
@@ -458,7 +452,7 @@ const makeStyles = (theme: Theme) =>
 		},
 		buttonText: {
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
 		},
 		inputVerify: {
@@ -473,7 +467,7 @@ const makeStyles = (theme: Theme) =>
 		textInputVerify: {
 			fontSize: FontSize.sm,
 			padding: 10,
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 			color: theme.colors.text,
 			width: '100%',
 			overflow: 'hidden',

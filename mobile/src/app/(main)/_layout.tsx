@@ -39,7 +39,7 @@ export default function TabLayout() {
 				},
 				headerShown: useClientOnlyValue(false, true),
 				tabBarLabelStyle: {
-					fontFamily: fontFamily.poppins.medium,
+					fontFamily: theme.fonts.medium.fontFamily,
 				},
 			}}
 		>

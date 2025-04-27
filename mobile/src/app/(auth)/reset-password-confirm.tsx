@@ -10,7 +10,7 @@ import { fontFamily } from '@/src/constants/FontFamily'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useSignUp } from '@clerk/clerk-expo'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { router, Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
 
@@ -49,13 +49,15 @@ export default function ResetPasswordConfirm() {
 	const handleReset = async () => {
 		try {
 			if (password !== passwordConfirm) {
-				setErrors([{
-					code: 'password_mismatch',
-					message: 'As passwords não coincidem',
-					meta: {
-						paramName: 'password',
+				setErrors([
+					{
+						code: 'password_mismatch',
+						message: 'As passwords não coincidem',
+						meta: {
+							paramName: 'password',
+						},
 					},
-				}])
+				])
 				return
 			}
 			await client.signIn.attemptFirstFactor({
@@ -77,7 +79,11 @@ export default function ResetPasswordConfirm() {
 					title: 'Recuperar Password',
 					headerLeft: () => (
 						<Pressable onPress={() => router.back()}>
-							<Ionicons name="chevron-back" size={24} color={theme.colors.textHeader} />
+							<Ionicons
+								name="chevron-back"
+								size={24}
+								color={theme.colors.textHeader}
+							/>
 						</Pressable>
 					),
 				}}
@@ -305,7 +311,7 @@ const makeStyles = (theme: Theme) =>
 		},
 		headerText: {
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 20,
 		},
 		button: {
@@ -323,7 +329,7 @@ const makeStyles = (theme: Theme) =>
 		textInputVerify: {
 			fontSize: FontSize.sm,
 			padding: 10,
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 			color: theme.colors.text,
 			width: '100%',
 			overflow: 'hidden',
@@ -331,8 +337,8 @@ const makeStyles = (theme: Theme) =>
 		},
 		buttonText: {
 			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
-			color: Colors.black
+			color: Colors.black,
 		},
 	})

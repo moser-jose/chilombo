@@ -4,7 +4,9 @@ import {
 	Text,
 	StyleSheet,
 	Modal,
-	TouchableOpacity, Dimensions, ScrollView
+	TouchableOpacity,
+	Dimensions,
+	ScrollView,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { fontFamily } from '@/src/constants/FontFamily'
@@ -888,7 +890,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 											>
 												<View style={styles.serviceItem}>
 													<FastImage
-														source={ item.icon}
+														source={item.icon}
 														style={styles.serviceIcon}
 														resizeMode={FastImage.resizeMode.contain}
 													/>
@@ -924,7 +926,6 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 													styleContainer={styles.styleContainer}
 													styleTitle={styles.completedServiceTitle}
 												/>
-												
 											))}
 										</View>
 									</View>
@@ -944,7 +945,8 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 		</Modal>
 	)
 }
-{/* <TouchableOpacity
+{
+	/* <TouchableOpacity
 	key={item.id}
 	style={[
 		styles.completedServiceItem,
@@ -1030,7 +1032,8 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 			</View>
 		</View>
 	</View>
-</TouchableOpacity> */} 
+</TouchableOpacity> */
+}
 const useStyles = (theme: Theme) =>
 	StyleSheet.create({
 		modalContainer: {
@@ -1048,7 +1051,7 @@ const useStyles = (theme: Theme) =>
 			width: width * 0.7,
 		},
 		completedServiceTitle: {
-			fontSize: FontSize.sm,
+			fontSize: theme.size.sm,
 		},
 		leftContainerRight: {
 			flexDirection: 'row',
@@ -1133,7 +1136,7 @@ const useStyles = (theme: Theme) =>
 			justifyContent: 'space-between',
 			marginTop: 8,
 		},
-		
+
 		resultItem: {
 			marginBottom: 16,
 			backgroundColor: theme.colors.ImputBackgroundColors,
@@ -1158,8 +1161,8 @@ const useStyles = (theme: Theme) =>
 			flex: 1,
 		},
 		serviceName: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.semibold,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.semibold.fontFamily,
 			color: theme.colors.text,
 		},
 		completedServicesWrapper: {
@@ -1189,15 +1192,10 @@ const useStyles = (theme: Theme) =>
 		completedServiceInfo: {
 			padding: 8,
 		},
-		completedServiceTitle: {
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.semibold,
-			color: theme.colors.text,
-			marginBottom: 2,
-		},
+		
 		completedServiceDescription: {
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.colorIconInput,
 			marginBottom: 4,
 		},
@@ -1207,14 +1205,14 @@ const useStyles = (theme: Theme) =>
 		},
 		ratingText: {
 			marginLeft: 4,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.medium,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: theme.colors.text,
 		},
 		likesText: {
 			marginLeft: 4,
-			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
 			color: theme.colors.colorIconInput,
 		},
 		noResultsContainer: {
@@ -1225,8 +1223,8 @@ const useStyles = (theme: Theme) =>
 		},
 		noResultsText: {
 			marginTop: 16,
-			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.medium,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: '#666D80',
 			textAlign: 'center',
 		},

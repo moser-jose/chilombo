@@ -645,7 +645,7 @@ const services = [
 ]
 
 import Services from '@/src/components/front/Services'
-import Colors from '@/src/constants/Colors'
+import Colors from '@/src/constants/Theme'
 import { Theme } from '@/src/types/theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 
@@ -809,7 +809,7 @@ export default function HomeScreen() {
 									<Text
 										style={{
 											fontSize: 10,
-											fontFamily: fontFamily.poppins.semibold,
+											fontFamily: theme.fonts.semibold,
 											color: '#fff',
 											marginLeft: 4,
 										}}

@@ -200,8 +200,17 @@ export default function EditProfileScreen() {
 			<Stack.Screen
 				options={{
 					headerTitle: 'Editar Perfil',
-					headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
-			
+					headerBackground: () => (
+						<View
+							style={{
+								backgroundColor: theme.colors.backgroundHeader,
+								height: '100%',
+								width: '100%',
+								borderBottomWidth: 0.5,
+								borderBottomColor: theme.colors.border,
+							}}
+						/>
+					),
 				}}
 			/>
 
@@ -341,7 +350,7 @@ const makeStyles = (theme: Theme) =>
 		},
 		headerTitle: {
 			fontSize: FontSize.lg,
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 		},
 		saveButtonContainer: {
 			position: 'absolute',
@@ -361,18 +370,18 @@ const makeStyles = (theme: Theme) =>
 		userName: {
 			fontSize: FontSize.lg,
 			marginBottom: 1,
-			fontFamily: fontFamily.poppins.bold,
+			fontFamily: theme.fonts.bold.fontFamily,
 		},
 		saveButtonWrapper: {},
 		userEmail: {
 			fontSize: FontSize.sm,
 			color: '#666',
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 		saveButton: {
 			color: theme.colors.background,
 			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.medium,
+			fontFamily: theme.fonts.medium.fontFamily,
 		},
 		imageContainer: {
 			alignItems: 'center',
@@ -413,7 +422,7 @@ const makeStyles = (theme: Theme) =>
 		},
 		label: {
 			fontSize: FontSize.sm,
-			fontFamily: fontFamily.poppins.medium,
+			fontFamily: theme.fonts.medium.fontFamily,
 			color: '#666',
 			textAlign: 'left',
 			backgroundColor: 'red',
@@ -424,6 +433,6 @@ const makeStyles = (theme: Theme) =>
 			borderRadius: 12,
 			padding: 12,
 			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 		},
 	})

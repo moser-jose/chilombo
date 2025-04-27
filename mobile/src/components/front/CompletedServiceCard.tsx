@@ -28,7 +28,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	data,
 	style,
 	styleContainer,
-	styleTitle
+	styleTitle,
 }) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
@@ -175,14 +175,14 @@ const makeStyles = (theme: any) =>
 		},
 		locationText: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginLeft: 4,
 			flex: 1,
 			color: theme.colors.muted,
 		},
 		description: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 6,
 			lineHeight: 16,
 			color: theme.colors.text,
@@ -210,7 +210,7 @@ const makeStyles = (theme: any) =>
 		},
 		likesText: {
 			fontSize: FontSize.xs,
-			fontFamily: fontFamily.poppins.regular,
+			fontFamily: theme.fonts.regular.fontFamily,
 			marginLeft: 2,
 			color: theme.colors.muted,
 		},
