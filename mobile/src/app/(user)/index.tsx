@@ -9,7 +9,6 @@ import {
 import { Text } from '@/src/components/ui/Text'
 import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { useRouter } from 'expo-router'
 import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
@@ -123,9 +122,12 @@ export default function UserScreen() {
 								source={{ uri: user?.imageUrl }}
 							/>
 							<View style={styles.editImageButton}>
-								<Ionicons name="ribbon-outline" size={18} color="white" />
+								<View style={styles.imageButton}>
+									<Ionicons name="ribbon-outline" size={18} color="white" />
+								</View>
 							</View>
 						</View>
+
 						<Text
 							style={[
 								styles.userName,
@@ -557,29 +559,44 @@ const useStyles = (theme: Theme) =>
 		imageContainer: {
 			position: 'relative',
 			marginBottom: 0,
-			flex: 1,
-			justifyContent: 'center',
+			width: 80,
+			height: 80,
+
+
+			
 		},
 		profileImage: {
 			width: 80,
 			height: 80,
 			borderRadius: 60,
-			borderWidth: 3,
+			borderWidth: 4,
 			borderColor: theme.colors.primary,
-			padding: 2,
+			//padding: 2,
 		},
 		editImageButton: {
 			position: 'absolute',
-			right: 6,
-			bottom: 10,
-			backgroundColor: theme.colors.primary,
+			right: -10,
+			bottom: 6,
 			width: 32,
 			height: 32,
 			borderRadius: 18,
 			justifyContent: 'center',
 			alignItems: 'center',
-			borderWidth: 3,
-			borderColor: 'white',
+			borderWidth: 4,
+			shadowColor: theme.colors.background,
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.25,
+			shadowRadius: 3.84,
+			elevation: 5,
+			borderColor: theme.colors.background,
+		},
+		imageButton: {
+			backgroundColor: theme.colors.primary,
+			width: 25,
+			height: 25,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderRadius: 18,
 		},
 		userName: {
 			fontSize: theme.size.base,

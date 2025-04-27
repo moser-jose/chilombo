@@ -86,12 +86,14 @@ const makeStyles = (theme: Theme) =>
 			alignItems: 'center',
 		},
 		modalContent: {
-			backgroundColor: theme.colors.modal, //Colors[theme].colors.modal,
+			backgroundColor: theme.colors.modal,
 			borderRadius: 25,
 			padding: 25,
 			width: '85%',
 			alignItems: 'center',
 			shadowColor: '#000',
+			borderWidth: .5,
+			borderColor: theme.colors.tint,
 			shadowOffset: {
 				width: 0,
 				height: 2,
@@ -103,7 +105,7 @@ const makeStyles = (theme: Theme) =>
 		modalIconContainer: {
 			width: 70,
 			height: 70,
-			backgroundColor: theme.colors.textMuted, //Colors[theme].colors.textMuted,
+			backgroundColor: theme.colors.textMuted,
 			borderRadius: 40,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -113,14 +115,14 @@ const makeStyles = (theme: Theme) =>
 			fontSize:theme.size.base,
 			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 15,
-			color: theme.colors.text, //Colors[theme].colors.text,
+			color: theme.colors.text,
 		},
 		modalText: {
 			fontSize:theme.size.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 25,
 			textAlign: 'center',
-			color: theme.colors.text, //Colors[theme].colors.text,
+			color: theme.colors.text,
 			paddingHorizontal: 10,
 		},
 		modalButtons: {

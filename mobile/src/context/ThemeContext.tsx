@@ -8,8 +8,8 @@ import React, {
 } from 'react'
 import { useColorScheme } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Colors from '@/src/constants/Theme'
-import { Theme } from '../types/theme'
+import Theme from '@/src/constants/Theme'
+import { Theme as ThemeType } from '../types/theme'
 
 type ThemePreference = 'light' | 'dark' | 'system'
 type EffectiveTheme = 'light' | 'dark'
@@ -19,8 +19,8 @@ interface ThemeContextProps {
 	effectiveTheme: EffectiveTheme
 	isSystemTheme: boolean
 	setThemePreference: (preference: ThemePreference) => Promise<void>
-	theme: typeof Colors.light | typeof Colors.dark
-	navigationTheme: Theme
+	theme: typeof Theme.light | typeof Theme.dark
+	navigationTheme: ThemeType
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined)
@@ -65,11 +65,11 @@ export const CustomThemeProvider: React.FC<CustomThemeProviderProps> = ({
 		}
 	}
 
-	const theme: Theme = useMemo(() => {
-		return effectiveTheme === 'dark' ? Colors.dark : Colors.light
+	const theme: ThemeType = useMemo(() => {
+		return effectiveTheme === 'dark' ? Theme.dark : Theme.light
 	}, [effectiveTheme])
 
-	const navigationTheme = useMemo<Theme>(() => {
+	const navigationTheme = useMemo<ThemeType>(() => {
 		return {
 			dark: effectiveTheme === 'dark',
 			colors: theme.colors,
