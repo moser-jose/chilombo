@@ -155,16 +155,16 @@ const makeStyles = (theme: any) =>
 		},
 		starText: {
 			color: 'white',
-			fontFamily: fontFamily.poppins.semibold,
-			fontSize: FontSize.xss,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			fontSize: theme.size.xss,
 			marginLeft: 4,
 		},
 		contentContainer: {
 			padding: 12,
 		},
 		title: {
-			fontSize: FontSize.base,
-			fontFamily: fontFamily.poppins.semibold,
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.semibold.fontFamily,
 			marginBottom: 1,
 			color: theme.colors.text,
 		},

@@ -4,30 +4,24 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	ScrollView,
-	TouchableOpacity,
 	Dimensions,
 	Animated,
 	Platform,
 	TextInput,
-	FlatList,
+	Pressable,
 } from 'react-native'
+import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import FastImage from 'react-native-fast-image'
-import { fontFamily } from '@/src/constants/FontFamily'
-import {
-	Ionicons,
-	MaterialCommunityIcons,
-	FontAwesome5,
-	MaterialIcons,
-} from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import PlanCard from '@/src/components/front/PlanCard'
-import Colors from '@/src/constants/Colors'
 import { FontSize } from '@/src/constants/FontSize'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import { Separador } from '@/src/components/front/Separador'
 import Star from '@/src/components/front/Star'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -630,12 +624,14 @@ export default function ServiceDetailsScreen() {
 	const [showCommentModal, setShowCommentModal] = useState(false)
 	const [commentText, setCommentText] = useState('')
 	const { id } = useLocalSearchParams()
+	const { theme } = useCustomTheme()
+
+	const styles = useStyles(theme as Theme)
 
 	const serviceId = typeof id === 'string' ? parseInt(id, 10) : 1
 	const service = services.find(s => s.id === serviceId) || services[0]
 
 	const handlePlanSelection = (plan: string) => {
-		// Implementar lógica de seleção do plano
 		console.warn('Plano selecionado:', plan)
 	}
 
@@ -662,7 +658,6 @@ export default function ServiceDetailsScreen() {
 		? service.comments
 		: service.comments.slice(0, 2)
 
-	// Animations for Twitter-like scroll behavior
 	const headerHeight = scrollY.interpolate({
 		inputRange: [0, HEADER_HEIGHT - HEADER_MIN_HEIGHT],
 		outputRange: [HEADER_HEIGHT, HEADER_MIN_HEIGHT],
@@ -714,6 +709,7 @@ export default function ServiceDetailsScreen() {
 			<View style={styles.userRatingContainer}>
 				{[...Array(5)].map((_, index) => (
 					<TouchableOpacity
+						type="tertiary"
 						key={index}
 						onPress={() => handleRating(index + 1)}
 						style={styles.userRatingStar}
@@ -737,7 +733,6 @@ export default function ServiceDetailsScreen() {
 				}}
 			/>
 			<View style={styles.container}>
-				{/* Sticky Header for Twitter-like scroll */}
 				<Animated.View
 					style={[
 						styles.stickyHeader,
@@ -750,10 +745,11 @@ export default function ServiceDetailsScreen() {
 					]}
 				>
 					<TouchableOpacity
+						type="tertiary"
 						style={styles.backButtonSticky}
 						onPress={() => router.back()}
 					>
-						<Ionicons name="chevron-back" size={24} color={Colors.primary} />
+						<Ionicons name="chevron-back" size={20} color={theme.colors.text} />
 					</TouchableOpacity>
 					<Animated.Text
 						style={[styles.stickyTitle, { opacity: titleOpacity }]}
@@ -772,7 +768,6 @@ export default function ServiceDetailsScreen() {
 					)}
 					contentContainerStyle={{ paddingTop: 0 }}
 				>
-					{/* Header Image with Animation */}
 					<Animated.View
 						style={[
 							styles.imageContainer,
@@ -815,56 +810,50 @@ export default function ServiceDetailsScreen() {
 							<Text style={styles.serviceTitle}>{service.name}</Text>
 
 							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								{/* <View style={styles.testimonialRatingSmall}>
-									<Ionicons name="star" size={14} color="rgb(245, 194, 26)" />
-									<Text style={styles.testimonialRatingText}>
-										{service.rating}
-									</Text>
-									<Text style={styles.testimonialRatingText}>
-										({service.reviews})
-									</Text>
-								</View> */}
 								<Star rating={service.rating} />
 							</View>
 						</Animated.View>
 					</Animated.View>
 
-					{/* Main Content */}
 					<View style={styles.mainContent}>
-						{/* Engagement Buttons */}
 						<View style={styles.engagementContainer}>
 							<TouchableOpacity
+								type="tertiary"
 								style={styles.engagementButton}
 								onPress={handleLike}
 							>
 								<Ionicons
 									name={liked ? 'heart' : 'heart-outline'}
 									size={24}
-									color={liked ? '#FF5959' : Colors.primary}
+									color={liked ? '#FF5959' : theme.colors.text}
 								/>
 								<Text style={styles.engagementText}>Amar</Text>
 							</TouchableOpacity>
 
 							<TouchableOpacity
+								type="tertiary"
 								style={styles.engagementButton}
 								onPress={() => setShowRatingModal(true)}
 							>
 								<Ionicons
 									name={userRating > 0 ? 'star' : 'star-outline'}
 									size={24}
-									color={userRating > 0 ? 'rgb(245, 194, 26)' : Colors.primary}
+									color={
+										userRating > 0 ? 'rgb(245, 194, 26)' : theme.colors.text
+									}
 								/>
 								<Text style={styles.engagementText}>Avaliar</Text>
 							</TouchableOpacity>
 
 							<TouchableOpacity
+								type="tertiary"
 								style={styles.engagementButton}
 								onPress={() => setShowCommentModal(true)}
 							>
 								<Ionicons
 									name="chatbox-outline"
 									size={24}
-									color={Colors.primary}
+									color={theme.colors.text}
 								/>
 								<Text style={styles.engagementText}>Comentar</Text>
 							</TouchableOpacity>
@@ -877,70 +866,35 @@ export default function ServiceDetailsScreen() {
 							<View style={styles.statsContainer}>
 								<View style={styles.statItem}>
 									<Ionicons
-										name="time-outline"
-										size={24}
-										color={Colors.primary}
+										name="timer"
+										size={20}
+										color={theme.colors.colorIconInput}
 									/>
 									<Text style={styles.statValue}>{service.duration}</Text>
 									<Text style={styles.statLabel}>Duração</Text>
 								</View>
 								<View style={styles.statItem}>
-									<FontAwesome5
-										name="user-check"
+									<Ionicons
+										name="people"
 										size={20}
-										color={Colors.primary}
+										color={theme.colors.colorIconInput}
 									/>
 									<Text style={styles.statValue}>{service.professionals}</Text>
 									<Text style={styles.statLabel}>Profissionais</Text>
 								</View>
 								<View style={styles.statItem}>
-									<MaterialCommunityIcons
-										name="home-heart"
-										size={24}
-										color={Colors.primary}
+									<Ionicons
+										name="home"
+										size={20}
+										color={theme.colors.colorIconInput}
 									/>
 									<Text style={styles.statValue}>{service.services}</Text>
 									<Text style={styles.statLabel}>Serviços</Text>
 								</View>
 							</View>
 						</View>
-
+						<Separador text="Benefícios" />
 						<View style={styles.benefitsSection}>
-							<Text style={styles.sectionTitle}>Benefícios</Text>
-
-							{/* {service.benefits.map((benefit, index) => (
-								<View style={styles.benefitRow} key={index}>
-									<View style={styles.benefitItem}>
-										<Ionicons
-											name="shield-checkmark"
-											size={24}
-											color={Colors.primary}
-										/>
-										<Text style={styles.benefitText}>{benefit}</Text>
-									</View>
-								</View>
-							))} */}
-
-							{/* <FlatList
-								data={service.benefits}
-								keyExtractor={item => item}
-								numColumns={2}
-								columnWrapperStyle={{justifyContent: 'space-between'}}
-
-								renderItem={({ item }) => (
-									<View style={styles.benefitRow}>
-										<View style={styles.benefitItem}>
-											<Ionicons
-												name="shield-checkmark"
-												size={24}
-												color={Colors.primary}
-											/>
-											<Text style={styles.benefitText}>{item}</Text>
-										</View>
-									</View>
-								)}
-							/> */}
-
 							{service.benefits
 								.reduce<Array<Array<(typeof service.benefits)[0]>>>(
 									(rows, item, index) => {
@@ -959,26 +913,30 @@ export default function ServiceDetailsScreen() {
 											<View style={styles.benefitItem} key={index}>
 												<Ionicons
 													name="shield-checkmark"
-													size={24}
-													color={Colors.primary}
-										/>
-										<Text style={styles.benefitText}>{benefit}</Text>
+													size={20}
+													color={theme.colors.primary}
+												/>
+												<Text style={styles.benefitText}>{benefit}</Text>
+											</View>
+										))}
 									</View>
 								))}
-							</View>
-						))}
 
-							{/* <View style={styles.benefitRow}>
+							<View style={styles.benefitRow}>
 								<View style={styles.benefitItem}>
 									<Ionicons
 										name="shield-checkmark"
 										size={24}
-										color={Colors.primary}
+										color={theme.colors.primary}
 									/>
 									<Text style={styles.benefitText}>Garantia de satisfação</Text>
 								</View>
 								<View style={styles.benefitItem}>
-									<Ionicons name="people" size={24} color={Colors.primary} />
+									<Ionicons
+										name="people"
+										size={24}
+										color={theme.colors.primary}
+									/>
 									<Text style={styles.benefitText}>
 										Profissionais verificados
 									</Text>
@@ -986,19 +944,28 @@ export default function ServiceDetailsScreen() {
 							</View>
 							<View style={styles.benefitRow}>
 								<View style={styles.benefitItem}>
-									<Ionicons name="calendar" size={24} color={Colors.primary} />
+									<Ionicons
+										name="calendar"
+										size={24}
+										color={theme.colors.primary}
+									/>
 									<Text style={styles.benefitText}>Agendamento flexível</Text>
 								</View>
 								<View style={styles.benefitItem}>
-									<Ionicons name="sparkles" size={24} color={Colors.primary} />
+									<Ionicons
+										name="sparkles"
+										size={24}
+										color={theme.colors.primary}
+									/>
 									<Text style={styles.benefitText}>Produtos de qualidade</Text>
 								</View>
-							</View> */}
+							</View>
 						</View>
 
 						<Separador text="Planos disponíveis" />
 						<View style={styles.periodSelector}>
 							<TouchableOpacity
+								type="tertiary"
 								onPress={() => setIsMonthly(false)}
 								style={[styles.periodOptionContainer]}
 							>
@@ -1012,6 +979,7 @@ export default function ServiceDetailsScreen() {
 								</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
+								type="tertiary"
 								onPress={() => setIsMonthly(true)}
 								style={[styles.periodOptionContainer]}
 							>
@@ -1038,46 +1006,6 @@ export default function ServiceDetailsScreen() {
 							/>
 						))}
 
-						{/* <PlanCard
-							title="Básico"
-							description="Ideal para famílias com um agregado reduzido."
-							price={getPrice(50000)}
-							activities={[
-								'Limpeza Geral',
-								'Higienização da Roupa',
-								'Limpeza de 4 divisões',
-							]}
-							tag="Popular"
-							onPress={() => handlePlanSelection('basic')}
-						/>
-
-						<PlanCard
-							title="Pro"
-							description="Ideal para famílias com 5 a 6 membros"
-							price={getPrice(65000)}
-							activities={[
-								'Tudo do plano Básico',
-								'Preparo de duas Refeições',
-								'Limpeza de janelas',
-							]}
-							tag="Recomendado"
-							onPress={() => handlePlanSelection('pro')}
-						/>
-
-						<PlanCard
-							title="Premium"
-							description="Ideal para famílias com mais de 7 membros"
-							price={getPrice(80000)}
-							activities={[
-								'Tudo do plano Pro',
-								'Cuidar de Crianças',
-								'Organização de armários',
-								'Limpeza profunda',
-							]}
-							tag="melhor valor"
-							onPress={() => handlePlanSelection('premium')}
-						/> */}
-
 						<View style={styles.divider} />
 
 						<Text style={styles.reviewTitle}>O que dizem deste serviço</Text>
@@ -1102,14 +1030,14 @@ export default function ServiceDetailsScreen() {
 										{renderRating(review.rating)}
 										<Text style={styles.reviewText}>"{review.text}"</Text>
 										<View style={styles.reviewFooter}>
-											<TouchableOpacity style={styles.likeButton}>
+											<Pressable style={styles.likeButton}>
 												<Ionicons
 													name="thumbs-up-outline"
 													size={16}
-													color={Colors.primary}
+													color={theme.colors.text}
 												/>
 												<Text style={styles.likeCount}>{review.likes}</Text>
-											</TouchableOpacity>
+											</Pressable>
 										</View>
 									</View>
 								</View>
@@ -1117,6 +1045,7 @@ export default function ServiceDetailsScreen() {
 
 							{!showAllReviews && service.comments.length > 2 && (
 								<TouchableOpacity
+									type="tertiary"
 									style={styles.showMoreButton}
 									onPress={() => setShowAllReviews(true)}
 								>
@@ -1124,19 +1053,14 @@ export default function ServiceDetailsScreen() {
 									<Ionicons
 										name="chevron-down"
 										size={16}
-										color={Colors.primary}
+										color={theme.colors.primary}
 									/>
 								</TouchableOpacity>
 							)}
 						</View>
-
-						<TouchableOpacity style={styles.ctaButton}>
-							<Text style={styles.ctaButtonText}>Solicitar Serviço Agora</Text>
-						</TouchableOpacity>
 					</View>
 				</Animated.ScrollView>
 
-				{/* Rating Modal */}
 				{showRatingModal && (
 					<ModalMessage
 						showLogoutModal={showRatingModal}
@@ -1153,7 +1077,6 @@ export default function ServiceDetailsScreen() {
 					</ModalMessage>
 				)}
 
-				{/* Comment Modal */}
 				{showCommentModal && (
 					<ModalMessage
 						showLogoutModal={showCommentModal}
@@ -1181,399 +1104,384 @@ export default function ServiceDetailsScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		position: 'relative',
-	},
-	stickyHeader: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		backgroundColor: '#fff',
-		zIndex: 100,
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: '#eee',
-	},
-	backButtonSticky: {
-		height: 40,
-		width: 40,
-		borderRadius: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	stickyTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#222',
-		marginLeft: 10,
-		flex: 1,
-	},
-	imageContainer: {
-		position: 'relative',
-		overflow: 'hidden',
-	},
-	headerImage: {
-		width: '100%',
-		height: HEADER_HEIGHT,
-	},
-	gradient: {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		top: 0,
-		height: HEADER_HEIGHT,
-	},
-	imageOverlay: {
-		position: 'absolute',
-		bottom: 20,
-		left: 16,
-		right: 16,
-	},
-	mainContent: {
-		backgroundColor: '#fff',
-		marginTop: -10,
-		paddingTop: 20,
-	},
-	serviceTitle: {
-		fontSize: FontSize.lg,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#fff',
-		textShadowColor: 'rgba(0, 0, 0, 0.75)',
-		textShadowOffset: { width: -1, height: 1 },
-		textShadowRadius: 10,
-	},
-	ratingRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	ratingText: {
-		color: '#fff',
-		marginLeft: 6,
-		fontFamily: fontFamily.poppins.regular,
-		fontSize: FontSize.xs,
-		textShadowColor: 'rgba(0, 0, 0, 0.75)',
-		textShadowOffset: { width: -1, height: 1 },
-		textShadowRadius: 10,
-	},
-	testimonialRatingSmall: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: 'rgba(245, 194, 26, 0.1)',
-		borderColor: '#F5C21A',
-		borderWidth: 1,
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: 20,
-	},
-	testimonialRatingText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#fff',
-		marginLeft: 4,
-	},
-	infoCard: {
-		marginHorizontal: 16,
-		marginTop: 16,
-		padding: 16,
-		backgroundColor: '#fff',
-		borderRadius: 12,
-		elevation: 2,
-		shadowColor: 'rgba(0, 0, 0, 0.53)',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.1,
-		borderWidth: 0.5,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		shadowRadius: 1,
-	},
-	descriptionTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#333',
-		marginBottom: 8,
-	},
-	description: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#666',
-		lineHeight: 20,
-	},
-	statsContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginTop: 16,
-		paddingTop: 16,
-		borderTopWidth: 1,
-		borderTopColor: '#f0f0f0',
-	},
-	statItem: {
-		alignItems: 'center',
-		flex: 1,
-	},
-	statValue: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#333',
-		marginTop: 4,
-	},
-	statLabel: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#888',
-	},
-	sectionTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#333',
-		marginHorizontal: 16,
-		//marginTop: 24,
-		marginBottom: 12,
-	},
-	benefitsSection: {
-		marginHorizontal: 16,
-		marginTop: 20,
-		padding: 16,
-		backgroundColor: '#f9f9f9',
-		borderRadius: 12,
-	},
-	benefitRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginTop: 12,
-	},
-	benefitItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		flex: 1,
-	},
-	benefitText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#555',
-		marginLeft: 8,
-		flex: 1,
-	},
-	periodSelector: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginBottom: 20,
-		paddingHorizontal: 16,
-	},
-	periodOptionContainer: {
-		paddingHorizontal: 24,
-	},
-	periodOption: {
-		paddingVertical: 4,
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#666',
-	},
-	periodOptionActive: {
-		color: Colors.primary,
-		borderBottomWidth: 2,
-		borderBottomColor: Colors.primary,
-	},
-	backButton: {
-		position: 'absolute',
-		top: 50,
-		left: 16,
-		height: 40,
-		width: 40,
-		borderRadius: 20,
-		backgroundColor: 'rgba(0,0,0,0.3)',
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 10,
-	},
-	divider: {
-		height: 8,
-		backgroundColor: '#f5f5f5',
-		marginVertical: 16,
-	},
-	reviewSection: {
-		marginHorizontal: 16,
-		marginTop: 8,
-		marginBottom: 24,
-		padding: 16,
-		backgroundColor: '#f9f9f9',
-		borderRadius: 12,
-		elevation: 3,
-		shadowColor: 'rgba(0, 0, 0, 0.53)',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.1,
-		borderWidth: 0.5,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		shadowRadius: 1,
-	},
-	reviewTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.bold,
-		color: Colors.primary,
-		marginBottom: 4,
-		textAlign: 'center',
-	},
-	overallRating: {
-		alignItems: 'center',
-		marginBottom: 16,
-	},
-	ratingBig: {
-		fontSize: 36,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#333',
-	},
-	ratingCount: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#777',
-		marginTop: 4,
-	},
-	reviewItem: {
-		flexDirection: 'row',
-		marginBottom: 16,
-		paddingBottom: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: '#eaeaea',
-	},
-	reviewHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-	reviewDate: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#999',
-	},
-	userImage: {
-		width: 40,
-		height: 40,
-		borderRadius: 20,
-		marginRight: 12,
-	},
-	userInfo: {
-		flex: 1,
-	},
-	userName: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#333',
-		marginBottom: 4,
-	},
-	starContainer: {
-		flexDirection: 'row',
-		marginBottom: 4,
-	},
-	reviewText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#555',
-		lineHeight: 18,
-	},
-	reviewFooter: {
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
-		marginTop: 8,
-	},
-	likeButton: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 4,
-	},
-	likeCount: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#777',
-		marginLeft: 4,
-	},
-	showMoreButton: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 8,
-		marginTop: 8,
-	},
-	showMoreText: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-		color: Colors.primary,
-		marginRight: 4,
-	},
-	ctaButton: {
-		backgroundColor: Colors.primary,
-		borderRadius: 8,
-		paddingVertical: 14,
-		marginHorizontal: 16,
-		marginBottom: 30,
-		alignItems: 'center',
-		elevation: 2,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.1,
-		shadowRadius: 4,
-	},
-	ctaButtonText: {
-		color: '#fff',
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.bold,
-	},
-	engagementContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		paddingVertical: 5,
-		marginHorizontal: 16,
-		//marginTop: 1,
-		backgroundColor: '#fff',
-		borderRadius: 12,
-		elevation: 2,
-		shadowColor: 'rgba(0, 0, 0, 0.53)',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.1,
-		borderWidth: 0.5,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		shadowRadius: 1,
-	},
-	engagementButton: {
-		flexDirection: 'column',
-		alignItems: 'center',
-		padding: 8,
-	},
-	engagementText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#555',
-		marginTop: 6,
-	},
-	userRatingContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingVertical: 16,
-	},
-	userRatingStar: {
-		padding: 8,
-	},
-	ratingModalContent: {
-		paddingVertical: 8,
-	},
-	commentModalContent: {
-		paddingVertical: 16,
-		paddingHorizontal: 8,
-	},
-	commentInput: {
-		borderWidth: 1,
-		borderColor: '#eaeaea',
-		borderRadius: 8,
-		padding: 12,
-		minHeight: 120,
-		textAlignVertical: 'top',
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#333',
-	},
-})
+const useStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: theme.colors.background,
+			position: 'relative',
+		},
+		stickyHeader: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			backgroundColor: theme.colors.background,
+			zIndex: 100,
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingHorizontal: 16,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.colors.border,
+		},
+		backButtonSticky: {
+			height: 40,
+			width: 40,
+			borderRadius: 20,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		stickyTitle: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 10,
+			flex: 1,
+		},
+		imageContainer: {
+			position: 'relative',
+			overflow: 'hidden',
+		},
+		headerImage: {
+			width: '100%',
+			height: HEADER_HEIGHT,
+		},
+		gradient: {
+			position: 'absolute',
+			left: 0,
+			right: 0,
+			top: 0,
+			height: HEADER_HEIGHT,
+		},
+		imageOverlay: {
+			position: 'absolute',
+			bottom: 20,
+			left: 16,
+			right: 16,
+		},
+		mainContent: {
+			backgroundColor: theme.colors.background,
+			marginTop: -10,
+			paddingTop: 20,
+		},
+		serviceTitle: {
+			fontSize: theme.size.lg,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: 'white',
+			textShadowColor: 'rgba(0, 0, 0, 0.75)',
+			textShadowOffset: { width: -1, height: 1 },
+		},
+		ratingRow: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		ratingText: {
+			color: theme.colors.text,
+			marginLeft: 6,
+			fontFamily: theme.fonts.regular.fontFamily,
+			fontSize: theme.size.xs,
+			textShadowColor: 'rgba(0, 0, 0, 0.75)',
+			textShadowOffset: { width: -1, height: 1 },
+			textShadowRadius: 10,
+		},
+		testimonialRatingSmall: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			backgroundColor: 'rgba(245, 194, 26, 0.1)',
+			borderColor: '#F5C21A',
+			borderWidth: 1,
+			paddingHorizontal: 8,
+			paddingVertical: 2,
+			borderRadius: 20,
+		},
+		testimonialRatingText: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 4,
+		},
+		infoCard: {
+			marginHorizontal: 16,
+			marginTop: 16,
+			padding: 16,
+			borderRadius: 12,
+			elevation: 2,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			backgroundColor: theme.colors.card,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		descriptionTitle: {
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			color: theme.colors.text,
+			marginBottom: 8,
+		},
+		description: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			lineHeight: 20,
+		},
+		statsContainer: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			marginTop: 16,
+			paddingTop: 16,
+			borderTopWidth: 1,
+			borderTopColor: theme.colors.border,
+		},
+		statItem: {
+			alignItems: 'center',
+			flex: 1,
+		},
+		statValue: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+			marginTop: 4,
+		},
+		statLabel: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+		},
+		sectionTitle: {
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			color: theme.colors.text,
+			marginHorizontal: 16,
+			//marginTop: 24,
+			marginBottom: 12,
+		},
+		benefitsSection: {
+			marginHorizontal: 16,
+			padding: 16,
+			borderRadius: 12,
+			borderColor: theme.colors.tint,
+			backgroundColor: theme.colors.card,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+			borderWidth: 1,
+		},
+		benefitRow: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			marginTop: 12,
+		},
+		benefitItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			flex: 1,
+		},
+		benefitText: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 8,
+			flex: 1,
+		},
+		periodSelector: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			marginBottom: 20,
+			paddingHorizontal: 16,
+		},
+		periodOptionContainer: {
+			paddingHorizontal: 24,
+		},
+		periodOption: {
+			paddingVertical: 4,
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: '#666',
+		},
+		periodOptionActive: {
+			color: theme.colors.primary,
+			borderBottomWidth: 2,
+			borderBottomColor: theme.colors.primary,
+		},
+		backButton: {
+			position: 'absolute',
+			top: 50,
+			left: 16,
+			height: 40,
+			width: 40,
+			borderRadius: 20,
+			backgroundColor: 'rgba(0,0,0,0.3)',
+			alignItems: 'center',
+			justifyContent: 'center',
+			zIndex: 10,
+		},
+		divider: {
+			height: 8,
+			backgroundColor: theme.colors.border,
+			marginVertical: 16,
+		},
+		reviewSection: {
+			marginHorizontal: 16,
+			marginTop: 8,
+			marginBottom: 24,
+			padding: 16,
+
+			borderRadius: 12,
+			elevation: 3,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			backgroundColor: theme.colors.card,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		reviewTitle: {
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+			marginBottom: 4,
+			textAlign: 'center',
+		},
+		overallRating: {
+			alignItems: 'center',
+			marginBottom: 16,
+		},
+		ratingBig: {
+			fontSize: 36,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+		},
+		ratingCount: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginTop: 4,
+		},
+		reviewItem: {
+			flexDirection: 'row',
+			marginBottom: 16,
+			paddingBottom: 16,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.colors.border,
+		},
+		reviewHeader: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+		},
+		reviewDate: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+		},
+		userImage: {
+			width: 40,
+			height: 40,
+			borderRadius: 20,
+			marginRight: 12,
+		},
+		userInfo: {
+			flex: 1,
+		},
+		userName: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+			marginBottom: 4,
+		},
+		starContainer: {
+			flexDirection: 'row',
+			marginBottom: 4,
+		},
+		reviewText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			lineHeight: 18,
+		},
+		reviewFooter: {
+			flexDirection: 'row',
+			justifyContent: 'flex-end',
+			marginTop: 8,
+		},
+		likeButton: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			padding: 4,
+		},
+		likeCount: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 4,
+		},
+		showMoreButton: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			padding: 8,
+			marginTop: 8,
+		},
+		showMoreText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.primary,
+			marginRight: 4,
+		},
+
+		engagementContainer: {
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			paddingVertical: 5,
+			marginHorizontal: 16,
+			backgroundColor: theme.colors.card,
+			borderRadius: 12,
+			elevation: 2,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			//shadowColor: 'rgba(0, 0, 0, 0.53)',
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		engagementButton: {
+			flexDirection: 'column',
+			alignItems: 'center',
+			padding: 8,
+		},
+		engagementText: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginTop: 6,
+		},
+		userRatingContainer: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			paddingVertical: 16,
+		},
+		userRatingStar: {
+			padding: 8,
+		},
+		ratingModalContent: {
+			paddingVertical: 8,
+		},
+		commentModalContent: {
+			paddingVertical: 16,
+			paddingHorizontal: 8,
+		},
+		commentInput: {
+			borderWidth: 1,
+			borderColor: theme.colors.border,
+			borderRadius: 8,
+			padding: 12,
+			minHeight: 120,
+			textAlignVertical: 'top',
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+		},
+	})
