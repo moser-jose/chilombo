@@ -20,6 +20,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/ui/ModalMessage'
 import { Separador } from '@/src/components/front/Separador'
 import Star from '@/src/components/front/Star'
+import { Theme } from '@/src/types/theme'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import EmployerCard from '@/src/components/front/EmployersCard'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -38,7 +41,29 @@ const completedServicesData = [
 		date: '15/03/2024',
 		client: 'J. Mateus',
 		duration: '3 horas',
-		professionals: ['Maria Silva', 'Carlos Santos'],
+		professionals: [
+			{
+				id: 1,
+				firstname: 'Antônio',
+				lastname: 'Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				role: 'Vendedor',
+			},
+			{
+				id: 2,
+				firstname: 'Miguel',
+				lastname: 'Silva',
+				//image: '',
+				role: 'Analista',
+			},
+			{
+				id: 3,
+				firstname: 'Marcos',
+				lastname: 'Silva',
+				image: 'https://randomuser.me/api/portraits/men/10.jpg',
+				role: 'Vendedor',
+			},
+		],
 		workImages: [
 			'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1470&auto=format&fit=crop',
 			'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1374&auto=format&fit=crop',
@@ -96,7 +121,22 @@ const completedServicesData = [
 		date: '22/03/2024',
 		client: 'Ana Marisa',
 		duration: '2 horas',
-		professionals: ['Paulo Neves'],
+		professionals: [
+			{
+				id: 2,
+				firstname: 'Miguel',
+				lastname: 'Silva',
+				//image: '',
+				role: 'Analista',
+			},
+			{
+				id: 3,
+				firstname: 'Marcos',
+				lastname: 'Silva',
+				image: 'https://randomuser.me/api/portraits/men/10.jpg',
+				role: 'Vendedor',
+			},
+		],
 		workImages: [
 			'https://images.unsplash.com/photo-1603848198135-5ace8c4a91c3?q=80&w=1374&auto=format&fit=crop',
 			'https://images.unsplash.com/photo-1588854337221-4cf9fa96059c?q=80&w=1470&auto=format&fit=crop',
@@ -125,7 +165,22 @@ const completedServicesData = [
 		date: '03/04/2024',
 		client: 'Empresa TechSolutions',
 		duration: '5 horas',
-		professionals: ['Isabel Dias', 'Ricardo Mendes', 'Joana Lima'],
+		professionals: [
+			{
+				id: 1,
+				firstname: 'Antônio',
+				lastname: 'Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				role: 'Vendedor',
+			},
+			{
+				id: 2,
+				firstname: 'Miguel',
+				lastname: 'Silva',
+				//image: '',
+				role: 'Analista',
+			},
+		],
 		workImages: [
 			'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1470&auto=format&fit=crop',
 			'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?q=80&w=1471&auto=format&fit=crop',
@@ -158,7 +213,22 @@ const completedServicesData = [
 		date: '10/04/2024',
 		client: 'Carlos Eduardo',
 		duration: '1.5 horas',
-		professionals: ['Mariana Costa'],
+		professionals: [
+			{
+				id: 1,
+				firstname: 'Antônio',
+				lastname: 'Silva',
+				image: 'https://randomuser.me/api/portraits/men/5.jpg',
+				role: 'Vendedor',
+			},
+			{
+				id: 2,
+				firstname: 'Miguel',
+				lastname: 'Silva',
+				//image: '',
+				role: 'Analista',
+			},
+		],
 		workImages: [
 			'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1470&auto=format&fit=crop',
 			'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1470&auto=format&fit=crop',
@@ -185,6 +255,9 @@ export default function CompletedServiceDetailScreen() {
 	const [showRatingModal, setShowRatingModal] = useState(false)
 	const scrollY = useRef(new Animated.Value(0)).current
 	const insets = useSafeAreaInsets()
+
+	const { theme } = useCustomTheme()
+	const styles = useStyles(theme)
 
 	// Find the service by ID
 	const serviceId = typeof id === 'string' ? parseInt(id, 10) : 1
@@ -281,9 +354,7 @@ export default function CompletedServiceDetailScreen() {
 					headerShown: false,
 				}}
 			/>
-			{/* <StatusBar barStyle="light-content" /> */}
 			<View style={styles.container}>
-				{/* Sticky Header for Twitter-like scroll */}
 				<Animated.View
 					style={[
 						styles.stickyHeader,
@@ -299,7 +370,7 @@ export default function CompletedServiceDetailScreen() {
 						style={styles.backButtonSticky}
 						onPress={() => router.back()}
 					>
-						<Ionicons name="chevron-back" size={24} color={Colors.primary} />
+						<Ionicons name="chevron-back" size={20} color={theme.colors.text} />
 					</TouchableOpacity>
 					<Animated.Text
 						style={[styles.stickyTitle, { opacity: titleOpacity }]}
@@ -318,7 +389,6 @@ export default function CompletedServiceDetailScreen() {
 					)}
 					contentContainerStyle={{ paddingTop: 0 }}
 				>
-					{/* Header Image with Animation */}
 					<Animated.View
 						style={[
 							styles.imageContainer,
@@ -360,15 +430,6 @@ export default function CompletedServiceDetailScreen() {
 						>
 							<Text style={styles.serviceTitle}>{service.title}</Text>
 							<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-								{/* <View style={styles.testimonialRatingSmall}>
-									<Ionicons name="star" size={14} color="rgb(245, 194, 26)" />
-									<Text style={styles.testimonialRatingText}>
-										{service.rating}
-									</Text>
-									<Text style={styles.testimonialRatingText}>
-										({service.reviews})
-									</Text>
-								</View> */}
 								<Star rating={service.stars} />
 							</View>
 						</Animated.View>
@@ -385,7 +446,7 @@ export default function CompletedServiceDetailScreen() {
 								<Ionicons
 									name={liked ? 'heart' : 'heart-outline'}
 									size={24}
-									color={liked ? '#FF4D67' : '#555'}
+									color={liked ? '#FF4D67' : theme.colors.text}
 								/>
 								<Text style={styles.engagementText}>Amei</Text>
 							</TouchableOpacity>
@@ -394,12 +455,20 @@ export default function CompletedServiceDetailScreen() {
 								style={styles.engagementButton}
 								onPress={() => setShowRatingModal(true)}
 							>
-								<Ionicons name="star-outline" size={24} color="#555" />
+								<Ionicons
+									name="star-outline"
+									size={24}
+									color={theme.colors.text}
+								/>
 								<Text style={styles.engagementText}>Avaliar</Text>
 							</TouchableOpacity>
 
 							<TouchableOpacity style={styles.engagementButton}>
-								<Ionicons name="chatbubble-outline" size={24} color="#555" />
+								<Ionicons
+									name="chatbubble-outline"
+									size={24}
+									color={theme.colors.text}
+								/>
 								<Text style={styles.engagementText}>Comentar</Text>
 							</TouchableOpacity>
 						</View>
@@ -444,7 +513,7 @@ export default function CompletedServiceDetailScreen() {
 										<Ionicons
 											name="calendar-outline"
 											size={20}
-											color={Colors.primary}
+											color={theme.colors.primary}
 										/>
 										<View style={styles.detailTextContainer}>
 											<Text style={styles.detailLabel}>Data</Text>
@@ -463,7 +532,7 @@ export default function CompletedServiceDetailScreen() {
 										<Ionicons
 											name="time-outline"
 											size={20}
-											color={Colors.primary}
+											color={theme.colors.primary}
 										/>
 										<View style={styles.detailTextContainer}>
 											<Text style={styles.detailLabel}>Duração</Text>
@@ -477,7 +546,7 @@ export default function CompletedServiceDetailScreen() {
 										<Ionicons
 											name="location-outline"
 											size={20}
-											color={Colors.primary}
+											color={theme.colors.primary}
 										/>
 										<View style={styles.detailTextContainer}>
 											<Text style={styles.detailLabel}>Local</Text>
@@ -496,7 +565,7 @@ export default function CompletedServiceDetailScreen() {
 										<Ionicons
 											name="person-outline"
 											size={20}
-											color={Colors.primary}
+											color={theme.colors.primary}
 										/>
 										<View style={styles.detailTextContainer}>
 											<Text style={styles.detailLabel}>Cliente</Text>
@@ -512,7 +581,11 @@ export default function CompletedServiceDetailScreen() {
 						<View style={styles.tasksContainer}>
 							{service.tasks.map((task, index) => (
 								<View key={index} style={styles.taskItem}>
-									<Ionicons name="checkmark" size={22} color={Colors.primary} />
+									<Ionicons
+										name="checkmark"
+										size={22}
+										color={theme.colors.primary}
+									/>
 									<Text style={styles.taskText}>{task}</Text>
 								</View>
 							))}
@@ -520,25 +593,26 @@ export default function CompletedServiceDetailScreen() {
 
 						{/* Team */}
 						<Separador text="Equipe Responsável" />
-						<View style={styles.teamContainer}>
-							<View style={styles.professionalsList}>
-								{service.professionals.map((professional, index) => (
-									<View key={index} style={styles.professionalItem}>
-										<View style={styles.professionalAvatarContainer}>
-											<FastImage
-												source={{
-													uri: `https://ui-avatars.com/api/?name=${professional.replace(' ', '+')}&background=0D8ABC&color=fff`,
-												}}
-												style={styles.professionalAvatar}
-												resizeMode={FastImage.resizeMode.cover}
-											/>
-										</View>
-										<Text style={styles.professionalName}>{professional}</Text>
-										<Text style={styles.professionalRole}>Profissional</Text>
-									</View>
-								))}
-							</View>
-						</View>
+						<FlatList
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							keyExtractor={item => item.id.toString()}
+							data={service.professionals}
+							renderItem={({ index, item }) => (
+								<View
+									style={{
+										marginLeft: index === 0 ? 16 : 16,
+										marginRight:
+											index === service.professionals.length - 1 ? 16 : 0,
+										flex: 1,
+										flexDirection: 'row',
+										gap: 10,
+									}}
+								>
+									<EmployerCard data={item} />
+								</View>
+							)}
+						/>
 
 						{/* Client Testimonial */}
 						<Separador text="Avaliação do Cliente" />
@@ -556,7 +630,7 @@ export default function CompletedServiceDetailScreen() {
 										<FontAwesome
 											name="quote-left"
 											size={20}
-											color={Colors.primary}
+											color={theme.colors.primary}
 											style={styles.quoteIcon}
 										/>
 										{renderRating(service.testimonial.rating)}
@@ -620,7 +694,11 @@ export default function CompletedServiceDetailScreen() {
 															</Text>
 														</View>
 													</View>
-													<Star rating={item.rating} style={styles.testimonialRatingSmall} textColor="#555" />
+													<Star
+														rating={item.rating}
+														style={styles.testimonialRatingSmall}
+														textColor={theme.colors.text}
+													/>
 												</View>
 												<Text style={styles.testimonialItemText}>
 													{item.text}
@@ -632,15 +710,28 @@ export default function CompletedServiceDetailScreen() {
 							)}
 
 						{/* CTA Button */}
-						<TouchableOpacity
-							style={styles.ctaButton}
-							onPress={() => router.push('/(services)/empregada-domestica')}
-						>
-							<Text style={styles.ctaButtonText}>
-								Solicitar Serviço Similar
-							</Text>
-							<MaterialIcons name="arrow-forward-ios" size={16} color="#fff" />
-						</TouchableOpacity>
+						<View style={styles.ctaContainer}>
+							<TouchableOpacity
+								style={styles.ctaButton}
+								onPress={() =>
+									router.push({
+										pathname: '/(services)/service-details',
+										params: {
+											serviceId: service.id,
+										},
+									})
+								}
+							>
+								<Text style={styles.ctaButtonText}>
+									Solicitar Serviço Similar
+								</Text>
+								<MaterialIcons
+									name="arrow-forward-ios"
+									size={16}
+									color="#fff"
+								/>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</Animated.ScrollView>
 
@@ -664,519 +755,487 @@ export default function CompletedServiceDetailScreen() {
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		position: 'relative',
-	},
-	stickyHeader: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		backgroundColor: '#fff',
-		zIndex: 100,
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 16,
-		borderBottomWidth: 1,
-		borderBottomColor: '#eee',
-	},
-	testimonialImage: {
-		width: 30,
-		height: 30,
-		borderRadius: 15,
-	},
-	testimonialHeaderLeft: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
-	backButtonSticky: {
-		height: 40,
-		width: 40,
-		borderRadius: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	stickyTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#222',
-		marginLeft: 10,
-		flex: 1,
-	},
-	backButton: {
-		position: 'absolute',
-		top: 50,
-		left: 16,
-		height: 40,
-		width: 40,
-		borderRadius: 20,
-		backgroundColor: 'rgba(0,0,0,0.3)',
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 10,
-	},
-	imageContainer: {
-		position: 'relative',
-		overflow: 'hidden',
-	},
-	headerImage: {
-		width: '100%',
-		height: HEADER_HEIGHT,
-	},
-	gradient: {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		top: 0,
-		height: HEADER_HEIGHT,
-	},
-	imageOverlay: {
-		position: 'absolute',
-		bottom: 20,
-		left: 16,
-		right: 16,
-	},
-	serviceTitle: {
-		fontSize: FontSize.lg + 2,
-		fontFamily: fontFamily.poppins.bold,
-		color: '#fff',
-		textShadowColor: 'rgba(0, 0, 0, 0.75)',
-		textShadowOffset: { width: -1, height: 1 },
-		textShadowRadius: 10,
-	},
-	ratingRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 4,
-	},
-	starContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	ratingText: {
-		color: '#fff',
-		marginLeft: 6,
-		fontFamily: fontFamily.poppins.regular,
-		fontSize: FontSize.xs,
-		textShadowColor: 'rgba(0, 0, 0, 0.75)',
-		textShadowOffset: { width: -1, height: 1 },
-		textShadowRadius: 10,
-	},
-	mainContent: {
-		backgroundColor: '#fff',
-		marginTop: -10,
-		paddingTop: 20,
-	},
-	// Engagement styles
-	engagementContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		paddingVertical: 5,
-		marginHorizontal: 16,
-		//marginTop: 10,
-		backgroundColor: '#fff',
-		borderRadius: 14,
-		elevation: 2,
-		shadowColor: 'rgba(0, 0, 0, 0.53)',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.1,
-		borderWidth: 0.5,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		shadowRadius: 1,
-	},
-	engagementButton: {
-		flexDirection: 'column',
-		alignItems: 'center',
-		padding: 8,
-	},
-	engagementText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#555',
-		marginTop: 6,
-	},
-	// Gallery styles
-	galleryContainer: {
-		//marginTop: 20,
-		paddingHorizontal: 16,
-	},
-	galleryList: {
-		//paddingVertical: 12,
-	},
-	galleryItem: {
-		width: 90,
-		height: 90,
-		borderRadius: 10,
-		marginRight: 12,
-		borderWidth: 2,
-		borderColor: 'transparent',
-		overflow: 'hidden',
-	},
-	activeGalleryItem: {
-		borderColor: Colors.primary,
-	},
-	galleryImage: {
-		width: '100%',
-		height: '100%',
-	},
-	// Info card styles
-	infoCard: {
-		marginHorizontal: 16,
-		marginTop: 20,
-		padding: 16,
-		backgroundColor: '#fff',
-		borderRadius: 12,
-		elevation: 3,
-		shadowColor: 'rgba(0, 0, 0, 0.53)',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.1,
-		borderWidth: 0.5,
-		borderColor: 'rgba(0, 0, 0, 0.1)',
-		shadowRadius: 1,
-	},
-	descriptionTitle: {
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#222',
-		marginBottom: 10,
-	},
-	description: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#555',
-		lineHeight: 22,
-	},
-	detailsContainer: {
-		marginTop: 10,
-	},
-	detailRow: {
-		marginTop: 16,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		flex: 1,
-		width: '100%',
-	},
-	detailItem: {
-		flexDirection: 'row',
-		alignItems: 'flex-start',
-		flex: 1,
-		marginRight: 8,
-	},
-	detailTextContainer: {
-		marginLeft: 10,
-	},
-	detailLabel: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#777',
-		marginBottom: 2,
-	},
-	detailValue: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#333',
-	},
-	// Section title
-	sectionTitle: {
-		fontSize: FontSize.base + 1,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#222',
-		marginBottom: 14,
-	},
-	// Tasks styles
-	tasksContainer: {
-		marginHorizontal: 16,
-		backgroundColor: '#f8f9fa',
-		borderRadius: 10,
-	},
-	taskItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		padding: 12,
-		elevation: 1,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.05,
-		shadowRadius: 2,
-	},
-	taskText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#333',
-		marginLeft: 12,
-		flex: 1,
-	},
-	// Team styles
-	teamContainer: {
-		marginHorizontal: 16,
-		//marginTop: 28,
-	},
-	professionalsList: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		justifyContent: 'flex-start',
-	},
-	professionalItem: {
-		alignItems: 'center',
-		width: width / 3.5,
-		marginBottom: 20,
-		marginRight: 10,
-	},
-	professionalAvatarContainer: {
-		width: 55,
-		height: 55,
-		borderRadius: 50,
-		//backgroundColor: '#E8F5FE',
-		overflow: 'hidden',
-		marginBottom: 8,
-		borderWidth: 2,
-		borderColor: 'rgba(0, 0, 0, 0.25)',
-		elevation: 2,
-		padding: 2,
-		//shadowColor: 'rgba(0,0,0,0.1)',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.1,
-		shadowRadius: 3,
-	},
-	professionalAvatar: {
-		width: '100%',
-		height: '100%',
-		borderRadius: 50,
-	},
-	professionalName: {
-		fontSize: FontSize.xs + 1,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#333',
-		textAlign: 'center',
-	},
-	professionalRole: {
-		fontSize: FontSize.xs - 1,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#777',
-		textAlign: 'center',
-		marginTop: 2,
-	},
-	// Testimonial styles
-	testimonialContainer: {
-		marginHorizontal: 16,
-		//marginTop: 28,
-	},
-	testimonialContent: {
-		backgroundColor: '#f8f9fa',
-		padding: 16,
-		borderRadius: 12,
-		borderLeftWidth: 4,
-		borderLeftColor: Colors.primary,
-		elevation: 1,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.05,
-		shadowRadius: 2,
-	},
-	testimonialHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 12,
-		justifyContent: 'space-between',
-	},
-	quoteIcon: {
-		marginRight: 10,
-	},
-	testimonialRating: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#444',
-		marginLeft: 8,
-	},
-	testimonialText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#333',
-		fontStyle: 'italic',
-		lineHeight: 22,
-	},
-	testimonialClient: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#555',
-		textAlign: 'right',
-		marginTop: 6,
-	},
-	// CTA Button
-	ctaButton: {
-		backgroundColor: Colors.primary,
-		borderRadius: 10,
-		padding: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginTop: 30,
-		marginBottom: 30,
-		marginHorizontal: 16,
-		elevation: 3,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
-	},
-	ctaButtonText: {
-		color: '#fff',
-		fontSize: FontSize.base,
-		fontFamily: fontFamily.poppins.semibold,
-		marginRight: 8,
-	},
-	// Rating modal styles
-	ratingModal: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(0,0,0,0.5)',
-		justifyContent: 'center',
-		alignItems: 'center',
-		zIndex: 999,
-	},
-	ratingModalContent: {
-		backgroundColor: '#fff',
-		padding: 10,
-		borderRadius: 10,
-		width: '80%',
-		maxWidth: 400,
-		alignItems: 'center',
-	},
-	ratingModalTitle: {
-		fontSize: FontSize.base + 1,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#222',
-		marginBottom: 20,
-	},
-	userRatingContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginBottom: 20,
-	},
-	userRatingStar: {
-		marginHorizontal: 6,
-	},
-	ratingModalButtons: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: '100%',
-		marginTop: 16,
-	},
-	ratingModalButton: {
-		backgroundColor: '#f8f9fa',
-		borderRadius: 8,
-		padding: 12,
-		minWidth: 100,
-		alignItems: 'center',
-	},
-	ratingModalButtonPrimary: {
-		backgroundColor: Colors.primary,
-	},
-	ratingModalButtonText: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.medium,
-		color: '#333',
-	},
-	ratingModalButtonTextPrimary: {
-		fontSize: FontSize.sm,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#fff',
-	},
-	// Additional Testimonials styles
-	additionalTestimonialsContainer: {
-		//marginTop: 28,
-	},
-	testimonialsHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: 16,
-		paddingHorizontal: 16,
-	},
-	testimonialsList: {
-		paddingLeft: 16,
-		paddingRight: 8,
-	},
-	viewAllButton: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	viewAllText: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.medium,
-		color: Colors.primary,
-		marginRight: 4,
-	},
-	testimonialItemHorizontal: {
-		backgroundColor: '#f8f9fa',
-		padding: 16,
-		borderRadius: 12,
-		marginRight: 12,
-		borderLeftWidth: 2,
-		borderLeftColor: Colors.primary,
-		elevation: 1,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: 1 },
-		shadowOpacity: 0.05,
-		shadowRadius: 2,
-		width: width * 0.75,
-		maxWidth: 320,
-	},
-	testimonialItemHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		marginBottom: 10,
-	},
-	testimonialUser: {
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	testimonialUserImage: {
-		width: 36,
-		height: 36,
-		borderRadius: 18,
-		marginRight: 10,
-	},
-	testimonialUserName: {
-		fontSize: FontSize.xs,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#333',
-	},
-	testimonialDate: {
-		fontSize: FontSize.xss,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#777',
-	},
-	testimonialRatingSmall: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		backgroundColor: 'rgba(245, 194, 26, 0.1)',
-		borderColor: '#F5C21A',
-		borderWidth: 1,
-		paddingHorizontal: 8,
-		paddingVertical: 2,
-		borderRadius: 20,
-	},
-	testimonialRatingText: {
-		fontSize: FontSize.xss,
-		fontFamily: fontFamily.poppins.semibold,
-		color: '#555',
-		marginLeft: 4,
-	},
-	testimonialItemText: {
-		fontSize: FontSize.xsB,
-		fontFamily: fontFamily.poppins.regular,
-		color: '#333',
-		fontStyle: 'italic',
-		lineHeight: 20,
-	},
-})
+const useStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: theme.colors.background,
+			position: 'relative',
+		},
+		stickyHeader: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			backgroundColor: theme.colors.background,
+			zIndex: 100,
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingHorizontal: 16,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.colors.border,
+		},
+		testimonialImage: {
+			width: 30,
+			height: 30,
+			borderRadius: 15,
+		},
+		testimonialHeaderLeft: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+		},
+		backButtonSticky: {
+			height: 40,
+			width: 40,
+			borderRadius: 20,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		stickyTitle: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 10,
+			flex: 1,
+		},
+		backButton: {
+			position: 'absolute',
+			top: 50,
+			left: 16,
+			height: 40,
+			width: 40,
+			borderRadius: 20,
+			backgroundColor: 'rgba(0,0,0,0.3)',
+			alignItems: 'center',
+			justifyContent: 'center',
+			zIndex: 10,
+		},
+		imageContainer: {
+			position: 'relative',
+			overflow: 'hidden',
+		},
+		headerImage: {
+			width: '100%',
+			height: HEADER_HEIGHT,
+		},
+		gradient: {
+			position: 'absolute',
+			left: 0,
+			right: 0,
+			top: 0,
+			height: HEADER_HEIGHT,
+		},
+		imageOverlay: {
+			position: 'absolute',
+			bottom: 20,
+			left: 16,
+			right: 16,
+		},
+		serviceTitle: {
+			fontSize: theme.size.lg + 2,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: '#fff',
+			textShadowColor: 'rgba(0, 0, 0, 0.75)',
+			textShadowOffset: { width: -1, height: 1 },
+			textShadowRadius: 10,
+		},
+		ratingRow: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: 4,
+		},
+		starContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		ratingText: {
+			color: '#fff',
+			marginLeft: 6,
+			fontFamily: theme.fonts.regular.fontFamily,
+			fontSize: theme.size.xs,
+			textShadowColor: 'rgba(0, 0, 0, 0.75)',
+			textShadowOffset: { width: -1, height: 1 },
+			textShadowRadius: 10,
+		},
+		mainContent: {
+			backgroundColor: theme.colors.background,
+			marginTop: -10,
+			paddingTop: 20,
+		},
+		engagementContainer: {
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			paddingVertical: 5,
+			marginHorizontal: 16,
+			backgroundColor: theme.colors.card,
+			borderRadius: 12,
+			elevation: 2,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		engagementButton: {
+			flexDirection: 'column',
+			alignItems: 'center',
+			padding: 8,
+		},
+		engagementText: {
+			fontSize: FontSize.xs,
+			fontFamily: fontFamily.poppins.medium,
+			color: theme.colors.text,
+			marginTop: 6,
+		},
+		// Gallery styles
+		galleryContainer: {
+			//marginTop: 20,
+			paddingHorizontal: 16,
+		},
+		galleryList: {
+			//paddingVertical: 12,
+		},
+		galleryItem: {
+			width: 90,
+			height: 90,
+			borderRadius: 10,
+			marginRight: 12,
+			borderWidth: 2,
+			borderColor: 'transparent',
+			overflow: 'hidden',
+		},
+		activeGalleryItem: {
+			borderColor: theme.colors.primary,
+		},
+		galleryImage: {
+			width: '100%',
+			height: '100%',
+		},
+		// Info card styles
+		infoCard: {
+			marginHorizontal: 16,
+			marginTop: 16,
+			padding: 16,
+			borderRadius: 12,
+			elevation: 2,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			backgroundColor: theme.colors.card,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		descriptionTitle: {
+			fontSize: theme.size.base,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+			marginBottom: 10,
+		},
+		description: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			lineHeight: 22,
+		},
+		detailsContainer: {
+			marginTop: 10,
+		},
+		detailRow: {
+			marginTop: 16,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			flex: 1,
+			width: '100%',
+		},
+		detailItem: {
+			flexDirection: 'row',
+			alignItems: 'flex-start',
+			flex: 1,
+			marginRight: 8,
+		},
+		detailTextContainer: {
+			marginLeft: 10,
+		},
+		detailLabel: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.secondary,
+			marginBottom: 2,
+		},
+		detailValue: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+		},
+		// Section title
+		sectionTitle: {
+			fontSize: theme.size.base + 1,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginBottom: 14,
+		},
+		// Tasks styles
+		tasksContainer: {
+			marginHorizontal: 16,
+			backgroundColor: theme.colors.card,
+			borderRadius: 10,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.1,
+			shadowRadius: 1,
+		},
+		taskItem: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			padding: 12,
+			elevation: 1,
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.05,
+			shadowRadius: 2,
+		},
+		taskText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 12,
+			flex: 1,
+		},
+		// Team styles
+
+		professionalsList: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'flex-start',
+		},
+		professionalItem: {
+			alignItems: 'center',
+			width: width / 3.5,
+			marginBottom: 20,
+			marginRight: 10,
+		},
+		professionalAvatarContainer: {
+			width: 55,
+			height: 55,
+			borderRadius: 50,
+			//backgroundColor: '#E8F5FE',
+			overflow: 'hidden',
+			marginBottom: 8,
+			borderWidth: 2,
+			borderColor: 'rgba(0, 0, 0, 0.25)',
+			elevation: 2,
+			padding: 2,
+			//shadowColor: 'rgba(0,0,0,0.1)',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.1,
+			shadowRadius: 3,
+		},
+		professionalAvatar: {
+			width: '100%',
+			height: '100%',
+			borderRadius: 50,
+		},
+		professionalName: {
+			fontSize: theme.size.xs + 1,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			textAlign: 'center',
+		},
+		professionalRole: {
+			fontSize: theme.size.xs - 1,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.textMuted,
+			textAlign: 'center',
+			marginTop: 2,
+		},
+
+		additionalTestimonialsContainer: {
+			marginBottom: 30,
+		},
+		// Testimonial styles
+		testimonialContainer: {
+			marginHorizontal: 16,
+			//marginTop: 28,
+		},
+		testimonialContent: {
+			backgroundColor: theme.colors.card,
+			padding: 16,
+			borderRadius: 12,
+			borderLeftWidth: 4,
+			borderLeftColor: theme.colors.primary,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			elevation: 1,
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.05,
+			shadowRadius: 2,
+		},
+		testimonialHeader: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginBottom: 12,
+			justifyContent: 'space-between',
+		},
+		quoteIcon: {
+			marginRight: 10,
+		},
+		testimonialRating: {
+			fontSize: theme.size.sm,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 8,
+		},
+		testimonialText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			fontStyle: 'italic',
+			lineHeight: 22,
+		},
+		testimonialClient: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
+			textAlign: 'right',
+			marginTop: 6,
+		},
+		ctaContainer: {
+			marginHorizontal: 16,
+			marginBottom: 40,
+		},
+
+		ctaButton: {
+			backgroundColor: theme.colors.primary,
+			borderRadius: 12,
+			paddingVertical: 10,
+			flex: 1,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		ctaButtonText: {
+			color: '#fff',
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.medium.fontFamily,
+			marginRight: 8,
+		},
+		// Rating modal styles
+		ratingModal: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			backgroundColor: 'rgba(0,0,0,0.5)',
+			justifyContent: 'center',
+			alignItems: 'center',
+			zIndex: 999,
+		},
+		ratingModalContent: {
+			backgroundColor: theme.colors.card,
+			padding: 10,
+			borderRadius: 10,
+			width: '80%',
+			maxWidth: 400,
+			alignItems: 'center',
+		},
+		ratingModalTitle: {
+			fontSize: FontSize.base + 1,
+			fontFamily: fontFamily.poppins.semibold,
+			color: '#222',
+			marginBottom: 20,
+		},
+		userRatingContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginBottom: 20,
+		},
+		userRatingStar: {
+			marginHorizontal: 6,
+		},
+		ratingModalButtons: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			width: '100%',
+			marginTop: 16,
+		},
+		ratingModalButton: {
+			backgroundColor: '#f8f9fa',
+			borderRadius: 8,
+			padding: 12,
+			minWidth: 100,
+			alignItems: 'center',
+		},
+		testimonialsList: {
+			paddingLeft: 16,
+			paddingRight: 8,
+		},
+		testimonialItemHorizontal: {
+			backgroundColor: theme.colors.card,
+			padding: 16,
+			borderRadius: 12,
+			marginRight: 12,
+			borderLeftWidth: 2,
+			borderLeftColor: theme.colors.primary,
+			borderWidth: 1,
+			borderColor: theme.colors.tint,
+			elevation: 1,
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.05,
+			shadowRadius: 2,
+			width: width * 0.75,
+			maxWidth: 320,
+		},
+		testimonialItemHeader: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			marginBottom: 10,
+		},
+		testimonialUser: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		testimonialUserImage: {
+			width: 36,
+			height: 36,
+			borderRadius: 18,
+			marginRight: 10,
+		},
+		testimonialUserName: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			color: theme.colors.text,
+		},
+		testimonialDate: {
+			fontSize: FontSize.xss,
+			fontFamily: fontFamily.poppins.regular,
+			color: '#777',
+		},
+		testimonialRatingSmall: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			backgroundColor: 'rgba(245, 194, 26, 0.1)',
+			borderColor: '#F5C21A',
+			borderWidth: 1,
+			paddingHorizontal: 8,
+			paddingVertical: 2,
+			borderRadius: 20,
+		},
+		testimonialRatingText: {
+			fontSize: theme.size.xss,
+			fontFamily: theme.fonts.semibold.fontFamily,
+			color: theme.colors.text,
+			marginLeft: 4,
+		},
+		testimonialItemText: {
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			lineHeight: 20,
+		},
+	})

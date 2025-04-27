@@ -8,7 +8,7 @@ import Colors from '@/src/constants/Colors'
 import { FontSize } from '@/src/constants/FontSize'
 
 type Props = TouchableOpacityProps & {
-	type?: 'primary' | 'secondary'
+	type?: 'primary' | 'secondary' | 'tertiary'
 }
 
 export function TouchableOpacity(props: Props) {
@@ -21,7 +21,9 @@ export function TouchableOpacity(props: Props) {
 			style={[
 				type === 'primary'
 					? { ...styles.buttonPrimary }
-					: { ...styles.buttonSecondary },
+					: type === 'secondary'
+					? { ...styles.buttonSecondary }
+					: { ...styles.buttonTertiary },
 				style,
 			]}
 			{...otherProps}
@@ -45,6 +47,11 @@ const makeStyles = (theme: Theme) =>
 		},
 		buttonSecondary: {
 			backgroundColor: 'rgba(255, 255, 255, 0.06)',
+			padding: 10,
+			borderRadius: 50,
+		},
+		buttonTertiary: {
+			//backgroundColor: 'rgba(255, 255, 255, 0.06)',
 			padding: 10,
 			borderRadius: 50,
 		},

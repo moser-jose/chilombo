@@ -1,16 +1,16 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native'
 import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
-interface UserProfileProps {
+interface EmployerCardProps {
 	data: any
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ data }) => {
+const EmployerCard: React.FC<EmployerCardProps> = ({ data  }) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	const name = `${data.firstname} ${data.lastname}`
@@ -46,8 +46,6 @@ const makeStyles = (theme: Theme) =>
 			borderRadius: 50,
 			overflow: 'hidden',
 			marginBottom: 8,
-			borderWidth: 2,
-			borderColor: theme.colors.tint,
 		},
 		image: {
 			width: '100%',
@@ -68,4 +66,4 @@ const makeStyles = (theme: Theme) =>
 		},
 	})
 
-export default UserProfile
+export default EmployerCard

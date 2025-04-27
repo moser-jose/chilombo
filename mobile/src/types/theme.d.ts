@@ -29,6 +29,7 @@ export type Theme = {
 		backgroundIconIndex: string
 		buttonHeader: string
 		borderBottomHeader: string
+		cancelButton: string
 	}
 	fonts: NavigationTheme['fonts']
 	size: FontSize

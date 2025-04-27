@@ -159,7 +159,7 @@ const makeStyles = (theme: Theme) =>
 			shadowRadius: 0.41,
 		},
 		cancelButton: {
-			backgroundColor: 'rgb(111, 102, 102)'
+			backgroundColor: theme.colors.cancelButton
 		},
 		confirmButton: {
 			backgroundColor: theme.colors.primary,
