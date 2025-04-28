@@ -101,7 +101,7 @@ const services = [
 				],
 			},
 			semanal: {
-				title: 'Semanal',
+				title: 'Mensal',
 				price: 100000,
 			},
 		},
@@ -218,7 +218,7 @@ const services = [
 				],
 			},
 			semanal: {
-				title: 'Semanal',
+				title: 'Mensal',
 				price: 100000,
 			},
 		},
@@ -334,7 +334,7 @@ const services = [
 				],
 			},
 			semanal: {
-				title: 'Semanal',
+				title: 'Mensal',
 				price: 100000,
 			},
 		},
@@ -451,7 +451,7 @@ const services = [
 				],
 			},
 			semanal: {
-				title: 'Semanal',
+				title: 'Mensal',
 				price: 100000,
 			},
 		},
@@ -568,7 +568,7 @@ const services = [
 				],
 			},
 			semanal: {
-				title: 'Semanal',
+				title: 'Mensal',
 				price: 100000,
 			},
 		},
@@ -631,7 +631,7 @@ export default function ServiceDetailsScreen() {
 	const service = services.find(s => s.id === serviceId) || services[0]
 
 	const handlePlanSelection = (plan: string) => {
-		console.warn('Plano selecionado:', plan)
+		router.push('/(checkout)/address-select')
 	}
 
 	const getPrice = (basePrice: number) => {
