@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Slot } from 'expo-router'
+import { Slot, Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
@@ -75,6 +75,13 @@ function RootLayoutNav() {
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
 					<NavigationThemeProvider value={navigationTheme}>
+						{/* <Stack>
+							<Stack.Screen
+								name="(checkout)"
+								options={{ headerShown: false }}
+							/>
+							
+						</Stack> */}
 						<Slot />
 					</NavigationThemeProvider>
 				</ClerkLoaded>

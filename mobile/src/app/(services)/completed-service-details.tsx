@@ -630,7 +630,7 @@ export default function CompletedServiceDetailScreen() {
 										<FontAwesome
 											name="quote-left"
 											size={20}
-											color={theme.colors.primary}
+											color={theme.colors.text}
 											style={styles.quoteIcon}
 										/>
 										{renderRating(service.testimonial.rating)}
@@ -656,7 +656,7 @@ export default function CompletedServiceDetailScreen() {
 						{/* Additional Testimonials */}
 						{service.additionalTestimonials &&
 							service.additionalTestimonials.length > 0 && (
-								<View style={styles.additionalTestimonialsContainer}>
+								<View>
 									<Separador text="Outros Comentários" more />
 
 									<FlatList
@@ -1051,13 +1051,8 @@ const useStyles = (theme: Theme) =>
 			marginTop: 2,
 		},
 
-		additionalTestimonialsContainer: {
-			marginBottom: 30,
-		},
-		// Testimonial styles
 		testimonialContainer: {
 			marginHorizontal: 16,
-			//marginTop: 28,
 		},
 		testimonialContent: {
 			backgroundColor: theme.colors.card,
@@ -1103,7 +1098,7 @@ const useStyles = (theme: Theme) =>
 		},
 		ctaContainer: {
 			marginHorizontal: 16,
-			marginBottom: 40,
+			marginVertical: 40,
 		},
 
 		ctaButton: {
