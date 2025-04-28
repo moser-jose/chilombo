@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-	View,
-	Text,
-	StyleSheet,
-	ScrollView,
-	TextInput,
-} from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native'
 import { useCheckout } from './checkout-context'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -52,8 +46,8 @@ export default function Payment() {
 	}
 
 	return (
-        <>
-            <Stack.Screen
+		<>
+			<Stack.Screen
 				options={{
 					title: 'Pagamento',
 					headerLeft: () => (
@@ -67,118 +61,118 @@ export default function Payment() {
 					),
 				}}
 			/>
-		<View style={styles.container}>
-			<View style={styles.statusContainer}>
-				<StatusCheckout
-					styleText={styles.statusText}
-					styleNumber={styles.statusText}
-					status="Endereço"
-					colorIcon={theme.colors.primary}
-					number={1}
-				/>
-				<Ionicons
-					name="chevron-forward-outline"
-					size={16}
-					color={theme.colors.border}
-				/>
-				<StatusCheckout
-					styleText={styles.statusText}
-					styleNumber={styles.statusText}
-					status="Resumo"
-					colorIcon={theme.colors.border}
-					number={2}
-				/>
-				<Ionicons
-					name="chevron-forward-outline"
-					size={16}
-					color={theme.colors.border}
-				/>
-				<StatusCheckout
-					status="Pagamento"
-					colorIcon={theme.colors.primary}
-					number={3}
-				/>
-			</View>
-
-			<ScrollView style={styles.content}>
-				<View style={styles.methodsContainer}>
-					{paymentMethods.map(method => (
-						<TouchableOpacity
-							key={method.id}
-							style={[
-								styles.methodCard,
-								selectedMethod === method.id && styles.selectedMethod,
-							]}
-							onPress={() => setSelectedMethod(method.id)}
-						>
-							<Ionicons
-								name={method.icon as any}
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-							<Text style={styles.methodName}>{method.name}</Text>
-						</TouchableOpacity>
-					))}
+			<View style={styles.container}>
+				<View style={styles.statusContainer}>
+					<StatusCheckout
+						styleText={styles.statusText}
+						styleNumber={styles.statusText}
+						status="Endereço"
+						colorIcon={theme.colors.primary}
+						number={1}
+					/>
+					<Ionicons
+						name="chevron-forward-outline"
+						size={16}
+						color={theme.colors.border}
+					/>
+					<StatusCheckout
+						styleText={styles.statusText}
+						styleNumber={styles.statusText}
+						status="Resumo"
+						colorIcon={theme.colors.border}
+						number={2}
+					/>
+					<Ionicons
+						name="chevron-forward-outline"
+						size={16}
+						color={theme.colors.border}
+					/>
+					<StatusCheckout
+						status="Pagamento"
+						colorIcon={theme.colors.primary}
+						number={3}
+					/>
 				</View>
 
-				{selectedMethod === 'credit' || selectedMethod === 'debit' ? (
-					<View style={styles.cardForm}>
-						<Text style={styles.sectionTitle}>Dados do Cartão</Text>
-						<TextInput
-							style={styles.input}
-							placeholder="Número do Cartão"
-							value={cardNumber}
-							onChangeText={setCardNumber}
-							keyboardType="numeric"
-						/>
-						<TextInput
-							style={styles.input}
-							placeholder="Nome no Cartão"
-							value={cardName}
-							onChangeText={setCardName}
-						/>
-						<View style={styles.row}>
-							<TextInput
-								style={[styles.input, styles.halfInput]}
-								placeholder="Validade (MM/AA)"
-								value={expiryDate}
-								onChangeText={setExpiryDate}
-							/>
-							<TextInput
-								style={[styles.input, styles.halfInput]}
-								placeholder="CVV"
-								value={cvv}
-								onChangeText={setCvv}
-								keyboardType="numeric"
-								secureTextEntry
-							/>
-						</View>
+				<ScrollView style={styles.content}>
+					<View style={styles.methodsContainer}>
+						{paymentMethods.map(method => (
+							<TouchableOpacity
+								key={method.id}
+								style={[
+									styles.methodCard,
+									selectedMethod === method.id && styles.selectedMethod,
+								]}
+								onPress={() => setSelectedMethod(method.id)}
+							>
+								<Ionicons
+									name={method.icon as any}
+									size={24}
+									color={theme.colors.colorIconInput}
+								/>
+								<Text style={styles.methodName}>{method.name}</Text>
+							</TouchableOpacity>
+						))}
 					</View>
-				) : selectedMethod === 'pix' ? (
-					<View style={styles.pixContainer}>
-						<Text style={styles.sectionTitle}>Pagamento via PIX</Text>
-						<View style={styles.qrCodePlaceholder}>
-							<Ionicons name="qr-code" size={100} color="#4CAF50" />
-						</View>
-						<Text style={styles.pixInstructions}>
-							Escaneie o QR Code ou copie o código PIX abaixo
-						</Text>
-						<Text style={styles.pixCode}>
-							00020126580014BR.GOV.BCB.PIX0136...
-						</Text>
-					</View>
-				) : null}
-			</ScrollView>
 
-			<TouchableOpacity
-				style={[styles.button, !selectedMethod && styles.buttonDisabled]}
-				onPress={handlePayment}
-				disabled={!selectedMethod}
-			>
-				<Text style={styles.buttonText}>Finalizar Compra</Text>
-			</TouchableOpacity>
-		</View>
-        </>
+					{selectedMethod === 'credit' || selectedMethod === 'debit' ? (
+						<View style={styles.cardForm}>
+							<Text style={styles.sectionTitle}>Dados do Cartão</Text>
+							<TextInput
+								style={styles.input}
+								placeholder="Número do Cartão"
+								value={cardNumber}
+								onChangeText={setCardNumber}
+								keyboardType="numeric"
+							/>
+							<TextInput
+								style={styles.input}
+								placeholder="Nome no Cartão"
+								value={cardName}
+								onChangeText={setCardName}
+							/>
+							<View style={styles.row}>
+								<TextInput
+									style={[styles.input, styles.halfInput]}
+									placeholder="Validade (MM/AA)"
+									value={expiryDate}
+									onChangeText={setExpiryDate}
+								/>
+								<TextInput
+									style={[styles.input, styles.halfInput]}
+									placeholder="CVV"
+									value={cvv}
+									onChangeText={setCvv}
+									keyboardType="numeric"
+									secureTextEntry
+								/>
+							</View>
+						</View>
+					) : selectedMethod === 'pix' ? (
+						<View style={styles.pixContainer}>
+							<Text style={styles.sectionTitle}>Pagamento via PIX</Text>
+							<View style={styles.qrCodePlaceholder}>
+								<Ionicons name="qr-code" size={100} color="#4CAF50" />
+							</View>
+							<Text style={styles.pixInstructions}>
+								Escaneie o QR Code ou copie o código PIX abaixo
+							</Text>
+							<Text style={styles.pixCode}>
+								00020126580014BR.GOV.BCB.PIX0136...
+							</Text>
+						</View>
+					) : null}
+				</ScrollView>
+
+				<TouchableOpacity
+					style={[styles.button, !selectedMethod && styles.buttonDisabled]}
+					onPress={handlePayment}
+					disabled={!selectedMethod}
+				>
+					<Text style={styles.buttonText}>Finalizar Compra</Text>
+				</TouchableOpacity>
+			</View>
+		</>
 	)
 }
 
@@ -285,18 +279,18 @@ const useStyles = (theme: Theme) =>
 			textAlign: 'center',
 		},
 		button: {
-			backgroundColor: '#4CAF50',
-			padding: 16,
-			borderRadius: 8,
-			alignItems: 'center',
-			marginTop: 16,
-		},
-		buttonDisabled: {
-			backgroundColor: '#ccc',
+			backgroundColor: theme.colors.primary,
+			borderRadius: 12,
+			paddingVertical: 12,
+			marginVertical: 16,
 		},
 		buttonText: {
 			color: '#fff',
-			fontSize: 16,
-			fontWeight: 'bold',
+			fontSize: theme.size.xsB,
+			fontFamily: theme.fonts.medium.fontFamily,
+			marginRight: 8,
+		},
+		buttonDisabled: {
+			backgroundColor: '#ccc',
 		},
 	})
