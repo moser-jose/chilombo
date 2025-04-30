@@ -1,22 +1,21 @@
-import React, { createContext, useContext, useState } from 'react';
-import { Address } from '../types/address';
-import { Service } from '../types/service';
-import { Client } from '../types/Client';
+import React, { createContext, useContext, useState } from 'react'
+import { Address } from '../types/address'
+import { Service } from '../types/service'
+import { Client } from '../types/Client'
 type OrderItem = {
-	service:Service
-
+	service: Service
 }
 type Payment = { method: string | null; details: Record<string, any> }
 
 type CheckoutContextType = {
-	address: Address | null
-	setAddress: (address: Address | null) => void
+	address: Address
+	setAddress: (address: Address) => void
 	order: OrderItem[]
 	setOrder: (order: OrderItem[]) => void
-	payment: Payment 
+	payment: Payment
 	setPayment: (payment: Payment) => void
-	client:Client
-	seClient:(client: Client) => void
+	client: Client
+	setClient: (client: Client) => void
 }
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -24,14 +23,23 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 )
 
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
-	const [address, setAddress] = useState<Address | null>(null)
+	const [address, setAddress] = useState<Address>({} as Address)
 	const [order, setOrder] = useState<OrderItem[]>([])
-	const [client, setClient] = useState()
+	const [client, setClient] = useState<Client>({} as Client)
 	const [payment, setPayment] = useState<Payment>({ method: null, details: {} })
 
 	return (
 		<CheckoutContext.Provider
-			value={{ address, setAddress, order, setOrder, payment, setPayment,client, setClient }}
+			value={{
+				address,
+				setAddress,
+				order,
+				setOrder,
+				payment,
+				setPayment,
+				client,
+				setClient,
+			}}
 		>
 			{children}
 		</CheckoutContext.Provider>
