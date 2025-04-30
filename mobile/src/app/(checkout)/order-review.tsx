@@ -12,28 +12,25 @@ const mockOrder = {
 	items: [
 		{
 			id: '1',
-			name: 'Produto 1',
-			price: 29.99,
-			quantity: 2,
-			image: 'https://via.placeholder.com/100',
-		},
-		{
-			id: '2',
-			name: 'Produto 2',
-			price: 49.99,
-			quantity: 1,
+			name: 'Empregada Domestica',
+			price: 50000,
+			plan: 'Mensal',
+			type: 'Basico',
 			image: 'https://via.placeholder.com/100',
 		},
 	],
 	subtotal: 109.97,
-	shipping: 10.0,
+	discount: 10.0,
 	total: 119.97,
 }
 
 export default function OrderReview() {
-	const { order } = useCheckout()
+	const { order, address, plan } = useCheckout()
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme)
+
+	console.log(address, 'address - address-select')
+	console.log(plan, 'plan - address-select')
 	return (
 		<>
 			<Stack.Screen
@@ -91,10 +88,9 @@ export default function OrderReview() {
 							</View>
 							<View style={styles.itemDetails}>
 								<Text style={styles.itemName}>{item.name}</Text>
-								<Text style={styles.itemPrice}>R$ {item.price.toFixed(2)}</Text>
-								<Text style={styles.itemQuantity}>
-									Quantidade: {item.quantity}
-								</Text>
+								<Text style={styles.itemPlan}>{item.plan} - {item.type}</Text>
+								<Text style={styles.itemPrice}> {item.price.toFixed(2)} Kzs</Text>
+								
 							</View>
 						</View>
 					))}
@@ -104,19 +100,19 @@ export default function OrderReview() {
 					<View style={styles.summaryRow}>
 						<Text style={styles.summaryLabel}>Subtotal</Text>
 						<Text style={styles.summaryValue}>
-							R$ {mockOrder.subtotal.toFixed(2)}
+							{mockOrder.subtotal.toFixed(2)} Kzs
 						</Text>
 					</View>
 					<View style={styles.summaryRow}>
-						<Text style={styles.summaryLabel}>Frete</Text>
+						<Text style={styles.summaryLabel}>Discon</Text>
 						<Text style={styles.summaryValue}>
-							R$ {mockOrder.shipping.toFixed(2)}
+							{mockOrder.discount.toFixed(2)} Kzs
 						</Text>
 					</View>
 					<View style={[styles.summaryRow, styles.totalRow]}>
 						<Text style={styles.totalLabel}>Total</Text>
 						<Text style={styles.totalValue}>
-							R$ {mockOrder.total.toFixed(2)}
+							{mockOrder.total.toFixed(2)} Kzs
 						</Text>
 					</View>
 				</View>
@@ -177,6 +173,11 @@ const useStyles = (theme: Theme) =>
 			marginBottom: 12,
 			backgroundColor: theme.colors.card,
 		},
+		itemPlan: {
+			fontSize: theme.size.xsB,
+			color: theme.colors.muted,
+			fontFamily: theme.fonts.medium.fontFamily,
+		},
 		itemImage: {
 			width: 80,
 			height: 80,
@@ -193,7 +194,7 @@ const useStyles = (theme: Theme) =>
 		itemName: {
 			fontSize: theme.size.sm,
 			fontFamily: theme.fonts.semibold.fontFamily,
-			marginBottom: 4,
+			//marginBottom: 4,
 			color: theme.colors.text,
 		},
 		itemPrice: {

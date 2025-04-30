@@ -16,6 +16,7 @@ import {
 	Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
+import { CheckoutProvider } from '../context/CheckoutContext'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -74,6 +75,7 @@ function RootLayoutNav() {
 		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
 			<GestureHandlerRootView style={{ flex: 1 }}>
 				<ClerkLoaded>
+					<CheckoutProvider>
 					<NavigationThemeProvider value={navigationTheme}>
 						{/* <Stack>
 							<Stack.Screen
@@ -84,6 +86,7 @@ function RootLayoutNav() {
 						</Stack> */}
 						<Slot />
 					</NavigationThemeProvider>
+					</CheckoutProvider>
 				</ClerkLoaded>
 			</GestureHandlerRootView>
 		</ClerkProvider>

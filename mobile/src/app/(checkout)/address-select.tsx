@@ -67,10 +67,12 @@ zipCode?: string | null */
 //neighborhood, city, state
 
 export default function AddressSelect() {
-	const { address, setAddress } = useCheckout()
+	const { address, setAddress, plan } = useCheckout()
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme as Theme)
 	const [selectedAddress, setSelectedAddress] = useState<Address>(address)
+
+	console.log(plan, 'plan - address-select')
 
 	const handleSelectAddress = (address: Address) => {
 		setSelectedAddress(address)

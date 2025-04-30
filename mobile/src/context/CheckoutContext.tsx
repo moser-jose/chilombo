@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react'
 import { Address } from '../types/address'
 import { Service } from '../types/service'
-import { Client } from '../types/Client'
+import { Client } from '../types/client'
 type OrderItem = {
 	service: Service
 }
@@ -16,6 +16,8 @@ type CheckoutContextType = {
 	setPayment: (payment: Payment) => void
 	client: Client
 	setClient: (client: Client) => void
+	plan: string
+	setPlan: (plan: string) => void
 }
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -27,6 +29,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
 	const [order, setOrder] = useState<OrderItem[]>([])
 	const [client, setClient] = useState<Client>({} as Client)
 	const [payment, setPayment] = useState<Payment>({ method: null, details: {} })
+	const [plan, setPlan] = useState<string>('')
 
 	return (
 		<CheckoutContext.Provider
@@ -39,6 +42,8 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
 				setPayment,
 				client,
 				setClient,
+				plan,
+				setPlan,
 			}}
 		>
 			{children}

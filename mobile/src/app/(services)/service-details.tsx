@@ -21,6 +21,7 @@ import { Separador } from '@/src/components/front/Separador'
 import Star from '@/src/components/front/Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
+import { useCheckout } from '@/src/context/CheckoutContext'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -629,8 +630,11 @@ export default function ServiceDetailsScreen() {
 
 	const serviceId = typeof id === 'string' ? parseInt(id, 10) : 1
 	const service = services.find(s => s.id === serviceId) || services[0]
+	const { setPlan } = useCheckout()
 
 	const handlePlanSelection = (plan: string) => {
+		setPlan(plan)
+		console.log(plan, 'plan')
 		router.push('/(checkout)/address-select')
 	}
 
