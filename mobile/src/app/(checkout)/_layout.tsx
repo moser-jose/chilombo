@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { CheckoutProvider } from './checkout-context'
+import { CheckoutProvider } from '../../context/CheckoutContext'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Theme } from '@/src/types/theme'
@@ -27,12 +27,10 @@ const HeaderAddress = () => {
 			</Text>
 		</View>
 	)
-
-	
 }
 
 export default function CheckoutLayout() {
-    const { theme } = useCustomTheme()
+	const { theme } = useCustomTheme()
 	return (
 		<CheckoutProvider>
 			<Stack
@@ -41,7 +39,7 @@ export default function CheckoutLayout() {
 					headerStyle: {
 						backgroundColor: theme.colors.backgroundHeaderScreen,
 					},
-                    headerTintColor: theme.colors.text,
+					headerTintColor: theme.colors.text,
 				}}
 			>
 				<Stack.Screen name="address-select" options={{ title: 'Endereço' }} />
@@ -53,10 +51,10 @@ export default function CheckoutLayout() {
 }
 
 const useStyles = (theme: Theme) =>
-    StyleSheet.create({
-        text: {
-            color: theme.colors.text,
-            fontSize: 16,
-            fontWeight: 'bold',
-        },
-    })
+	StyleSheet.create({
+		text: {
+			color: theme.colors.text,
+			fontSize: 16,
+			fontWeight: 'bold',
+		},
+	})
