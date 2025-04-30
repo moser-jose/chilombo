@@ -11,32 +11,68 @@ import { Address } from '@/types/address'
 
 const addresses: Address[] = [
 	{
-		id: '1',
-		title: 'Casa',
-		address: 'Rua das Flores, 123',
-		neighborhood: 'Centro',
-		city: 'São Paulo',
-		state: 'SP',
-		zipCode: '01234-567',
+		id: '2',
+		title: 'Minha casa 1',
+		street: 'Av. Paulista',
+		number: '1000',
+		neighborhood: 'Capango',
+		building_number: '10',
+		apartment: '10',
+		city: 'Huambo',
+		state: 'Huambo',
 	},
 	{
-		id: '2',
-		title: 'Trabalho',
-		address: 'Av. Paulista, 1000',
-		neighborhood: 'Bela Vista',
-		city: 'São Paulo',
-		state: 'SP',
-		zipCode: '01310-100',
+		id: '1',
+		title: 'Minha casa 2',
+		centrality: 'Centralidade do Lossambo',
+		block: '14',
+		building_number: '9',
+		apartment: '3',
+		neighborhood: 'Lossambo',
+		city: 'Huambo',
+		state: 'Huambo',
 	},
 ]
 
+/* id: string
+title: string
+address: string
+neighborhood?: string | null
+centrality?: string | null
+commune?: string | null
+block?: string | null
+street?: string | null
+number?: string | null
+apartment?: string | null
+building_number?: string | null
+city: string
+state: string
+zipCode?: string | null */
+
+//Normal
+
+//Rua, number,
+//building_number, apartment
+//neighborhood, city, state
+
+//centrality
+
+//centrality,
+//block, building_number, apartment
+//neighborhood, city, state
+
+//block, street, number,
+//neighborhood, city, state
+
+//neighborhood, city, state
+
 export default function AddressSelect() {
-	const { address, setAddress } = useCheckout()
+	const { address, setAddress, plan } = useCheckout()
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme as Theme)
-	const [selectedAddress, setSelectedAddress] = useState<Address | null>(
-		address,
-	)
+	const [selectedAddress, setSelectedAddress] = useState<Address>(address)
+
+	console.log(plan, 'plan - address-select')
 
 	const handleSelectAddress = (address: Address) => {
 		setSelectedAddress(address)
@@ -68,8 +104,6 @@ export default function AddressSelect() {
 				}}
 			/>
 			<View style={styles.container}>
-				{/* <Text style={styles.title}>Selecione o endereço para a realização da actividade </Text> */}
-
 				<View style={styles.statusContainer}>
 					<StatusCheckout
 						status="Endereço"
@@ -113,22 +147,50 @@ export default function AddressSelect() {
 							]}
 							onPress={() => handleSelectAddress(addr)}
 						>
-							<View style={styles.addressHeader}>
-								<Text style={styles.addressTitle}>{addr.title}</Text>
-								{selectedAddress?.id === addr.id && (
-									<Ionicons
-										name="checkmark-circle"
-										size={24}
-										color={theme.colors.primary}
-									/>
-								)}
+							<View style={styles.addressContent}>
+								<View style={styles.addressHeader}>
+									{selectedAddress?.id === addr.id && (
+										<Ionicons
+											name="checkmark-circle"
+											size={24}
+											color={theme.colors.primary}
+										/>
+									)}
+								</View>
+								<View>
+									<Text style={styles.addressTitle}>{addr.title}</Text>
+									<View style={{ flexDirection: 'row', gap: 4 }}>
+										{(addr.street || addr.centrality) && (
+											<Text style={styles.addressText}>
+												{(addr.street || addr.centrality) + ' '}
+												{addr.number && addr.number + ', '}
+											</Text>
+										)}
+										{addr.apartment && !addr.centrality && (
+											<Text style={styles.addressText}>
+												{addr.building_number &&
+													'Pd ' + addr.building_number + ', '}
+												{addr.apartment && 'Ap ' + addr.apartment}
+											</Text>
+										)}
+									</View>
+
+									{addr.block && (
+										<Text style={styles.addressText}>
+											{'Qdra ' + addr.block + ', '}
+											{'Pd ' + addr.building_number}, {'Ap ' + addr.apartment}
+										</Text>
+									)}
+
+									<Text style={styles.addressText}>
+										{addr.neighborhood && addr.neighborhood + ', '}
+										{addr.city}, {addr.state}
+									</Text>
+								</View>
 							</View>
-							<Text style={styles.addressText}>{addr.address}</Text>
-							<Text style={styles.addressText}>{addr.neighborhood}</Text>
-							<Text style={styles.addressText}>
-								{addr.city} - {addr.state}
-							</Text>
-							<Text style={styles.addressText}>CEP: {addr.zipCode}</Text>
+							<TouchableOpacity type="tertiary" style={styles.addressAction}>
+								<Text style={styles.addressActionText}>Editar</Text>
+							</TouchableOpacity>
 						</TouchableOpacity>
 					))}
 
@@ -192,6 +254,9 @@ const useStyles = (theme: Theme) =>
 			borderRadius: 8,
 			marginBottom: 12,
 			backgroundColor: theme.colors.card,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
 		},
 		selectedAddress: {
 			borderColor: theme.colors.primary,
@@ -238,5 +303,26 @@ const useStyles = (theme: Theme) =>
 		},
 		infoTextBold: {
 			fontFamily: theme.fonts.bold.fontFamily,
+		},
+		addressContent: {
+			flex: 1,
+			flexDirection: 'row',
+			gap: 10,
+		},
+		addressAction: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			//backgroundColor: theme.colors.cancelButton,
+			borderWidth: 1,
+			borderColor: theme.colors.text,
+			borderRadius: 8,
+			paddingHorizontal: 12,
+			paddingVertical: 4,
+		},
+		addressActionText: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.medium.fontFamily,
+			color: theme.colors.text,
 		},
 	})
