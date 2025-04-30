@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { useCheckout } from './checkout-context'
+import { useCheckout } from '../../context/CheckoutContext'
 import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
@@ -8,7 +8,6 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import StatusCheckout from '@/src/components/front/StatusCheckout'
 
-// Mock data - replace with actual data from your backend
 const mockOrder = {
 	items: [
 		{

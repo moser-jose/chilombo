@@ -1,22 +1,13 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { useCheckout } from './checkout-context'
+import { useCheckout } from '../../context/CheckoutContext'
 import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import StatusCheckout from '@/src/components/front/StatusCheckout'
-
-interface Address {
-	id: string
-	title: string
-	address: string
-	neighborhood: string
-	city: string
-	state: string
-	zipCode: string
-}
+import { Address } from '@/types/address'
 
 const addresses: Address[] = [
 	{
@@ -92,7 +83,7 @@ export default function AddressSelect() {
 					/>
 					<StatusCheckout
 						styleText={styles.statusText}
-                        styleNumber={styles.statusText}
+						styleNumber={styles.statusText}
 						status="Resumo"
 						colorIcon={theme.colors.border}
 						number={2}

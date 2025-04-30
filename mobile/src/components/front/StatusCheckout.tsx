@@ -1,11 +1,9 @@
-import { Ionicons, Fontisto } from '@expo/vector-icons'
 import {
-	View,
-	Text,
-	StyleSheet,
-	StyleProp,
-	TextStyle,
-	ViewStyle,
+    View,
+    Text,
+    StyleSheet,
+    StyleProp,
+    TextStyle
 } from 'react-native'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
@@ -18,7 +16,7 @@ const NumberIcon = ({
 	style?: StyleProp<TextStyle>
 }) => {
 	const { theme } = useCustomTheme()
-	const styles = useStylesNumber(theme)
+	const styles = useStyles(theme)
 	return (
 		<View style={[styles.numberContainer]}>
 			<Text style={[styles.numberText, style]}>{number}</Text>
@@ -61,12 +59,7 @@ const useStyles = (theme: Theme) => {
 			color: theme.colors.text,
 			marginLeft: 8,
 		},
-	})
-}
-
-const useStylesNumber = (theme: Theme) => {
-	return StyleSheet.create({
-		numberContainer: {
+        numberContainer: {
 			backgroundColor: theme.colors.card,
 			borderRadius: 50,
 			height: 20,
