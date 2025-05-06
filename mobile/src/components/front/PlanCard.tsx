@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
@@ -50,6 +51,7 @@ export default function PlanCard({
 			</View>
 
 			<TouchableOpacity
+				type="primary"
 				style={styles.button}
 				onPress={onPress}
 				activeOpacity={0.8}
@@ -66,8 +68,8 @@ const useStyles = (theme: Theme) =>
 		container: {
 			borderRadius: 16,
 			padding: 18,
-			marginBottom: 16,
-			marginHorizontal: 16,
+			//marginBottom: 16,
+			//marginHorizontal: 16,
 			borderWidth: 0.5,
 			borderColor: theme.colors.tint,
 			backgroundColor: theme.colors.card,
@@ -76,6 +78,7 @@ const useStyles = (theme: Theme) =>
 			shadowRadius: 1,
 			shadowColor: '#000',
 			elevation: 5,
+			width: '100%',
 		},
 		header: {
 			flexDirection: 'row',
@@ -144,13 +147,8 @@ const useStyles = (theme: Theme) =>
 			marginLeft: 4,
 		},
 		button: {
-			backgroundColor: theme.colors.primary,
-			borderRadius: 12,
 			paddingVertical: 10,
-			flex: 1,
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
+			borderRadius: 12,
 		},
 		buttonText: {
 			color: '#fff',

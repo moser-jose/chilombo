@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react'
 import { Address } from '../types/address'
 import { Service } from '../types/service'
 import { Client } from '../types/client'
+import { Plan } from '../types/plans'
 type OrderItem = {
 	service: Service
 }
@@ -16,8 +17,8 @@ type CheckoutContextType = {
 	setPayment: (payment: Payment) => void
 	client: Client
 	setClient: (client: Client) => void
-	plan: string
-	setPlan: (plan: string) => void
+	plan: Plan
+	setPlan: (plan: Plan) => void
 }
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(

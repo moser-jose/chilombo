@@ -17,6 +17,7 @@ import {
 } from '@expo-google-fonts/poppins'
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
 import { CheckoutProvider } from '../context/CheckoutContext'
+import CheckoutLayout from './(checkout)/_layout'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
