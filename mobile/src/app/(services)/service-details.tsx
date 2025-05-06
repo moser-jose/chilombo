@@ -22,6 +22,8 @@ import Star from '@/src/components/front/Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useCheckout } from '@/src/context/CheckoutContext'
+import { Plan } from '@/src/types/plans'
+import CarroucelPlan from '@/src/components/front/CarroucelPlan'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -613,6 +615,7 @@ const services = [
 		],
 	},
 ]
+
 export default function ServiceDetailsScreen() {
 	const [isMonthly, setIsMonthly] = useState(false)
 	const [showAllReviews, setShowAllReviews] = useState(false)
@@ -632,9 +635,8 @@ export default function ServiceDetailsScreen() {
 	const service = services.find(s => s.id === serviceId) || services[0]
 	const { setPlan } = useCheckout()
 
-	const handlePlanSelection = (plan: string) => {
+	const handlePlanSelection = (plan: Plan) => {
 		setPlan(plan)
-		console.log(plan, 'plan')
 		router.push('/(checkout)/address-select')
 	}
 
@@ -1005,9 +1007,11 @@ export default function ServiceDetailsScreen() {
 								price={getPrice(subplan.price)}
 								activities={subplan.activities}
 								tag={subplan.type}
-								onPress={() => handlePlanSelection(subplan.id.toString())}
+								onPress={() => handlePlanSelection(subplan)}
 							/>
 						))}
+
+						{/* <CarroucelPlan service={service} /> */}
 
 						<View style={styles.divider} />
 

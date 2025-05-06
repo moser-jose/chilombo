@@ -29,8 +29,6 @@ export default function OrderReview() {
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme)
 
-	console.log(address, 'address - address-select')
-	console.log(plan, 'plan - address-select')
 	return (
 		<>
 			<Stack.Screen
@@ -81,19 +79,18 @@ export default function OrderReview() {
 				</View>
 
 				<ScrollView style={styles.itemsContainer}>
-					{mockOrder.items.map(item => (
-						<View key={item.id} style={styles.itemCard}>
-							<View style={styles.itemImage}>
-								<Ionicons name="image" size={50} color="#ddd" />
-							</View>
-							<View style={styles.itemDetails}>
-								<Text style={styles.itemName}>{item.name}</Text>
-								<Text style={styles.itemPlan}>{item.plan} - {item.type}</Text>
-								<Text style={styles.itemPrice}> {item.price.toFixed(2)} Kzs</Text>
-								
-							</View>
+					<View key={plan.id} style={styles.itemCard}>
+						<View style={styles.itemImage}>
+							<Ionicons name="image" size={50} color="#ddd" />
 						</View>
-					))}
+						<View style={styles.itemDetails}>
+							<Text style={styles.itemName}>{plan.title}</Text>
+							{/* <Text style={styles.itemPlan}>
+								{plan.} - {plan.subplan.type}
+							</Text>
+							<Text style={styles.itemPrice}> {item.price.toFixed(2)} Kzs</Text> */}
+						</View>
+					</View>
 				</ScrollView>
 
 				<View style={styles.summaryContainer}>

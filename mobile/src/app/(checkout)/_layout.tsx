@@ -6,8 +6,6 @@ import { Theme } from '@/src/types/theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 
 const HeaderAddress = () => {
-	const { theme } = useCustomTheme()
-	const styles = useStyles(theme as Theme)
 	return (
 		<View
 			style={{
@@ -32,21 +30,29 @@ const HeaderAddress = () => {
 export default function CheckoutLayout() {
 	const { theme } = useCustomTheme()
 	return (
-		<CheckoutProvider>
-			<Stack
-				screenOptions={{
-					headerShown: true,
-					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeaderScreen,
-					},
-					headerTintColor: theme.colors.text,
-				}}
-			>
-				<Stack.Screen name="address-select" options={{ title: 'Endereço' }} />
-				<Stack.Screen name="order-review" options={{ title: 'Revisão' }} />
-				<Stack.Screen name="payment" options={{ title: 'Pagamento' }} />
-			</Stack>
-		</CheckoutProvider>
+		<Stack
+			screenOptions={{
+				headerShown: true,
+
+				headerBackground: () => (
+					<View
+						style={{
+							backgroundColor: theme.colors.backgroundHeader,
+							height: '100%',
+							width: '100%',
+							borderBottomWidth: 0.5,
+							borderBottomColor: theme.colors.border,
+						}}
+					/>
+				),
+
+				headerTintColor: theme.colors.text,
+			}}
+		>
+			<Stack.Screen name="address-select" options={{ title: 'Endereço' }} />
+			<Stack.Screen name="order-review" options={{ title: 'Revisão' }} />
+			<Stack.Screen name="payment" options={{ title: 'Pagamento' }} />
+		</Stack>
 	)
 }
 
