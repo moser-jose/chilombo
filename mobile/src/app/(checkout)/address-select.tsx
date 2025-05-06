@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useCheckout } from '../../context/CheckoutContext'
 import { router, Stack } from 'expo-router'
@@ -70,13 +70,10 @@ export default function AddressSelect() {
 	const { address, setAddress } = useCheckout()
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme as Theme)
-	const [selectedAddress, setSelectedAddress] = useState<Address>(address)
 
 	const handleSelectAddress = (address: Address) => {
-		setSelectedAddress(address)
 		setAddress(address)
 	}
-
 	return (
 		<>
 			<Stack.Screen
@@ -141,13 +138,13 @@ export default function AddressSelect() {
 							key={addr.id}
 							style={[
 								styles.addressCard,
-								selectedAddress?.id === addr.id && styles.selectedAddress,
+								address?.id === addr.id && styles.selectedAddress,
 							]}
 							onPress={() => handleSelectAddress(addr)}
 						>
 							<View style={styles.addressContent}>
 								<View style={styles.addressHeader}>
-									{selectedAddress?.id === addr.id && (
+									{address?.id === addr.id && (
 										<Ionicons
 											name="checkmark-circle"
 											size={24}
@@ -199,10 +196,9 @@ export default function AddressSelect() {
 				</ScrollView>
 
 				<TouchableOpacity
-					type="primary"
-					style={[styles.button, !selectedAddress && styles.buttonDisabled]}
+					style={[styles.button, !address && styles.buttonDisabled]}
 					onPress={() => router.push('/(checkout)/order-review')}
-					disabled={!selectedAddress}
+					disabled={!address}
 				>
 					<Text style={styles.buttonText}>Confirmar Endereço</Text>
 				</TouchableOpacity>
@@ -289,7 +285,7 @@ const useStyles = (theme: Theme) =>
 			marginRight: 8,
 		},
 		buttonDisabled: {
-			backgroundColor: theme.colors.border,
+			backgroundColor: '#ccc',
 		},
 		infoText: {
 			marginTop: 15,

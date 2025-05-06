@@ -3,7 +3,7 @@ import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-
+import { formatKwanza } from '@/src/utils/currency'
 type PlanCardProps = {
 	title: string
 	description: string
@@ -46,7 +46,7 @@ export default function PlanCard({
 			</View>
 
 			<View style={styles.priceContainer}>
-				<Text style={styles.price}>{price.toLocaleString('pt-AO')}</Text>
+				<Text style={styles.price}>{formatKwanza(price)}</Text>
 				<Text style={styles.currency}>KZs</Text>
 			</View>
 
@@ -68,7 +68,7 @@ const useStyles = (theme: Theme) =>
 		container: {
 			borderRadius: 16,
 			padding: 18,
-			//marginBottom: 16,
+			marginBottom: 16,
 			//marginHorizontal: 16,
 			borderWidth: 0.5,
 			borderColor: theme.colors.tint,

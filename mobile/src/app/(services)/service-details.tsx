@@ -23,7 +23,6 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useCheckout } from '@/src/context/CheckoutContext'
 import { Plan } from '@/src/types/plans'
-import CarroucelPlan from '@/src/components/front/CarroucelPlan'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -69,6 +68,7 @@ const services = [
 						title: 'Básico',
 						price: 50000,
 						type: 'Popular',
+						tag: 'Mensal',
 						description: 'Ideal para famílias com um agregado reduzido.',
 						activities: [
 							'Limpeza Geral',
@@ -186,6 +186,7 @@ const services = [
 						title: 'Básico',
 						price: 50000,
 						type: 'Popular',
+						tag: 'Mensal',
 						description: 'Ideal para famílias com um agregado reduzido.',
 						activities: [
 							'Limpeza Geral',
@@ -999,17 +1000,19 @@ export default function ServiceDetailsScreen() {
 							</TouchableOpacity>
 						</View>
 
-						{service.plan.diario.subplan.map((subplan, index) => (
-							<PlanCard
-								key={index}
-								title={subplan.title}
-								description={subplan.description}
-								price={getPrice(subplan.price)}
-								activities={subplan.activities}
-								tag={subplan.type}
-								onPress={() => handlePlanSelection(subplan)}
-							/>
-						))}
+						<View style={{ marginHorizontal: 16 }}>
+							{service.plan.diario.subplan.map((subplan, index) => (
+								<PlanCard
+									key={index}
+									title={subplan.title}
+									description={subplan.description}
+									price={getPrice(subplan.price)}
+									activities={subplan.activities}
+									tag={subplan.type}
+									onPress={() => handlePlanSelection(subplan)}
+								/>
+							))}
+						</View>
 
 						{/* <CarroucelPlan service={service} /> */}
 

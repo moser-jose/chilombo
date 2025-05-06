@@ -7,25 +7,10 @@ import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import StatusCheckout from '@/src/components/front/StatusCheckout'
-
-const mockOrder = {
-	items: [
-		{
-			id: '1',
-			name: 'Empregada Domestica',
-			price: 50000,
-			plan: 'Mensal',
-			type: 'Basico',
-			image: 'https://via.placeholder.com/100',
-		},
-	],
-	subtotal: 109.97,
-	discount: 10.0,
-	total: 119.97,
-}
+import { formatKwanza } from '@/src/utils/currency'
 
 export default function OrderReview() {
-	const { order, address, plan } = useCheckout()
+	const { plan } = useCheckout()
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme)
 
@@ -84,11 +69,10 @@ export default function OrderReview() {
 							<Ionicons name="image" size={50} color="#ddd" />
 						</View>
 						<View style={styles.itemDetails}>
-							<Text style={styles.itemName}>{plan.title}</Text>
-							{/* <Text style={styles.itemPlan}>
-								{plan.} - {plan.subplan.type}
-							</Text>
-							<Text style={styles.itemPrice}> {item.price.toFixed(2)} Kzs</Text> */}
+							<Text style={styles.itemName}>Plano - {plan.title}</Text>
+							<Text style={styles.type}>{plan?.type} | {plan?.tag}</Text>
+							{/* <Text style={styles.description}>{plan?.description}</Text> */}
+							<Text style={styles.itemPrice}>{formatKwanza(plan?.price)}</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -96,21 +80,15 @@ export default function OrderReview() {
 				<View style={styles.summaryContainer}>
 					<View style={styles.summaryRow}>
 						<Text style={styles.summaryLabel}>Subtotal</Text>
-						<Text style={styles.summaryValue}>
-							{mockOrder.subtotal.toFixed(2)} Kzs
-						</Text>
+						<Text style={styles.summaryValue}>{formatKwanza(plan?.price)}</Text>
 					</View>
 					<View style={styles.summaryRow}>
-						<Text style={styles.summaryLabel}>Discon</Text>
-						<Text style={styles.summaryValue}>
-							{mockOrder.discount.toFixed(2)} Kzs
-						</Text>
+						<Text style={styles.summaryLabel}>Desconto</Text>
+						<Text style={styles.summaryValue}>0,00 Kz</Text>
 					</View>
 					<View style={[styles.summaryRow, styles.totalRow]}>
 						<Text style={styles.totalLabel}>Total</Text>
-						<Text style={styles.totalValue}>
-							{mockOrder.total.toFixed(2)} Kzs
-						</Text>
+						<Text style={styles.totalValue}>{formatKwanza(plan?.price)}</Text>
 					</View>
 				</View>
 
@@ -140,6 +118,19 @@ const useStyles = (theme: Theme) =>
 			alignItems: 'center',
 			width: '100%',
 			marginBottom: 20,
+		},
+		type: {
+			fontSize: theme.size.xss,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.muted,
+			marginBottom: 4,
+			fontStyle: 'italic',
+		},
+		description: {
+			fontSize: theme.size.xss,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.muted,
+			marginBottom: 4,
 		},
 		statusText: {
 			color: theme.colors.primary,
