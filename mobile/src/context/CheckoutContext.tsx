@@ -9,16 +9,16 @@ type OrderItem = {
 type Payment = { method: string | null; details: Record<string, any> }
 
 type CheckoutContextType = {
-	address: Address
-	setAddress: (address: Address) => void
+	address: Address | null
+	setAddress: (address: Address | null) => void
 	order: OrderItem[]
 	setOrder: (order: OrderItem[]) => void
 	payment: Payment
 	setPayment: (payment: Payment) => void
 	client: Client
 	setClient: (client: Client) => void
-	plan: Plan
-	setPlan: (plan: Plan) => void
+	plan: Plan | null
+	setPlan: (plan: Plan | null) => void
 }
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(
@@ -26,11 +26,11 @@ const CheckoutContext = createContext<CheckoutContextType | undefined>(
 )
 
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
-	const [address, setAddress] = useState<Address>({} as Address)
+	const [address, setAddress] = useState<Address | null>(null)
 	const [order, setOrder] = useState<OrderItem[]>([])
 	const [client, setClient] = useState<Client>({} as Client)
 	const [payment, setPayment] = useState<Payment>({ method: null, details: {} })
-	const [plan, setPlan] = useState<string>('')
+	const [plan, setPlan] = useState<Plan | null>(null)
 
 	return (
 		<CheckoutContext.Provider
