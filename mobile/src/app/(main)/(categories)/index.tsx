@@ -1,37 +1,34 @@
 import { StyleSheet } from 'react-native'
 
-import EditScreenInfo from '@/src/components/EditScreenInfo'
 import { Text, View } from '@/src/components/Themed'
+import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 export default function CategoriesScreen() {
+	const { theme } = useCustomTheme()
+	const styles = useStyles(theme)
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Categorias</Text>
-			<View
-				style={styles.separator}
-				lightColor="#eee"
-				darkColor="rgba(255,255,255,0.1)"
-			/>
-
-			<EditScreenInfo path="app/(tabs)/(categories)/index.tsx" />
+			<Text style={styles.title}>Em desenvolvimento</Text>
 		</View>
 	)
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	title: {
-		fontSize: 20,
-
-		fontWeight: 'bold',
-	},
-	separator: {
-		marginVertical: 30,
-		height: 1,
-		width: '80%',
-	},
-})
+const useStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		title: {
+			fontSize: 20,
+			color: theme.colors.text,
+			fontFamily: theme.fonts.bold.fontFamily,
+		},
+		separator: {
+			marginVertical: 30,
+			height: 1,
+			width: '80%',
+		},
+	})
