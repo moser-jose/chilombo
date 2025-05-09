@@ -285,7 +285,7 @@ const useStyles = (theme: Theme) =>
 			marginRight: 8,
 		},
 		buttonDisabled: {
-			backgroundColor: '#ccc',
+			backgroundColor: theme.colors.disabled,
 		},
 		infoText: {
 			marginTop: 15,

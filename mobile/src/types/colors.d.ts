@@ -27,4 +27,5 @@ export type Colors = {
 	borderBottomHeader: string
 	cancelButton: string
 	black: string
+	disabled: string
 }
