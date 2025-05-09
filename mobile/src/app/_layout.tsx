@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Slot, Stack } from 'expo-router'
+import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
@@ -17,7 +17,6 @@ import {
 } from '@expo-google-fonts/poppins'
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
 import { CheckoutProvider } from '../context/CheckoutContext'
-import CheckoutLayout from './(checkout)/_layout'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
