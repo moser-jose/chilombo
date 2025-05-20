@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import {
 	Platform,
 	Image,
@@ -10,6 +10,7 @@ import {
 	useWindowDimensions,
 	Keyboard,
 	ScrollView,
+	ActivityIndicator,
 } from 'react-native'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { useRouter, Link, Stack } from 'expo-router'
@@ -18,7 +19,6 @@ import * as WebBrowser from 'expo-web-browser'
 import * as AuthSession from 'expo-auth-session'
 import { ClerkAPIError } from '@clerk/types'
 import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
-import { Ionicons } from '@expo/vector-icons'
 
 import { Text, View } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
@@ -31,15 +31,10 @@ import {
 	isClerkAPIResponseError,
 	useAuth,
 } from '@clerk/clerk-expo'
-import Colors from '@/src/constants/Theme'
-import { isStrongPassword } from '@/src/utils/strenghPasswordForce'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { isValidEmail } from '@/src/utils/validEmail'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
-// Finaliza qualquer sessão de autenticação pendente
 WebBrowser.maybeCompleteAuthSession()
 
 const logoApp = Image.resolveAssetSource(empresa).uri
@@ -48,7 +43,7 @@ export default function SignIn() {
 	useWarmUpBrowser()
 	const { startSSOFlow } = useSSO()
 	const router = useRouter()
-	const [errors, setErrors] = useState<ClerkAPIError[]>([])
+	const [errors, setErrors] = useState<ClerkAPIError | null>(null)
 	const { signIn, setActive, isLoaded } = useSignIn()
 	const { signOut } = useAuth()
 	const { theme } = useCustomTheme()
@@ -57,12 +52,6 @@ export default function SignIn() {
 	const [emailAddress, setEmailAddress] = useState('')
 	const [password, setPassword] = useState('')
 	const [isSignIn, setIsSignIn] = useState(false)
-	const [showPassword, setShowPassword] = useState(false)
-	const [isPasswordStrong, setIsPasswordStrong] = useState(false)
-	const [isEmailFocused, setIsEmailFocused] = useState(false)
-	const [isPasswordFocused, setIsPasswordFocused] = useState(false)
-	const [isLoading, setIsLoading] = useState(false)
-	const [isEmailValid, setIsEmailValid] = useState(false)
 
 	const translateY = useRef(new Animated.Value(0)).current
 
@@ -72,72 +61,12 @@ export default function SignIn() {
 		}
 	}
 
-	/* useEffect(() => {
-		const keyboardWillShow = Keyboard.addListener(
-			Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-			e => {
-				Animated.timing(translateY, {
-					toValue:
-						Platform.OS === 'ios'
-							? -e.endCoordinates.height / 3
-							: -height * 0.15,
-					duration: 250,
-					useNativeDriver: true,
-				}).start()
-			},
-		)
-
-		const keyboardWillHide = Keyboard.addListener(
-			Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-			() => {
-				Animated.timing(translateY, {
-					toValue: 0,
-					duration: 250,
-					useNativeDriver: true,
-				}).start()
-			},
-		)
-
-		return () => {
-			keyboardWillShow.remove()
-			keyboardWillHide.remove()
-		}
-	}, [height, translateY]) */
-
-	useEffect(() => {
-		setIsPasswordStrong(isStrongPassword(password))
-	}, [password])
-
-	useEffect(() => {
-		setIsEmailValid(isValidEmail(emailAddress))
-	}, [emailAddress])
-
 	const logoSize = {
 		width: width * 0.6,
 		height: width * 0.6 * 0.478,
 		maxWidth: 230,
 		maxHeight: 110,
 	}
-
-	const renderPasswordIcon = () => (
-		<View
-			style={{
-				backgroundColor: 'transparent',
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'center',
-				gap: 4,
-			}}
-		>
-			{password.length > 0 ? (
-				<Ionicons
-					name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-					size={22}
-					color={styles.colorIconInput.color}
-				/>
-			) : null}
-		</View>
-	)
 
 	const handleSignInWithGoogle = useCallback(async () => {
 		triggerHapticFeedback()
@@ -167,26 +96,23 @@ export default function SignIn() {
 				setErrors([
 					{
 						code: 'verification_incomplete',
-						message: 'Verification incomplete',
+						message: 'Verificação incompleta',
 						longMessage:
-							'The verification process could not be completed. Please try again.',
+							'O processo de verificação não pôde ser concluído. Por favor, tente novamente.',
 					},
 				])
 			}
 		} catch (err) {
 			if (isClerkAPIResponseError(err)) {
-				setErrors(err.errors)
-				//console.error("Clerk API Error:", err.errors);
+				handleErrors(err.errors[0])
 			}
-			console.error('Authentication error:', JSON.stringify(err, null, 2))
-			setErrors([
-				{
-					code: 'verification_incomplete',
-					message: 'Verification incomplete',
-					longMessage:
-						'The verification process could not be completed. Please try again.',
-				},
-			])
+
+			setErrors({
+				code: 'verification_incomplete',
+				message: 'Verification incomplete',
+				longMessage:
+					'O processo de verificação não pôde ser concluído. Por favor, Verifique.',
+			})
 		}
 	}, [startSSOFlow, router])
 
@@ -197,7 +123,7 @@ export default function SignIn() {
 			await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
 		}
 		setIsSignIn(true)
-		setErrors([])
+		setErrors(null)
 
 		try {
 			try {
@@ -215,22 +141,48 @@ export default function SignIn() {
 				await setActive({ session: signInAttempt.createdSessionId })
 				router.replace('/(main)')
 			} else {
-				setErrors([
-					{
-						code: 'verification_incomplete',
-						message: 'Verification incomplete',
-						longMessage:
-							'The verification process could not be completed. Please try again.',
-					},
-				])
+				setErrors({
+					code: 'invalid_credentials',
+					message: 'E-mail ou senha incorretos',
+					longMessage:
+						'O email ou senha que você inseriu estão incorretos. Por favor, verifique.',
+				})
 			}
 		} catch (err) {
-			if (isClerkAPIResponseError(err)) setErrors(err.errors)
-			console.error(err)
+			if (isClerkAPIResponseError(err)) handleErrors(err.errors[0])
 		} finally {
 			setIsSignIn(false)
 		}
 	}, [isLoaded, signIn, emailAddress, password, setActive, router, signOut])
+
+	function handleErrors(error: ClerkAPIError) {
+		switch (error.code) {
+			case 'invalid_credentials':
+				setErrors([
+					{
+						code: 'invalid_credentials',
+						message: 'E-mail ou senha incorretos',
+						longMessage:
+							'O email ou senha que você inseriu estão incorretos. Por favor, tente novamente.',
+					},
+				])
+				break
+			case 'form_param_nil':
+				setErrors({
+					code: 'form_param_nil',
+					message: 'Preencha todos os campos',
+					longMessage: 'Por favor, preencha todos os campos.',
+				})
+				break
+			default:
+				setErrors({
+					code: 'invalid_credentials',
+					message: 'E-mail ou senha incorretos',
+					longMessage:
+						'O email ou senha incorretos. Por favor, Verifique.',
+				})
+		}
+	}
 
 	return (
 		<>
@@ -245,6 +197,7 @@ export default function SignIn() {
 						showsVerticalScrollIndicator={true}
 						contentInsetAdjustmentBehavior="automatic"
 						keyboardShouldPersistTaps="handled"
+						indicatorStyle={theme.dark ? 'white' : 'black'}
 					>
 						<Animated.View
 							style={{
@@ -290,6 +243,18 @@ export default function SignIn() {
 									value={password}
 									onChangeText={setPassword}
 								/>
+								{errors && (
+									<Text
+										style={{
+											color: 'red',
+											fontSize: theme.size.xs,
+											fontFamily: theme.fonts.regular.fontFamily,
+											marginBottom: 20,
+										}}
+									>
+										{errors.longMessage}
+									</Text>
+								)}
 
 								<Pressable style={{ width: '100%', alignItems: 'flex-end' }}>
 									<Link href={'/reset-password'}>
@@ -372,6 +337,23 @@ export default function SignIn() {
 					</ScrollView>
 				</KeyboardAvoidingView>
 			</TouchableWithoutFeedback>
+
+			{isSignIn && (
+				<View
+					style={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: 'rgba(0, 0, 0, 0.17)',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<ActivityIndicator size="small" color={theme.colors.primary} />
+				</View>
+			)}
 		</>
 	)
 }

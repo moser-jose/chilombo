@@ -1,12 +1,11 @@
 import { View } from '@/src/components/Themed'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useState, useEffect } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Text } from '@/src/components/ui/Text'
 import { FontSize } from '@/src/constants/FontSize'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { router, Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
@@ -18,6 +17,7 @@ export default function ResetPassword() {
 	const [email, setEmail] = useState('')
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
 	const [pendingVerification, setPendingVerification] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	useEffect(() => {
@@ -32,16 +32,18 @@ export default function ResetPassword() {
 	}, [pendingVerification, email])
 
 	const handleReset = async () => {
+		setIsLoading(true)
 		try {
 			await client.signIn.create({
 				strategy: 'reset_password_email_code',
 				identifier: email.toLowerCase(),
 			})
-
+			
 			setPendingVerification(true)
 		} catch (err) {
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
-			console.error(err)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -51,14 +53,6 @@ export default function ResetPassword() {
 				options={{
 					headerShown: true,
 					title: 'Recuperar Password',
-					/* headerTitleStyle: {
-						fontFamily: theme.fonts.bold.fontFamily,
-						fontSize: theme.size.smB,
-						color: theme.colors.textHeader,
-					},
-					headerStyle: {
-						backgroundColor: theme.colors.backgroundHeader,
-					}, */
 					headerLeft: () => (
 						<Pressable onPress={() => router.back()}>
 							<Ionicons
@@ -109,6 +103,23 @@ export default function ResetPassword() {
 					</Pressable>
 				</View>
 			</View>
+
+			{isLoading && (
+				<View
+					style={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: 'rgba(0, 0, 0, 0.17)',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<ActivityIndicator size="small" color={theme.colors.primary} />
+				</View>
+			)}
 		</>
 	)
 }
