@@ -1,15 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useRef, useState } from 'react'
-import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Text } from '@/src/components/ui/Text'
 import { FontSize } from '@/src/constants/FontSize'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import { useSignUp } from '@clerk/clerk-expo'
 import Colors from '@/src/constants/Theme'
 import { router, Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
@@ -17,13 +15,10 @@ import { ClerkAPIError } from '@clerk/types'
 export default function ResetPasswordConfirm() {
 	const { client } = useClerk()
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
-	const [pendingVerification, setPendingVerification] = useState(false)
 	const [password, setPassword] = useState('')
 	const [passwordConfirm, setPasswordConfirm] = useState('')
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
-
-	const { isLoaded, signUp, setActive } = useSignUp()
 
 	const codeOneRef = useRef<TextInput>(null)
 	const codeTwoRef = useRef<TextInput>(null)
@@ -46,7 +41,10 @@ export default function ResetPasswordConfirm() {
 	const [isCodeFiveFocused, setIsCodeFiveFocused] = useState(false)
 	const [isCodeSixFocused, setIsCodeSixFocused] = useState(false)
 
+	const [isLoading, setIsLoading] = useState(false)
+
 	const handleReset = async () => {
+		setIsLoading(true)
 		try {
 			if (password !== passwordConfirm) {
 				setErrors([
@@ -68,6 +66,8 @@ export default function ResetPasswordConfirm() {
 			router.replace('/(main)')
 		} catch (err: unknown) {
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -294,6 +294,23 @@ export default function ResetPasswordConfirm() {
 					<Text style={styles.buttonText}>Confirmar</Text>
 				</TouchableOpacity>
 			</View>
+
+			{isLoading && (
+				<View
+					style={{
+						position: 'absolute',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						backgroundColor: 'rgba(0, 0, 0, 0.17)',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<ActivityIndicator size="small" color={theme.colors.primary} />
+				</View>
+			)}
 		</>
 	)
 }
