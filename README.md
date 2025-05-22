@@ -6,7 +6,7 @@ Chilombo project mobile app, developed with React Native, Expo, and TypeScript. 
 
 <div align="center">
 
-<img src="assets/images/empresa1.jpg" width="250" alt="HiASD Logo"/>
+<img src="mobile/assets/images/empresa1.jpg" width="250" alt="HiASD Logo"/>
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
@@ -21,15 +21,15 @@ Chilombo project mobile app, developed with React Native, Expo, and TypeScript. 
 ### Main app screens:
 
 <p align="center">
-  <img src="assets/readme/login-white.PNG" alt="Login - Light Theme" width="230" />
-  <img src="assets/readme/main-white.PNG" alt="Home - Light Theme" width="230" />
-  <img src="assets/readme/main-white-01.PNG" alt="Home - Light Theme (variation 1)" width="230" />
+  <img src="mobile/assets/readme/login-white.PNG" alt="Login - Light Theme" width="230" />
+  <img src="mobile/assets/readme/main-white.PNG" alt="Home - Light Theme" width="230" />
+  <img src="mobile/assets/readme/main-white-01.PNG" alt="Home - Light Theme (variation 1)" width="230" />
 </p>
 
 <p align="center">
-  <img src="assets/readme/login-black.jpeg" alt="Login - Dark Theme" width="230" />
-  <img src="assets/readme/main-black.PNG" alt="Home - Dark Theme" width="230" />
-  <img src="assets/readme/main-black-01.PNG" alt="Home - Dark Theme (variation 1)" width="230" />
+  <img src="mobile/assets/readme/login-black.jpeg" alt="Login - Dark Theme" width="230" />
+  <img src="mobile/assets/readme/main-black.PNG" alt="Home - Dark Theme" width="230" />
+  <img src="mobile/assets/readme/main-black-01.PNG" alt="Home - Dark Theme (variation 1)" width="230" />
 </p>
 
 ---
