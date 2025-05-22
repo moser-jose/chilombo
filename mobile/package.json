@@ -1,5 +1,6 @@
 {
 	"name": "chilombo-mobile",
+	"description": "App oficial do projeto chilombo, focado em acessibilidade, alta performance e integração robusta com backend via API REST. Utiliza navegação moderna (expo-router), autenticação segura, assets otimizados, integrações nativas via Expo (notificações, localização, armazenamento seguro), suporte a temas claro/escuro, experiência offline, testes automatizados e práticas avançadas de segurança.",
 	"main": "expo-router/entry",
 	"license": "0BSD",
 	"version": "1.0.0",
