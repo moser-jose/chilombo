@@ -6,7 +6,7 @@ Chilombo project mobile app, developed with React Native, Expo, and TypeScript. 
 
 <div align="center">
 
-<img src="mobile/assets/images/empresa1.jpg" width="250" alt="HiASD Logo"/>
+<img src="mobile/assets/images/logo-light.png" width="250" alt="Chilombo Logo"/>
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![React Native](https://img.shields.io/badge/React_Native-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
