@@ -337,7 +337,7 @@ export default function UserScreen() {
 								size={24}
 								color={theme.colors.colorIconInput}
 							/>
-							<Text style={styles.menuText}>Adicionar Endereços</Text>
+							<Text style={styles.menuText}>Meus Endereços</Text>
 						</View>
 						<Ionicons
 							name="chevron-forward-outline"
