@@ -13,7 +13,6 @@ import {
 import { Text, View } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useUser, useSession } from '@clerk/clerk-expo'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { Stack, useRouter } from 'expo-router'
 import { useState, useRef, useEffect } from 'react'
