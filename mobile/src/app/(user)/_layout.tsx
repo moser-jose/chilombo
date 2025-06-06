@@ -15,13 +15,26 @@ export default function UserLayout() {
 					fontSize: theme.size.smB,
 					color: theme.colors.textHeader,
 				},
-				headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+				headerBackground: () => (
+					<View
+						style={{
+							backgroundColor: theme.colors.backgroundHeader,
+							height: '100%',
+							width: '100%',
+							borderBottomWidth: 0.5,
+							borderBottomColor: theme.colors.border,
+						}}
+					/>
+				),
 				headerLeft: () => (
 					<TouchableOpacity onPress={() => router.back()}>
-						<Ionicons name="chevron-back" size={22} color={theme.colors.textHeader} />
+						<Ionicons
+							name="chevron-back"
+							size={22}
+							color={theme.colors.textHeader}
+						/>
 					</TouchableOpacity>
 				),
-
 			}}
 		/>
 	)

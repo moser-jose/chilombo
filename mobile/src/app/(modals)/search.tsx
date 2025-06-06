@@ -3,20 +3,17 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	Modal,
 	TouchableOpacity,
 	Dimensions,
 	ScrollView,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
-import TextInputUI from '../ui/TextInput'
+import TextInputUI from '@/src/components/ui/TextInput'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import CompletedServiceCard from './CompletedServiceCard'
+import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 const { width, height } = Dimensions.get('window')
 const services = [
 	{
@@ -831,27 +828,13 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 	}
 
 	return (
-		<Modal
-			visible={visible}
-			animationType="slide"
-			transparent={true}
-			onRequestClose={onClose}
-		>
+		<>
 			<View style={styles.modalContainer}>
 				<View style={styles.modalContent}>
-					<View style={styles.header}>
-						<Text style={styles.title}>Encontre os serviços</Text>
-						<View style={styles.closeButtonContainer}>
-							<TouchableOpacity onPress={onClose} style={styles.closeButton}>
-								<Ionicons name="close" size={18} color={theme.colors.text} />
-							</TouchableOpacity>
-						</View>
-					</View>
-
 					<View style={styles.searchContainer}>
 						<TextInputUI
 							type="text"
-							placeholder="Pesquisar por serviços"
+							placeholder="Serviço, categoria, etc."
 							icon="search-outline"
 							value={searchTerm}
 							onChangeText={handleSearch}
@@ -871,7 +854,6 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 					>
 						{allResults.length > 0 ? (
 							<>
-								{/* Regular Services */}
 								{filteredServices.length > 0 && (
 									<View style={styles.sectionContainer}>
 										<SeparatorList theme={theme} title="💎 Nossos Serviços" />
@@ -905,7 +887,6 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 									</View>
 								)}
 
-								{/* Completed Services */}
 								{filteredCompletedServices.length > 0 && (
 									<View style={styles.sectionContainer}>
 										<SeparatorList
@@ -942,7 +923,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 					</ScrollView>
 				</View>
 			</View>
-		</Modal>
+		</>
 	)
 }
 {
@@ -1036,11 +1017,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 }
 const useStyles = (theme: Theme) =>
 	StyleSheet.create({
-		modalContainer: {
-			flex: 1,
-			backgroundColor: 'rgba(0, 0, 0, 0.5)',
-			justifyContent: 'flex-end',
-		},
+		modalContainer: {},
 
 		inputText: {
 			flex: 1,
@@ -1192,7 +1169,7 @@ const useStyles = (theme: Theme) =>
 		completedServiceInfo: {
 			padding: 8,
 		},
-		
+
 		completedServiceDescription: {
 			fontSize: theme.size.xs,
 			fontFamily: theme.fonts.regular.fontFamily,

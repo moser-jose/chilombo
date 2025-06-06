@@ -7,8 +7,17 @@ export default function SettingsLayout() {
 	return (
 		<Stack
 			screenOptions={{
-
-				headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+				headerBackground: () => (
+					<View
+						style={{
+							backgroundColor: theme.colors.backgroundHeader,
+							height: '100%',
+							width: '100%',
+							borderBottomWidth: 0.5,
+							borderBottomColor: theme.colors.border,
+						}}
+					/>
+				),
 				headerShown: true,
 				headerTitle: 'Meus Serviços',
 				headerTitleStyle: {

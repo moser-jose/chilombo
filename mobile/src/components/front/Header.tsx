@@ -6,9 +6,8 @@ import { Ionicons } from '@expo/vector-icons'
 import * as Location from 'expo-location'
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
-import SearchResultsModal from './SearchResultsModal'
 import FastImage from 'react-native-fast-image'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
@@ -20,7 +19,6 @@ type Address = {
 const Header = () => {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
-	const [isModalVisible, setIsModalVisible] = useState(false)
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
 	const { user } = useUser()
@@ -48,10 +46,6 @@ const Header = () => {
 
 		getCurrentLocation()
 	}, [])
-
-	const handleCloseModal = () => {
-		setIsModalVisible(false)
-	}
 
 	return (
 		<>
@@ -89,22 +83,17 @@ const Header = () => {
 
 					<View style={{ flexDirection: 'row', gap: 10 }}>
 						<View style={styles.leftContainerRight}>
-							<TouchableOpacity
-								onPress={() => setIsModalVisible(true)}
-								style={styles.styleButton}
-							>
+							<Link href="/(modals)/search" style={styles.styleButton}>
 								<Ionicons
 									name="search-outline"
-									size={24}
+									size={22}
 									color={theme.colors.text}
 								/>
-							</TouchableOpacity>
+							</Link>
 						</View>
 					</View>
 				</View>
 			</View>
-
-			<SearchResultsModal visible={isModalVisible} onClose={handleCloseModal} />
 		</>
 	)
 }
@@ -161,10 +150,12 @@ const makeStyles = (theme: Theme) =>
 
 		styleButton: {
 			backgroundColor: theme.colors.buttonHeader,
+			borderRadius: 14,
 			padding: 8,
-			borderRadius: 18,
 			borderWidth: 1,
 			borderColor: theme.colors.borderBottomHeader,
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		locationContainer: {
 			flexDirection: 'row',

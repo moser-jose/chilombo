@@ -159,11 +159,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 					<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 						<View style={styles.cardModal}>
 							<View style={styles.modalIconContainer}>
-								<Ionicons
-									name='mail'
-									size={30}
-									color={theme.colors.text}
-								/>
+								<Ionicons name="mail" size={30} color={theme.colors.text} />
 							</View>
 							<Text style={styles.titleModal}>
 								Insira o Código de verificação
@@ -394,8 +390,8 @@ const makeStyles = (theme: Theme) =>
 			alignItems: 'center',
 		},
 		modalIconContainer: {
-			width:60,
-			height:60,
+			width: 60,
+			height: 60,
 			backgroundColor: theme.colors.textMuted,
 			borderRadius: 40,
 			justifyContent: 'center',

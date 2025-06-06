@@ -89,8 +89,7 @@ function Index() {
 						right: 0,
 						padding: 20,
 					}}
-				>
-				</View>
+				></View>
 			</TouchableOpacity>
 		</Animated.View>
 	)

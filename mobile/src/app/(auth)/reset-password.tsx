@@ -38,7 +38,7 @@ export default function ResetPassword() {
 				strategy: 'reset_password_email_code',
 				identifier: email.toLowerCase(),
 			})
-			
+
 			setPendingVerification(true)
 		} catch (err) {
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)

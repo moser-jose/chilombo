@@ -14,7 +14,6 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
 export default function PrivacyPolicyScreen() {
-	
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
 	const policies = [
@@ -77,10 +76,7 @@ export default function PrivacyPolicyScreen() {
 					headerTitle: 'Politica de Privacidade',
 				}}
 			/>
-			<ScrollView
-				style={styles.container}
-				showsVerticalScrollIndicator={false}
-			>
+			<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 				<View style={styles.content}>
 					<Text style={styles.intro}>
 						Sua privacidade é importante para nós. Esta política descreve como
@@ -133,14 +129,14 @@ const makeStyles = (theme: Theme) =>
 		policyText: {
 			fontSize: theme.size.xsB,
 			fontFamily: theme.fonts.regular.fontFamily,
-			color:theme.colors.text,
+			color: theme.colors.text,
 			lineHeight: 20,
 		},
 		footer: {
 			marginTop: 20,
 			fontSize: theme.size.xs,
 			fontFamily: theme.fonts.regular.fontFamily,
-			color:theme.colors.text,
+			color: theme.colors.text,
 			textAlign: 'center',
 		},
 	})
