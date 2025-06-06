@@ -14,7 +14,17 @@ export default function SettingsLayout() {
 					fontFamily: theme.fonts.bold.fontFamily,
 					color: theme.colors.textHeader,
 				},
-				headerBackground: () => <View style={{ backgroundColor: theme.colors.backgroundHeader,height: '100%', width: '100%', borderBottomWidth: .5, borderBottomColor: theme.colors.border }} />,
+				headerBackground: () => (
+					<View
+						style={{
+							backgroundColor: theme.colors.backgroundHeader,
+							height: '100%',
+							width: '100%',
+							borderBottomWidth: 0.5,
+							borderBottomColor: theme.colors.border,
+						}}
+					/>
+				),
 			}}
 		/>
 	)

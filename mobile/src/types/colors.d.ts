@@ -28,4 +28,5 @@ export type Colors = {
 	cancelButton: string
 	black: string
 	disabled: string
+	error: string
 }

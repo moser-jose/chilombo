@@ -561,9 +561,6 @@ const useStyles = (theme: Theme) =>
 			marginBottom: 0,
 			width: 80,
 			height: 80,
-
-
-			
 		},
 		profileImage: {
 			width: 80,

@@ -30,6 +30,7 @@
         <data android:scheme="chilombo"/>
         <data android:scheme="com.mosmmy.chilombo"/>
         <data android:scheme="exp+chilombo-mobile"/>
+        <data android:scheme="exp+chilombo"/>
       </intent-filter>
     </activity>
   </application>

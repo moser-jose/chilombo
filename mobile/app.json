@@ -1,18 +1,17 @@
 {
 	"expo": {
-		"name": "chilombo",
+		"name": "Chilombo",
 		"slug": "chilombo",
 		"version": "1.0.1",
 		"orientation": "portrait",
-		"icon": "./assets/images/icon.png",
+		"icon": {
+			"light": "./assets/icons/logo/ios-light.png",
+			"dark": "./assets/icons/logo/ios-dark.png",
+			"tinted": "./assets/icons/logo/ios-tinted.png"
+		},
 		"scheme": "chilombo",
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
-		"splash": {
-			"image": "./assets/images/splash-icon.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
 		"ios": {
 			"supportsTablet": true,
 			"bundleIdentifier": "com.mosmmy.chilombo",
@@ -34,6 +33,19 @@
 		},
 		"plugins": [
 			"expo-router",
+			[
+				"expo-splash-screen",
+				{
+					"image": "./assets/icons/logo/splash-icon-dark.png",
+					"imageWidth": 200,
+					"resizeMode": "contain",
+					"backgroundColor": "#ffffff",
+					"dark": {
+						"image": "./assets/icons/logo/splash-icon-light.png",
+						"backgroundColor": "#0D0D12"
+					}
+				}
+			],
 			[
 				"expo-location",
 				{

@@ -1,10 +1,4 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    StyleProp,
-    TextStyle
-} from 'react-native'
+import { View, Text, StyleSheet, StyleProp, TextStyle } from 'react-native'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
@@ -59,7 +53,7 @@ const useStyles = (theme: Theme) => {
 			color: theme.colors.text,
 			marginLeft: 8,
 		},
-        numberContainer: {
+		numberContainer: {
 			backgroundColor: theme.colors.card,
 			borderRadius: 50,
 			height: 20,

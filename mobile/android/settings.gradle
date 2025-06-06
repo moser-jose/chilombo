@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'chilombo-mobile'
+rootProject.name = 'Chilombo'
 
 dependencyResolutionManagement {
   versionCatalogs {

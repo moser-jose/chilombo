@@ -70,7 +70,9 @@ export default function OrderReview() {
 						</View>
 						<View style={styles.itemDetails}>
 							<Text style={styles.itemName}>Plano - {plan.title}</Text>
-							<Text style={styles.type}>{plan?.type} | {plan?.tag}</Text>
+							<Text style={styles.type}>
+								{plan?.type} | {plan?.tag}
+							</Text>
 							{/* <Text style={styles.description}>{plan?.description}</Text> */}
 							<Text style={styles.itemPrice}>{formatKwanza(plan?.price)}</Text>
 						</View>

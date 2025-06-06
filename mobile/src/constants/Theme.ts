@@ -33,6 +33,7 @@ export default {
 			cancelButton: '#cdcbcb',
 			black: '#0D0D12',
 			disabled: '#ccc',
+			error: 'rgb(239, 42, 25)',
 		},
 		fonts,
 		size: FontSize,
@@ -70,11 +71,12 @@ export default {
 			cancelButton: 'rgb(111, 102, 102)',
 			black: '#0D0D12',
 			disabled: 'rgb(39, 39, 41)',
+			error: 'rgba(248, 66, 50, 0.91)',
 		},
 		fonts,
 		size: FontSize,
 	},
-	
+
 	card: 'rgba(187, 184, 186, 0.03)',
 	text: 'rgba(255, 255, 255, 0.77)',
 	error: 'rgba(190, 38, 24, 0.81)',

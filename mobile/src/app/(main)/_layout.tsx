@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react'
-import { Redirect, Tabs } from 'expo-router'
+import { Redirect, router, Stack, Tabs } from 'expo-router'
 
 import { useClientOnlyValue } from '@/src/components/useClientOnlyValue'
 import { HomeSVG } from '@/src/components/svg/HomeSvg'
@@ -10,6 +10,8 @@ import { MyServicesSVG } from '@/src/components/svg/MyServices'
 import { useUser } from '@clerk/clerk-expo'
 import { SettingsSVG } from '@/src/components/svg/SettingsSvg'
 import { useCustomTheme } from '@/src/context/ThemeContext'
+import { TouchableOpacity } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 function TabBarIcon(props: {
 	color: string
@@ -36,7 +38,7 @@ export default function TabLayout() {
 				tabBarStyle: {
 					backgroundColor: theme.colors.tabBarBackgroundColor,
 				},
-				headerShown: useClientOnlyValue(false, true),
+				//headerShown: useClientOnlyValue(false, true),
 				tabBarLabelStyle: {
 					fontFamily: theme.fonts.medium.fontFamily,
 				},

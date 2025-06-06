@@ -1,11 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
-import {
-	Modal,
-	View,
-	StyleSheet,
-	Text,
-	TouchableOpacity
-} from 'react-native'
+import { Modal, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
@@ -92,7 +86,7 @@ const makeStyles = (theme: Theme) =>
 			width: '85%',
 			alignItems: 'center',
 			shadowColor: '#000',
-			borderWidth: .5,
+			borderWidth: 0.5,
 			borderColor: theme.colors.tint,
 			shadowOffset: {
 				width: 0,
@@ -112,13 +106,13 @@ const makeStyles = (theme: Theme) =>
 			marginBottom: 20,
 		},
 		modalTitle: {
-			fontSize:theme.size.base,
+			fontSize: theme.size.base,
 			fontFamily: theme.fonts.bold.fontFamily,
 			marginBottom: 15,
 			color: theme.colors.text,
 		},
 		modalText: {
-			fontSize:theme.size.sm,
+			fontSize: theme.size.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			marginBottom: 25,
 			textAlign: 'center',
@@ -151,7 +145,7 @@ const makeStyles = (theme: Theme) =>
 			backgroundColor: theme.colors.primary,
 		},
 		modalButtonText: {
-			fontSize:theme.size.xsB,
+			fontSize: theme.size.xsB,
 			fontFamily: theme.fonts.medium.fontFamily,
 			textAlign: 'center',
 		},

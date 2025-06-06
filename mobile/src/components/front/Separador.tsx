@@ -49,39 +49,40 @@ export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
 		</View>
 	)
 }
-const makeStyles=(theme:Theme) => StyleSheet.create({
-	container: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginHorizontal: 16,
-		marginVertical: 18,
-	},
-	separator: {
-		width: 5,
-		height: 25,
-		backgroundColor: Colors.dark.colors.primary,
-		marginRight: 8,
-		borderRadius: 10,
-	},
-	textContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		flexDirection: 'row',
-	},
-	text: {
-		fontSize: FontSize.base,
-		fontFamily: theme.fonts.bold.fontFamily,
-	},
-	vermais: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: 2,
-	},
-	vermaisText: {
-		fontSize: FontSize.xsB,
-		fontFamily: theme.fonts.regular.fontFamily,
-		color: Colors.dark.colors.primary,
-	},
-})
+const makeStyles = (theme: Theme) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginHorizontal: 16,
+			marginVertical: 18,
+		},
+		separator: {
+			width: 5,
+			height: 25,
+			backgroundColor: Colors.dark.colors.primary,
+			marginRight: 8,
+			borderRadius: 10,
+		},
+		textContainer: {
+			flex: 1,
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			flexDirection: 'row',
+		},
+		text: {
+			fontSize: FontSize.base,
+			fontFamily: theme.fonts.bold.fontFamily,
+		},
+		vermais: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: 2,
+		},
+		vermaisText: {
+			fontSize: FontSize.xsB,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: Colors.dark.colors.primary,
+		},
+	})

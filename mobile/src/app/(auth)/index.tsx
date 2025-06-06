@@ -24,7 +24,8 @@ import { Text, View } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { GoogleSVG } from '@/src/components/svg/GoogleSvg'
 import { FacebookSVG } from '@/src/components/svg/FacebookSVG'
-import empresa from '@/assets/images/empresa.jpg'
+import logoLight from '@/assets/images/logo-light.png'
+import logoDark from '@/assets/images/logo-dark.png'
 import {
 	useSignIn,
 	useSSO,
@@ -37,7 +38,8 @@ import { Theme } from '@/src/types/theme'
 
 WebBrowser.maybeCompleteAuthSession()
 
-const logoApp = Image.resolveAssetSource(empresa).uri
+const logoAppLight = Image.resolveAssetSource(logoLight).uri
+const logoAppDark = Image.resolveAssetSource(logoDark).uri
 
 export default function SignIn() {
 	useWarmUpBrowser()
@@ -93,14 +95,12 @@ export default function SignIn() {
 				router.replace('/(main)')
 			} else {
 				//console.log("No valid authentication state found");
-				setErrors([
-					{
-						code: 'verification_incomplete',
-						message: 'Verificação incompleta',
-						longMessage:
-							'O processo de verificação não pôde ser concluído. Por favor, tente novamente.',
-					},
-				])
+				setErrors({
+					code: 'verification_incomplete',
+					message: 'Verificação incompleta',
+					longMessage:
+						'O processo de verificação não pôde ser concluído. Por favor, tente novamente.',
+				})
 			}
 		} catch (err) {
 			if (isClerkAPIResponseError(err)) {
@@ -158,14 +158,12 @@ export default function SignIn() {
 	function handleErrors(error: ClerkAPIError) {
 		switch (error.code) {
 			case 'invalid_credentials':
-				setErrors([
-					{
-						code: 'invalid_credentials',
-						message: 'E-mail ou senha incorretos',
-						longMessage:
-							'O email ou senha que você inseriu estão incorretos. Por favor, tente novamente.',
-					},
-				])
+				setErrors({
+					code: 'invalid_credentials',
+					message: 'E-mail ou senha incorretos',
+					longMessage:
+						'O email ou senha que você inseriu estão incorretos. Por favor, tente novamente.',
+				})
 				break
 			case 'form_param_nil':
 				setErrors({
@@ -178,8 +176,7 @@ export default function SignIn() {
 				setErrors({
 					code: 'invalid_credentials',
 					message: 'E-mail ou senha incorretos',
-					longMessage:
-						'O email ou senha incorretos. Por favor, Verifique.',
+					longMessage: 'O email ou senha incorretos. Por favor, Verifique.',
 				})
 		}
 	}
@@ -210,7 +207,7 @@ export default function SignIn() {
 							<View style={[styles.contentContainer, { alignItems: 'center' }]}>
 								<Image
 									source={{
-										uri: logoApp,
+										uri: theme.dark ? logoAppDark : logoAppLight,
 									}}
 									resizeMode="contain"
 									style={{
@@ -246,9 +243,9 @@ export default function SignIn() {
 								{errors && (
 									<Text
 										style={{
-											color: 'red',
+											color: theme.colors.error,
 											fontSize: theme.size.xs,
-											fontFamily: theme.fonts.regular.fontFamily,
+											fontFamily: theme.fonts.medium.fontFamily,
 											marginBottom: 20,
 										}}
 									>

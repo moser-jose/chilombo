@@ -4,7 +4,7 @@ import { FontStyle, FontsType } from '../types/fontFamily'
 const WEB_FONT_STACK =
 	'system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
 
-export const Fonts= Platform.select({
+export const Fonts = Platform.select({
 	web: {
 		light: {
 			fontFamily: WEB_FONT_STACK,
@@ -83,4 +83,4 @@ export const Fonts= Platform.select({
 			fontWeight: '800',
 		} as FontStyle,
 	},
-} as const satisfies Record<string, FontsType> )
+} as const satisfies Record<string, FontsType>)

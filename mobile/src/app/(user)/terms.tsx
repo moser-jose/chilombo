@@ -15,10 +15,7 @@ export default function TermsScreen() {
 					headerTitle: 'Termos de Uso',
 				}}
 			/>
-			<ScrollView
-				style={styles.container}
-				showsVerticalScrollIndicator={false}
-			>
+			<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 				<View style={styles.content}>
 					<Text style={styles.section}>1. Aceitação dos Termos</Text>
 					<Text style={styles.text}>
@@ -53,9 +50,7 @@ export default function TermsScreen() {
 						qualquer momento, com ou sem aviso prévio.
 					</Text>
 
-					<Text style={styles.section}>
-						6. Limitação de Responsabilidade
-					</Text>
+					<Text style={styles.section}>6. Limitação de Responsabilidade</Text>
 					<Text style={styles.text}>
 						Não nos responsabilizamos por danos indiretos, incidentais ou
 						consequentes decorrentes do uso do serviço.

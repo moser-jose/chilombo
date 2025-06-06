@@ -1,7 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import TextInputUI from '@/src/components/ui/TextInput'
 import { useRef, useState } from 'react'
-import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native'
+import {
+	ActivityIndicator,
+	Pressable,
+	StyleSheet,
+	TextInput,
+	View,
+} from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { Text } from '@/src/components/ui/Text'
