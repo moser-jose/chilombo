@@ -151,7 +151,7 @@ const makeStyles = (theme: Theme) =>
 		styleButton: {
 			backgroundColor: theme.colors.buttonHeader,
 			borderRadius: 14,
-			padding: 8,
+			padding: 6,
 			borderWidth: 1,
 			borderColor: theme.colors.borderBottomHeader,
 			alignItems: 'center',
