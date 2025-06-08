@@ -161,7 +161,7 @@ function RootLayoutNav() {
 								}}
 							/>
 							<Stack.Screen
-								name="(services)/completed-service"
+								name="(services)/completed-service-details"
 								options={{ headerShown: false }}
 							/>
 							<Stack.Screen
