@@ -1,15 +1,9 @@
 import {
 	ScrollView,
-	StyleSheet,
-	TouchableOpacity,
-	useColorScheme,
+	StyleSheet
 } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
-import { router, Stack } from 'expo-router'
-import { fontFamily } from '@/src/constants/FontFamily'
-import { FontSize } from '@/src/constants/FontSize'
-import Colors from '@/src/constants/Theme'
-import { Ionicons } from '@expo/vector-icons'
+import { Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 

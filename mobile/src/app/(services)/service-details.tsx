@@ -1,4 +1,4 @@
-import { Stack, router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState, useRef } from 'react'
 import {
 	View,
@@ -627,7 +627,7 @@ export default function ServiceDetailsScreen() {
 	const [showRatingModal, setShowRatingModal] = useState(false)
 	const [showCommentModal, setShowCommentModal] = useState(false)
 	const [commentText, setCommentText] = useState('')
-	const { id } = useLocalSearchParams()
+	const { id, origin } = useLocalSearchParams()
 	const { theme } = useCustomTheme()
 
 	const styles = useStyles(theme as Theme)
@@ -730,24 +730,23 @@ export default function ServiceDetailsScreen() {
 			</View>
 		)
 	}
-
 	return (
 		<>
-			<Stack.Screen
-				options={{
-					headerShown: false,
-				}}
-			/>
 			<View style={styles.container}>
 				<Animated.View
 					style={[
 						styles.stickyHeader,
-						{
-							height: HEADER_MIN_HEIGHT + 10,
-							paddingTop: insets.top,
-							paddingBottom: 10,
-							opacity: titleOpacity,
-						},
+						origin === 'search'
+							? {
+									paddingVertical: 10,
+									opacity: titleOpacity,
+								}
+							: {
+									height: HEADER_MIN_HEIGHT + 10,
+									paddingTop: insets.top,
+									paddingVertical: 10,
+									opacity: titleOpacity,
+								},
 					]}
 				>
 					<TouchableOpacity
