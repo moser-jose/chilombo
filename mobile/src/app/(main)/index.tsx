@@ -3,18 +3,13 @@ import CarouselCard from '@/src/components/front/Carroucel'
 import Header from '@/src/components/front/Header'
 import UserProfile from '@/src/components/front/EmployersCard'
 import { useUser } from '@clerk/clerk-expo'
-import { router, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import React from 'react'
-import {
-	FlatList,
-	ScrollView,
-	StyleSheet,
-	TouchableOpacity,
-} from 'react-native'
+import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import { Separador } from '@/src/components/front/Separador'
 import ServicesCard from '@/src/components/front/ServicesCard'
 import CompletedServiceCard from '../../components/front/CompletedServiceCard'
-import { Ionicons, View } from '@/src/components/Themed'
+import { View } from '@/src/components/Themed'
 import { Text } from '@/src/components/ui/Text'
 const users = [
 	{
