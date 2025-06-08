@@ -21,6 +21,7 @@ import {
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
 import { CheckoutProvider } from '../context/CheckoutContext'
 import { Ionicons } from '@expo/vector-icons'
+import { View } from 'react-native'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -113,6 +114,25 @@ function RootLayoutNav() {
 								options={{
 									presentation: 'modal',
 									title: 'Pesquisar por serviço',
+									headerStyle: {
+										backgroundColor: navigationTheme.colors.background,
+									},
+									headerLeft: () => (
+										<TouchableOpacity onPress={() => router.back()}>
+											<Ionicons
+												name="close-outline"
+												size={28}
+												color={navigationTheme.colors.text}
+											/>
+										</TouchableOpacity>
+									),
+								}}
+							/>
+							<Stack.Screen
+								name="(modals)/edit-profile"
+								options={{
+									presentation: 'modal',
+									title: 'Editar Perfil',
 									headerStyle: {
 										backgroundColor: navigationTheme.colors.background,
 									},

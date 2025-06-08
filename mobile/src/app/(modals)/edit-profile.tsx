@@ -14,6 +14,7 @@ import { Text, View } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useUser, useSession } from '@clerk/clerk-expo'
 import { FontSize } from '@/src/constants/FontSize'
+
 import { useRouter } from 'expo-router'
 import { useState, useRef, useEffect } from 'react'
 import NetInfo from '@react-native-community/netinfo'
@@ -23,6 +24,8 @@ import ModalMessage from '@/src/components/ui/ModalMessage'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import { Dimensions } from 'react-native'
+const { width, height } = Dimensions.get('window')
 
 export default function EditProfileScreen() {
 	const { user } = useUser()

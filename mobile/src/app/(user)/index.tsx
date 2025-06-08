@@ -10,7 +10,7 @@ import { Text } from '@/src/components/ui/Text'
 import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { FontSize } from '@/src/constants/FontSize'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 import { Separador } from '@/src/components/front/Separador'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -115,7 +115,72 @@ export default function UserScreen() {
 		>
 			<View style={styles.container}>
 				<View style={styles.headerContainer}>
-					<View>
+					<Link href="/(modals)/edit-profile">
+						<View
+							style={{
+								flex: 1,
+								backgroundColor: theme.colors.card,
+								justifyContent: 'center',
+								alignItems: 'center',
+								borderRadius: 20,
+								width: '100%',
+								padding: 16,
+								boxShadow: '0 .8px 10px .4px rgba(0, 0, 0, 0.1)',
+								elevation: 5,
+								borderWidth: 1,
+								borderColor: theme.colors.border,
+							}}
+						>
+							<View style={styles.imageContainer}>
+								<Image
+									style={styles.profileImage}
+									source={{ uri: user?.imageUrl }}
+								/>
+								<View style={styles.editImageButton}>
+									<View style={styles.imageButton}>
+										<Ionicons name="ribbon-outline" size={18} color="white" />
+									</View>
+								</View>
+							</View>
+							<View
+								style={{
+									justifyContent: 'center',
+									alignItems: 'center',
+									flexDirection: 'row',
+									gap: 10,
+									marginTop: 10,
+								}}
+							>
+								<Text style={[styles.userName]}>{user?.firstName}</Text>
+								<Text style={styles.userName}>{user?.lastName}</Text>
+							</View>
+							<View style={styles.actionsTextContainer}>
+								{userVerified ? (
+									<View style={styles.verifyContainer}>
+										<Ionicons
+											name="ribbon-outline"
+											size={18}
+											color={theme.colors.primary}
+										/>
+										<Text style={styles.actionsText}>Perfil verificado</Text>
+									</View>
+								) : (
+									<View style={styles.verifyContainer}>
+										<Ionicons
+											name="close-circle"
+											size={18}
+											color={theme.colors.colorIconInput}
+										/>
+										<Text style={styles.actionsText}>
+											Perfil não verificado
+										</Text>
+									</View>
+								)}
+							</View>
+						</View>
+					</Link>
+
+					{/* <View>
 						<View style={styles.imageContainer}>
 							<Image
 								style={styles.profileImage}
@@ -214,7 +279,7 @@ export default function UserScreen() {
 								)}
 							</View>
 						</View>
-					</View>
+					</View> */}
 				</View>
 
 				<View style={styles.verifyContent}>
@@ -311,25 +376,6 @@ export default function UserScreen() {
 				<View style={styles.separator} />
 
 				<View style={styles.menuContainer}>
-					<TouchableOpacity
-						style={styles.menuItem}
-						onPress={() => router.push('/(user)/edit-profile')}
-					>
-						<View style={styles.menuLeftContent}>
-							<Ionicons
-								name="person-outline"
-								size={24}
-								color={theme.colors.colorIconInput}
-							/>
-							<Text style={styles.menuText}>Editar Perfil</Text>
-						</View>
-						<Ionicons
-							name="chevron-forward-outline"
-							size={24}
-							color={theme.colors.colorIconInput}
-						/>
-					</TouchableOpacity>
-
 					<TouchableOpacity style={styles.menuItem}>
 						<View style={styles.menuLeftContent}>
 							<Ionicons
@@ -527,7 +573,6 @@ const useStyles = (theme: Theme) =>
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center',
-			marginTop: 20,
 		},
 		verifyContainer: {
 			flexDirection: 'row',
@@ -535,9 +580,11 @@ const useStyles = (theme: Theme) =>
 			justifyContent: 'center',
 			gap: 10,
 			backgroundColor: theme.colors.backgroundIcon,
-			borderRadius: 5,
+			borderRadius: 6,
 			paddingHorizontal: 10,
 			paddingVertical: 4,
+			borderWidth: 0.5,
+			borderColor: theme.colors.border,
 		},
 		actionsText: {
 			fontSize: FontSize.xs,
@@ -597,8 +644,8 @@ const useStyles = (theme: Theme) =>
 		},
 		userName: {
 			fontSize: theme.size.base,
-			fontFamily: theme.fonts.bold.fontFamily,
-			color: theme.colors.primary,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
 		},
 		separator: {
 			marginTop: 10,
