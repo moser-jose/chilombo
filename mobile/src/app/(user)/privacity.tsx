@@ -1,7 +1,4 @@
-import {
-	ScrollView,
-	StyleSheet
-} from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
 import { Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'

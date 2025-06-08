@@ -9,10 +9,9 @@ import {
 	ViewStyle,
 	TextStyle,
 } from 'react-native'
-import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
-import FastImage, { ImageStyle } from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'

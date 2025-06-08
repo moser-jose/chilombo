@@ -23,6 +23,8 @@ import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useCheckout } from '@/src/context/CheckoutContext'
 import { Plan } from '@/src/types/plans'
+import Services from '@/src/components/front/Services'
+import ServicesCompleted from '@/src/components/front/ServicesCompleted'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -966,6 +968,10 @@ export default function ServiceDetailsScreen() {
 								</View>
 							</View>
 						</View>
+
+						<Separador text="Serviços realizados" />
+
+						<ServicesCompleted services={services.slice(0, 2)} />
 
 						<Separador text="Planos disponíveis" />
 						<View style={styles.periodSelector}>

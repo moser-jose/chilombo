@@ -864,7 +864,6 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 													router.push({
 														pathname: item.route as any,
 														params: { id: item.id, origin: 'search' },
-														
 													})
 													//onClose()
 												}}
