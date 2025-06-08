@@ -151,6 +151,20 @@ function RootLayoutNav() {
 							<Stack.Screen name="(main)" options={{ headerShown: false }} />
 							<Stack.Screen name="(user)" options={{ headerShown: false }} />
 							<Stack.Screen
+								name="(services)/service-details"
+								options={{
+									headerShown: false,
+									title: 'Detalhes do Serviço',
+									headerStyle: {
+										backgroundColor: navigationTheme.colors.background,
+									},
+								}}
+							/>
+							<Stack.Screen
+								name="(services)/completed-service"
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen
 								name="(checkout)"
 								options={{ headerShown: false }}
 							/>

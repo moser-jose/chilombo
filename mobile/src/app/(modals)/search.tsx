@@ -782,7 +782,6 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 			)
 		}
 
-		// For completed services
 		const isEvenIndex = index % 2 === 0
 
 		return (
@@ -864,9 +863,10 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 												onPress={() => {
 													router.push({
 														pathname: item.route as any,
-														params: { id: item.id },
+														params: { id: item.id, origin: 'search' },
+														
 													})
-													onClose()
+													//onClose()
 												}}
 												activeOpacity={0.7}
 											>

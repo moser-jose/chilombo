@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
-import { fontFamily } from '@/src/constants/FontFamily'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
@@ -29,6 +28,7 @@ export default function Services({ services }: { services: any[] }) {
 							params: {
 								id: item.id.toString(),
 								data: JSON.stringify(item),
+								origin: 'home',
 							},
 						})
 					}
