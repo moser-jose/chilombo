@@ -898,6 +898,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 												<CompletedServiceCard
 													key={item.id}
 													data={item}
+													origin="search"
 													style={[
 														styles.completedServiceItem,
 														index % 2 === 0

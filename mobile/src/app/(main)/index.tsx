@@ -861,7 +861,7 @@ export default function HomeScreen() {
 								flex: 1,
 							}}
 						>
-							<CompletedServiceCard data={item} />
+							<CompletedServiceCard data={item} origin="home" />
 						</View>
 					)}
 				/>

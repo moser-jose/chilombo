@@ -248,7 +248,7 @@ const completedServicesData = [
 ]
 
 export default function CompletedServiceDetailScreen() {
-	const { id } = useLocalSearchParams()
+	const { id, origin } = useLocalSearchParams()
 	const [activeImage, setActiveImage] = useState(0)
 	const [liked, setLiked] = useState(false)
 	const [userRating, setUserRating] = useState(0)
@@ -358,12 +358,17 @@ export default function CompletedServiceDetailScreen() {
 				<Animated.View
 					style={[
 						styles.stickyHeader,
-						{
-							height: HEADER_MIN_HEIGHT + 10,
-							paddingTop: insets.top,
-							paddingBottom: 10,
-							opacity: titleOpacity,
-						},
+						origin === 'search'
+							? {
+									paddingVertical: 10,
+									opacity: titleOpacity,
+								}
+							: {
+									height: HEADER_MIN_HEIGHT + 10,
+									paddingTop: insets.top,
+									paddingBottom: 10,
+									opacity: titleOpacity,
+								},
 					]}
 				>
 					<TouchableOpacity
@@ -718,6 +723,7 @@ export default function CompletedServiceDetailScreen() {
 										pathname: '/(services)/service-details',
 										params: {
 											serviceId: service.id,
+											origin: 'home',
 										},
 									})
 								}

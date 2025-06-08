@@ -22,6 +22,7 @@ interface CompletedServiceCardProps {
 	style?: StyleProp<ViewStyle>
 	styleContainer?: StyleProp<ViewStyle>
 	styleTitle?: StyleProp<TextStyle>
+	origin?: string
 }
 
 const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
@@ -29,6 +30,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	style,
 	styleContainer,
 	styleTitle,
+	origin,
 }) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
@@ -40,7 +42,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 			onPress={() =>
 				router.push({
 					pathname: '/(services)/completed-service-details',
-					params: { id: data.id },
+					params: { id: data.id, origin: origin },
 				})
 			}
 		>

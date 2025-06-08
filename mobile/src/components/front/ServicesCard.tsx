@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-color-literals */
-import { fontFamily } from '@/src/constants/FontFamily'
 import { FontSize } from '@/src/constants/FontSize'
 import { router } from 'expo-router'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
@@ -20,6 +19,7 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 			params: {
 				id: data.id,
 				data: data,
+				origin: 'home',
 			},
 		})
 	}
