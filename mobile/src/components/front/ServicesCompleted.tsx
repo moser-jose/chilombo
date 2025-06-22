@@ -18,46 +18,44 @@ export default function ServicesCompleted({ services }: { services: any[] }) {
 			}}
 		>
 			{services.map(item => (
-				<>
-					<TouchableOpacity
-						key={item.id}
-						activeOpacity={0.8}
-						style={[styles.containerImage, { flex: 1 }]}
-						onPress={() =>
-							router.push({
-								pathname: '/(services)/service-details',
-								params: {
-									id: item.id.toString(),
-									data: JSON.stringify(item),
-									origin: 'home',
-								},
-							})
-						}
-					>
-						<FastImage
-							source={{ uri: Image.resolveAssetSource(item.image).uri }}
-							style={styles.backgroundImage}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-						<LinearGradient
-							colors={['rgba(0, 0, 0, 0.12)', 'rgba(0, 0, 0, 0.19)']}
-							style={styles.gradient}
-						/>
-						<View style={styles.header}>
-							<View style={styles.commentContainer}>
-								<Ionicons
-									name="chatbox-ellipses-outline"
-									size={14}
-									color="white"
-								/>
-								<Text style={styles.commentText}>{item.comments.length}</Text>
-							</View>
+				<TouchableOpacity
+					key={item.id}
+					activeOpacity={0.8}
+					style={[styles.containerImage, { flex: 1 }]}
+					onPress={() =>
+						router.push({
+							pathname: '/(services)/service-details',
+							params: {
+								id: item.id.toString(),
+								data: JSON.stringify(item),
+								origin: 'home',
+							},
+						})
+					}
+				>
+					<FastImage
+						source={{ uri: Image.resolveAssetSource(item.image).uri }}
+						style={styles.backgroundImage}
+						resizeMode={FastImage.resizeMode.cover}
+					/>
+					<LinearGradient
+						colors={['rgba(0, 0, 0, 0.12)', 'rgba(0, 0, 0, 0.19)']}
+						style={styles.gradient}
+					/>
+					<View style={styles.header}>
+						<View style={styles.commentContainer}>
+							<Ionicons
+								name="chatbox-ellipses-outline"
+								size={14}
+								color="white"
+							/>
+							<Text style={styles.commentText}>{item.comments.length}</Text>
 						</View>
-						<View style={styles.headerContainer}>
-							<Text style={styles.categoryTitle}>Rua Bié | Huambo</Text>
-						</View>
-					</TouchableOpacity>
-				</>
+					</View>
+					<View style={styles.headerContainer}>
+						<Text style={styles.categoryTitle}>Rua Bié | Huambo</Text>
+					</View>
+				</TouchableOpacity>
 			))}
 		</View>
 	)

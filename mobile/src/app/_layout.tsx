@@ -21,7 +21,6 @@ import {
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
 import { CheckoutProvider } from '../context/CheckoutContext'
 import { Ionicons } from '@expo/vector-icons'
-import { View } from 'react-native'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
