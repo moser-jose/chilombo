@@ -255,6 +255,7 @@ const useStyles = (theme: Theme) =>
 		selectedAddress: {
 			borderColor: theme.colors.primary,
 			borderWidth: 2,
+			backgroundColor: theme.colors.primary + '10',
 		},
 		addressHeader: {
 			flexDirection: 'row',
