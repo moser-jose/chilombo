@@ -64,12 +64,12 @@ export default function OrderReview() {
 				</View>
 
 				<ScrollView style={styles.itemsContainer}>
-					<View key={plan.id} style={styles.itemCard}>
+					<View key={plan?.id} style={styles.itemCard}>
 						<View style={styles.itemImage}>
 							<Ionicons name="image" size={50} color="#ddd" />
 						</View>
 						<View style={styles.itemDetails}>
-							<Text style={styles.itemName}>Plano - {plan.title}</Text>
+							<Text style={styles.itemName}>Plano - {plan?.title}</Text>
 							<Text style={styles.type}>
 								{plan?.type} | {plan?.tag}
 							</Text>

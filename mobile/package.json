@@ -31,6 +31,7 @@
 		"expo-clipboard": "~7.0.1",
 		"expo-crypto": "14.0.2",
 		"expo-dev-client": "~5.0.14",
+		"expo-document-picker": "~13.0.3",
 		"expo-font": "~13.0.4",
 		"expo-haptics": "~14.0.1",
 		"expo-image-picker": "~16.0.6",
@@ -54,7 +55,8 @@
 		"react-native-screens": "~4.8.0",
 		"react-native-svg": "15.8.0",
 		"react-native-web": "~0.19.13",
-		"react-native-webview": "~13.13.1"
+		"react-native-webview": "~13.13.1",
+		"zustand": "^5.0.5"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
