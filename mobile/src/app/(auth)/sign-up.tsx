@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { Ionicons } from '@expo/vector-icons'
-import { Text } from '@/src/components/ui/Text'
+import { Text } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
@@ -26,12 +26,10 @@ import {
 import { formatPhoneNumber } from '@/src/utils/formatPhone'
 import { Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
-import { ModalSSO } from '@/src/components/ui/ModalSSO'
-import TextInputUI from '@/src/components/ui/TextInput'
+import { ModalSSO } from '@/src/components/modal/ModalSSO'
+import { TextInput, TouchableOpacity } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
-import ModalMessage from '@/src/components/ui/ModalMessage'
 export default function SignUp() {
 	const { isLoaded, signUp } = useSignUp()
 	const router = useRouter()
@@ -90,22 +88,6 @@ export default function SignUp() {
 	useEffect(() => {
 		setIsPasswordStrong(isStrongPassword(password))
 	}, [password])
-
-	/* useEffect(() => {
-		let timeoutId: NodeJS.Timeout
-
-		if (errors.length > 0) {
-			timeoutId = setTimeout(() => {
-				setErrors([])
-			}, 3000)
-		}
-
-		return () => {
-			if (timeoutId) {
-				clearTimeout(timeoutId)
-			}
-		}
-	}, [errors]) */
 
 	const renderStrengthBar = () => {
 		const barWidth = strength.score
@@ -181,7 +163,6 @@ export default function SignUp() {
 
 		try {
 			const formattedPhone = formatPhoneNumber(phone)
-			console.log(formattedPhone)
 			await signUp.create({
 				emailAddress,
 				password,
@@ -273,7 +254,7 @@ export default function SignUp() {
 										gap: 6,
 									}}
 								>
-									<TextInputUI
+									<TextInput
 										type="text"
 										label="Nome"
 										placeholder="Insira o nome"
@@ -283,7 +264,7 @@ export default function SignUp() {
 										style={{ flex: 1 }}
 										errors={errors}
 									/>
-									<TextInputUI
+									<TextInput
 										type="text"
 										label="Sobrenome"
 										placeholder="Insira o sobrenome"
@@ -314,7 +295,7 @@ export default function SignUp() {
 										style={{ flex: 0.25 }}
 									/>
 
-									<TextInputUI
+									<TextInput
 										type="phone"
 										label="Telefone"
 										placeholder="Insira o telefone"
@@ -326,7 +307,7 @@ export default function SignUp() {
 									/>
 								</View>
 
-								<TextInputUI
+								<TextInput
 									type="text"
 									label="Endereço"
 									placeholder="Insira o endereço"
@@ -335,7 +316,7 @@ export default function SignUp() {
 									onChangeText={setAddress}
 									errors={errors}
 								/>
-								<TextInputUI
+								<TextInput
 									type="email"
 									label="E-mail"
 									placeholder="Insira o e-mail"
@@ -345,7 +326,7 @@ export default function SignUp() {
 									onChangeText={setEmailAddress}
 								/>
 
-								<TextInputUI
+								<TextInput
 									type="password"
 									label="Senha"
 									placeholder="Insira a senha"

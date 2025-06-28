@@ -2,31 +2,27 @@ import { router, useLocalSearchParams } from 'expo-router'
 import React, { useState, useRef } from 'react'
 import {
 	View,
-	Text,
 	StyleSheet,
-	Dimensions,
 	Animated,
 	Platform,
 	TextInput,
 	Pressable,
 } from 'react-native'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import { TouchableOpacity,Text } from '@/src/components/Themed'
 import FastImage from 'react-native-fast-image'
 import { Ionicons } from '@expo/vector-icons'
 import PlanCard from '@/src/components/front/PlanCard'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import ModalMessage from '@/src/components/ui/ModalMessage'
+import ModalMessage from '@/src/components/modal/ModalMessage'
 import { Separador } from '@/src/components/front/Separador'
 import Star from '@/src/components/front/Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useCheckout } from '@/src/context/CheckoutContext'
 import { Plan } from '@/src/types/plans'
-import Services from '@/src/components/front/Services'
 import ServicesCompleted from '@/src/components/front/ServicesCompleted'
 
-const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 70
 

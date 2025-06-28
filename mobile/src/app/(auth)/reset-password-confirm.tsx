@@ -1,20 +1,17 @@
 import { Ionicons } from '@expo/vector-icons'
-import TextInputUI from '@/src/components/ui/TextInput'
 import { useRef, useState } from 'react'
 import {
 	ActivityIndicator,
 	Pressable,
 	StyleSheet,
-	TextInput,
 	View,
+	TextInput as DefaultTextInput,
 } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
-import { Text } from '@/src/components/ui/Text'
+import { Text, TouchableOpacity, TextInput } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import Colors from '@/src/constants/Theme'
 import { router, Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
 
@@ -26,12 +23,12 @@ export default function ResetPasswordConfirm() {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 
-	const codeOneRef = useRef<TextInput>(null)
-	const codeTwoRef = useRef<TextInput>(null)
-	const codeThreeRef = useRef<TextInput>(null)
-	const codeFourRef = useRef<TextInput>(null)
-	const codeFiveRef = useRef<TextInput>(null)
-	const codeSixRef = useRef<TextInput>(null)
+	const codeOneRef = useRef<DefaultTextInput>(null)
+	const codeTwoRef = useRef<DefaultTextInput>(null)
+	const codeThreeRef = useRef<DefaultTextInput>(null)
+	const codeFourRef = useRef<DefaultTextInput>(null)
+	const codeFiveRef = useRef<DefaultTextInput>(null)
+	const codeSixRef = useRef<DefaultTextInput>(null)
 
 	const [codeOne, setCodeOne] = useState('')
 	const [codeTwo, setCodeTwo] = useState('')
@@ -97,7 +94,7 @@ export default function ResetPasswordConfirm() {
 			<View style={{ padding: 16 }}>
 				<Text style={styles.headerText}>Insira a nova password</Text>
 
-				<TextInputUI
+				<TextInput
 					type="password"
 					label="Password"
 					placeholder="Insira a nova password"
@@ -108,7 +105,7 @@ export default function ResetPasswordConfirm() {
 					style={{ marginBottom: 20 }}
 				/>
 
-				<TextInputUI
+				<TextInput
 					type="password"
 					label="Confirmar Password"
 					placeholder="Confirmar Password"
@@ -139,7 +136,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeOneRef}
 							value={codeOne}
 							onChangeText={text => {
@@ -165,7 +162,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeTwoRef}
 							value={codeTwo}
 							onChangeText={text => {
@@ -193,7 +190,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeThreeRef}
 							value={codeThree}
 							onChangeText={text => {
@@ -221,7 +218,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeFourRef}
 							value={codeFour}
 							onChangeText={text => {
@@ -249,7 +246,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeFiveRef}
 							value={codeFive}
 							onChangeText={text => {
@@ -277,7 +274,7 @@ export default function ResetPasswordConfirm() {
 							},
 						]}
 					>
-						<TextInput
+						<DefaultTextInput
 							ref={codeSixRef}
 							value={codeSix}
 							onChangeText={text => {
@@ -362,6 +359,6 @@ const makeStyles = (theme: Theme) =>
 			fontSize: FontSize.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
-			color: Colors.black,
+			color: theme.colors.text,
 		},
 	})

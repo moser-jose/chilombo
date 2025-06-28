@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
 	Platform,
 	Image,
@@ -12,7 +12,6 @@ import {
 	ScrollView,
 	ActivityIndicator,
 } from 'react-native'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
 import { useRouter, Link, Stack } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import * as WebBrowser from 'expo-web-browser'
@@ -20,7 +19,7 @@ import * as AuthSession from 'expo-auth-session'
 import { ClerkAPIError } from '@clerk/types'
 import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
 
-import { Text, View } from '@/src/components/Themed'
+import { Text, View, TouchableOpacity } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { GoogleSVG } from '@/src/components/svg/GoogleSvg'
 import { FacebookSVG } from '@/src/components/svg/FacebookSVG'
@@ -32,11 +31,11 @@ import {
 	isClerkAPIResponseError,
 	useAuth,
 } from '@clerk/clerk-expo'
-import TextInputUI from '@/src/components/ui/TextInput'
+import { TextInput } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 
-WebBrowser.maybeCompleteAuthSession()
+  WebBrowser.maybeCompleteAuthSession()
 
 const logoAppLight = Image.resolveAssetSource(logoLight).uri
 const logoAppDark = Image.resolveAssetSource(logoDark).uri
@@ -222,7 +221,7 @@ export default function SignIn() {
 									Faça o login com o seu e-mail e senha
 								</Text>
 
-								<TextInputUI
+								<TextInput
 									type="email"
 									icon="mail-outline"
 									placeholder="Insira o e-mail"
@@ -233,7 +232,7 @@ export default function SignIn() {
 									}}
 								/>
 
-								<TextInputUI
+								<TextInput
 									type="password"
 									icon="key"
 									placeholder="Insira a senha"

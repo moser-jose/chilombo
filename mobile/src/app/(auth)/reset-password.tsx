@@ -1,15 +1,12 @@
-import { View } from '@/src/components/Themed'
-import TextInputUI from '@/src/components/ui/TextInput'
+import { View, TextInput } from '@/src/components/Themed'
 import { useState, useEffect } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
-import { Text } from '@/src/components/ui/Text'
+import { Text, TouchableOpacity } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { router, Stack } from 'expo-router'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import Colors from '@/src/constants/Theme'
 import { ClerkAPIError } from '@clerk/types'
 import { Ionicons } from '@expo/vector-icons'
 export default function ResetPassword() {
@@ -68,7 +65,7 @@ export default function ResetPassword() {
 				<Text style={styles.headerText}>
 					Recupere a sua password e tenha acesso ao app
 				</Text>
-				<TextInputUI
+				<TextInput
 					type="email"
 					label="Email"
 					placeholder="Insira o seu e-mail"
@@ -145,6 +142,6 @@ const makeStyles = (theme: Theme) =>
 			fontSize: FontSize.sm,
 			fontFamily: theme.fonts.regular.fontFamily,
 			letterSpacing: 0.5,
-			color: Colors.black,
+			color: theme.colors.text,
 		},
 	})

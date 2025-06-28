@@ -2,7 +2,7 @@
 import { FontSize } from '@/src/constants/FontSize'
 import { router } from 'expo-router'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { Text } from '../ui/Text'
+import { Text } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 

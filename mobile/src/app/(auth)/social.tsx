@@ -1,6 +1,5 @@
-import { useOAuth, useUser } from '@clerk/clerk-expo'
+import { useSSO, useUser } from '@clerk/clerk-expo'
 import { Ionicons } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
 import {
 	ActivityIndicator,
 	StyleSheet,
@@ -16,6 +15,7 @@ const SocialLoginButton = ({
 }: {
 	strategy: 'facebook' | 'google' | 'apple'
 }) => {
+	const { startSSOFlow } = useSSO()
 	const getStrategy = () => {
 		if (strategy === 'facebook') {
 			return 'oauth_facebook'
@@ -27,11 +27,9 @@ const SocialLoginButton = ({
 		return 'oauth_facebook'
 	}
 
-	const { startOAuthFlow } = useOAuth({ strategy: getStrategy() })
 	const { user } = useUser()
 	const [isLoading, setIsLoading] = useState(false)
 
-	const router = useRouter()
 	const buttonText = () => {
 		if (isLoading) {
 			return 'Loading...'
@@ -59,13 +57,11 @@ const SocialLoginButton = ({
 	const onSocialLoginPress = React.useCallback(async () => {
 		try {
 			setIsLoading(true)
-			const { createdSessionId, setActive } = await startOAuthFlow({
+			const { createdSessionId, setActive } = await startSSOFlow({
+				strategy: getStrategy(),
 				redirectUrl: Linking.createURL('/(auth)/home', { scheme: 'myapp' }),
 			})
-
-			// If sign in was successful, set the active session
 			if (createdSessionId) {
-				console.log('Session created', createdSessionId)
 				setActive!({ session: createdSessionId })
 				await user?.reload()
 			} else {

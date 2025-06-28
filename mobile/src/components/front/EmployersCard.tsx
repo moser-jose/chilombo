@@ -5,10 +5,8 @@ import {
 	Text,
 	Image,
 	StyleSheet,
-	TouchableOpacity,
-	ViewStyle,
+	TouchableOpacity
 } from 'react-native'
-import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'

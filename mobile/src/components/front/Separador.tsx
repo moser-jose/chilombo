@@ -7,11 +7,10 @@ import {
 	StyleProp,
 	ViewStyle,
 } from 'react-native'
-import { fontFamily } from '../../constants/FontFamily'
 import { FontSize } from '../../constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/src/constants/Theme'
-import { Text } from '../ui/Text'
+import { Text } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 
 type SeparadorProps = {

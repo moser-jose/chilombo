@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import { TouchableOpacity } from '@/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'

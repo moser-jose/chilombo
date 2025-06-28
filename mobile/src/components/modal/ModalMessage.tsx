@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Modal, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Modal, View, StyleSheet, Text } from 'react-native'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
+import { TouchableOpacity } from '../Themed'
 
 const ModalMessage = ({
 	setShowLogoutModal,
@@ -46,6 +47,7 @@ const ModalMessage = ({
 					<View style={styles.modalButtons}>
 						{cancelButton && (
 							<TouchableOpacity
+								type="tertiary"
 								style={[styles.modalButton, styles.cancelButton]}
 								onPress={() => setShowLogoutModal(false)}
 							>
@@ -55,6 +57,7 @@ const ModalMessage = ({
 							</TouchableOpacity>
 						)}
 						<TouchableOpacity
+							type="tertiary"
 							style={[styles.modalButton, styles.confirmButton]}
 							onPress={handleOk}
 						>

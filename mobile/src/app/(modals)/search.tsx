@@ -10,7 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
-import TextInputUI from '@/src/components/ui/TextInput'
+import { TextInput } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
@@ -831,7 +831,7 @@ const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 			<View style={styles.modalContainer}>
 				<View style={styles.modalContent}>
 					<View style={styles.searchContainer}>
-						<TextInputUI
+						<TextInput
 							type="text"
 							placeholder="Serviço, categoria, etc."
 							icon="search-outline"

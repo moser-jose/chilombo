@@ -19,13 +19,11 @@ import { useRouter } from 'expo-router'
 import { useState, useRef, useEffect } from 'react'
 import NetInfo from '@react-native-community/netinfo'
 import * as ImagePicker from 'expo-image-picker'
-import TextInputUI from '@/src/components/ui/TextInput'
-import ModalMessage from '@/src/components/ui/ModalMessage'
+import { TextInput } from '@/src/components/Themed'
+import ModalMessage from '@/src/components/modal/ModalMessage'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
-import { Dimensions } from 'react-native'
-const { width, height } = Dimensions.get('window')
+import { TouchableOpacity } from '@/src/components/Themed'
 
 export default function EditProfileScreen() {
 	const { user } = useUser()
@@ -240,7 +238,7 @@ export default function EditProfileScreen() {
 
 								<View style={styles.formContainer}>
 									<View style={styles.inputGroup}>
-										<TextInputUI
+										<TextInput
 											type="text"
 											label="Nome"
 											icon="person-outline"
@@ -251,7 +249,7 @@ export default function EditProfileScreen() {
 									</View>
 
 									<View style={styles.inputGroup}>
-										<TextInputUI
+										<TextInput
 											type="text"
 											icon="person-outline"
 											label="Sobrenome"
