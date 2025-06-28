@@ -1,16 +1,12 @@
 import { window } from '../../constants/SizeScreen'
 import * as React from 'react'
-import { View, Animated, TouchableOpacity } from 'react-native'
+import { View, Animated } from 'react-native'
 import {
-	Extrapolation,
-	interpolate,
-	useSharedValue,
+	useSharedValue
 } from 'react-native-reanimated'
 import Carousel, {
-	ICarouselInstance,
-	Pagination,
+	ICarouselInstance
 } from 'react-native-reanimated-carousel'
-import { useCustomTheme } from '@/src/context/ThemeContext'
 import PlanCard from './PlanCard'
 import { useState } from 'react'
 import { useCheckout } from '@/src/context/CheckoutContext'
@@ -648,11 +644,10 @@ const services = [
 	},
 ]
 
-function Index({ service }) {
+function Index({ service }: { service: (typeof carouselData)[0] }) {
 	const progress = useSharedValue<number>(0)
 	const [isMonthly, setIsMonthly] = useState(false)
 	const ref = React.useRef<ICarouselInstance>(null)
-	const { theme } = useCustomTheme()
 	const { setPlan } = useCheckout()
 
 	const handlePlanSelection = (plan: Plan) => {

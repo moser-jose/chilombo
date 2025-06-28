@@ -6,7 +6,7 @@ import {
 	FlatList,
 	View,
 } from 'react-native'
-import { Text } from '@/src/components/ui/Text'
+import { Text } from '@/src/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { FontSize } from '@/src/constants/FontSize'
@@ -15,7 +15,7 @@ import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
 import { Separador } from '@/src/components/front/Separador'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import ModalMessage from '@/src/components/ui/ModalMessage'
+import ModalMessage from '@/src/components/modal/ModalMessage'
 import { useState } from 'react'
 
 const completedServices = [

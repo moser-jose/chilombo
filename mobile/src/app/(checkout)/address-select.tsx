@@ -5,7 +5,7 @@ import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import { TouchableOpacity } from '@/src/components/ui/TouchableOpacity'
+import { TouchableOpacity } from '@/src/components/Themed'
 import StatusCheckout from '@/src/components/front/StatusCheckout'
 import { Address } from '@/types/address'
 
