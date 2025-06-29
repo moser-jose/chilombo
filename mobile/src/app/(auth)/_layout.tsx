@@ -1,6 +1,5 @@
 import { Redirect, Stack } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo'
-import Colors from '@/src/constants/Theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { View } from '@/src/components/Themed'
 export default function AuthLayout() {

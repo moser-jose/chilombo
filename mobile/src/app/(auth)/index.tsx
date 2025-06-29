@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import {
 	Platform,
 	Image,
@@ -69,12 +69,12 @@ export default function SignIn() {
 		maxHeight: 110,
 	}
 
-	const handleSignInWithGoogle = useCallback(async () => {
+	const handleSignSocial = useCallback(async ({ strategy }: { strategy: 'oauth_google' | 'oauth_facebook' | 'oauth_apple' }) => {
 		triggerHapticFeedback()
 		try {
 			const { createdSessionId, setActive, signIn, signUp } =
 				await startSSOFlow({
-					strategy: 'oauth_google',
+					strategy: strategy,
 					redirectUrl: AuthSession.makeRedirectUri(),
 				})
 
@@ -293,7 +293,7 @@ export default function SignIn() {
 								>
 									<TouchableOpacity
 										type="secondary"
-										onPress={handleSignInWithGoogle}
+										onPress={() => handleSignSocial({ strategy: 'oauth_facebook' })}
 										style={{
 											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,
@@ -304,7 +304,7 @@ export default function SignIn() {
 									</TouchableOpacity>
 									<TouchableOpacity
 										type="secondary"
-										onPress={handleSignInWithGoogle}
+										onPress={() => handleSignSocial({ strategy: 'oauth_google' })}
 										style={{
 											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,

@@ -18,11 +18,10 @@ import {
 	ScrollViewProps,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
-import { Ionicons as DefaultIonicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import { FontSize } from '../constants/FontSize'
 import { Theme } from '@/src/types/theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import { IconProps } from '@expo/vector-icons/build/createIconSet'
 import { useState, useEffect } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useStateStore } from '@/src/store/store'
@@ -236,7 +235,7 @@ export function TextInput({
 			>
 				{icon && (
 					<Ionicons
-						name={icon}
+						name={icon as keyof typeof Ionicons.glyphMap}
 						style={{ marginRight: 4 }}
 						size={20}
 						color={styles.colorIconInput.color}
@@ -557,16 +556,6 @@ export function TouchableOpacity(props: Props) {
 	)
 }
 
-export function Ionicons(
-	props: IconProps<keyof typeof DefaultIonicons.glyphMap>,
-) {
-	const { style, ...otherProps } = props
-	const { theme } = useCustomTheme()
-	const color = theme.colors.text
-
-	return <DefaultIonicons style={[{ color }, style]} {...otherProps} />
-}
-
 export const BodyScrollView = forwardRef<any, ScrollViewProps>((props, ref) => {
 	return (
 		<ScrollView
@@ -695,6 +684,7 @@ const makeStyles = (theme: Theme) =>
 		fileInfo: {
 			flex: 1,
 			marginLeft: 8,
+			backgroundColor: theme.colors.ImputBackgroundColors,
 		},
 		fileName: {
 			fontSize: theme.size.xs,

@@ -284,7 +284,7 @@ export default function SignUp() {
 										gap: 6,
 									}}
 								>
-									<TextInputUI
+									<TextInput
 										type="text"
 										label="DDI"
 										readOnly={true}
