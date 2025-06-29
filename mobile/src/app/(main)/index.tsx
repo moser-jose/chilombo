@@ -1,15 +1,15 @@
 /* eslint-disable react-native/no-color-literals */
-import CarouselCard from '@/src/components/front/Carroucel'
-import Header from '@/src/components/front/Header'
-import UserProfile from '@/src/components/front/EmployersCard'
+import CarouselCard from '@/src/components/ui/Carroucel'
+import Header from '@/src/components/ui/Header'
+import UserProfile from '@/src/components/ui/EmployersCard'
 import { useUser } from '@clerk/clerk-expo'
 import { Stack } from 'expo-router'
 import React from 'react'
 import { FlatList, ScrollView, StyleSheet } from 'react-native'
-import { Separador } from '@/src/components/front/Separador'
-import ServicesCard from '@/src/components/front/ServicesCard'
-import CompletedServiceCard from '../../components/front/CompletedServiceCard'
-import { View,Text } from '@/src/components/Themed'
+import { Separator } from '@/src/components/ui/Separator'
+import ServicesCard from '@/src/components/ui/ServicesCard'
+import CompletedServiceCard from '../../components/ui/CompletedServiceCard'
+import { View, Text } from '@/src/components/Themed'
 const users = [
 	{
 		id: 1,
@@ -643,7 +643,7 @@ const services = [
 	},
 ]
 
-import Services from '@/src/components/front/Services'
+import Services from '@/src/components/ui/Services'
 import Colors from '@/src/constants/Theme'
 import { Theme } from '@/src/types/theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -719,7 +719,7 @@ export default function HomeScreen() {
 					<CarouselCard />
 				</View>
 
-				<Separador text="Nossos Serviços" more />
+				<Separator text="Nossos Serviços" more />
 
 				<FlatList
 					horizontal
@@ -744,7 +744,7 @@ export default function HomeScreen() {
 					)}
 				/>
 
-				<Separador text="Nossa equipe" more />
+				<Separator text="Nossa equipe" more />
 
 				<FlatList
 					horizontal
@@ -766,7 +766,7 @@ export default function HomeScreen() {
 					)}
 				/>
 
-				<Separador
+				<Separator
 					text="Serviços de Limpeza"
 					more
 					style={{ marginBottom: 0 }}
@@ -840,7 +840,7 @@ export default function HomeScreen() {
 						<Services key={rowIndex} services={row} />
 					))}
 
-				<Separador text="Serviços Realizados" more />
+				<Separator text="Serviços Realizados" more />
 
 				<FlatList
 					horizontal

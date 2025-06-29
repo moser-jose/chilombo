@@ -16,11 +16,11 @@ import { FontSize } from '@/src/constants/FontSize'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/modal/ModalMessage'
-import { Separador } from '@/src/components/front/Separador'
-import Star from '@/src/components/front/Star'
+import { Separator } from '@/src/components/ui/Separator'
+import Star from '@/src/components/ui/Star'
 import { Theme } from '@/src/types/theme'
 import { useCustomTheme } from '@/src/context/ThemeContext'
-import EmployerCard from '@/src/components/front/EmployersCard'
+import EmployerCard from '@/src/components/ui/EmployersCard'
 
 const { width } = Dimensions.get('window')
 const HEADER_HEIGHT = 250
@@ -477,7 +477,7 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Photo gallery */}
-						<Separador text="Fotos do Trabalho Realizado" />
+						<Separator text="Fotos do Trabalho Realizado" />
 						<View style={styles.galleryContainer}>
 							<FlatList
 								horizontal
@@ -580,7 +580,7 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Tasks Completed */}
-						<Separador text="Tarefas Realizadas" />
+						<Separator text="Tarefas Realizadas" />
 						<View style={styles.tasksContainer}>
 							{service.tasks.map((task, index) => (
 								<View key={index} style={styles.taskItem}>
@@ -595,7 +595,7 @@ export default function CompletedServiceDetailScreen() {
 						</View>
 
 						{/* Team */}
-						<Separador text="Equipe Responsável" />
+						<Separator text="Equipe Responsável" />
 						<FlatList
 							horizontal
 							showsHorizontalScrollIndicator={false}
@@ -618,7 +618,7 @@ export default function CompletedServiceDetailScreen() {
 						/>
 
 						{/* Client Testimonial */}
-						<Separador text="Avaliação do Cliente" />
+						<Separator text="Avaliação do Cliente" />
 						<View style={styles.testimonialContainer}>
 							<View
 								style={[
@@ -660,7 +660,7 @@ export default function CompletedServiceDetailScreen() {
 						{service.additionalTestimonials &&
 							service.additionalTestimonials.length > 0 && (
 								<View>
-									<Separador text="Outros Comentários" more />
+									<Separator text="Outros Comentários" more />
 
 									<FlatList
 										horizontal

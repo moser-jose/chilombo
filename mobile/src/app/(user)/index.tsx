@@ -11,8 +11,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { useClerk, useUser } from '@clerk/clerk-expo'
 import { FontSize } from '@/src/constants/FontSize'
 import { Link, useRouter } from 'expo-router'
-import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
-import { Separador } from '@/src/components/front/Separador'
+import CompletedServiceCard from '@/src/components/ui/CompletedServiceCard'
+import { Separator } from '@/src/components/ui/Separator'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import ModalMessage from '@/src/components/modal/ModalMessage'
@@ -354,7 +354,7 @@ export default function UserScreen() {
 					</View>
 				</View>
 
-				<Separador text="Meus Serviços" more />
+				<Separator text="Meus Serviços" more />
 				<FlatList
 					horizontal
 					showsHorizontalScrollIndicator={false}
