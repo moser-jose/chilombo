@@ -11,6 +11,7 @@ export default function ServicesCompleted({ services }: { services: any[] }) {
 	const styles = makeStyles(theme)
 	return (
 		<View
+			testID="services-container"
 			style={{
 				flexDirection: 'row',
 				gap: 16,
@@ -20,6 +21,7 @@ export default function ServicesCompleted({ services }: { services: any[] }) {
 			{services.map(item => (
 				<TouchableOpacity
 					key={item.id}
+					testID="service-item"
 					activeOpacity={0.8}
 					style={[styles.containerImage, { flex: 1 }]}
 					onPress={() =>
@@ -34,7 +36,11 @@ export default function ServicesCompleted({ services }: { services: any[] }) {
 					}
 				>
 					<FastImage
-						source={{ uri: Image.resolveAssetSource(item.image).uri }}
+						source={{
+							uri: item.image
+								? Image.resolveAssetSource(item.image).uri
+								: undefined,
+						}}
 						style={styles.backgroundImage}
 						resizeMode={FastImage.resizeMode.cover}
 					/>
@@ -43,13 +49,15 @@ export default function ServicesCompleted({ services }: { services: any[] }) {
 						style={styles.gradient}
 					/>
 					<View style={styles.header}>
-						<View style={styles.commentContainer}>
+						<View testID="comment-container" style={styles.commentContainer}>
 							<Ionicons
 								name="chatbox-ellipses-outline"
 								size={14}
 								color="white"
 							/>
-							<Text style={styles.commentText}>{item.comments.length}</Text>
+							<Text style={styles.commentText}>
+								{item.comments?.length || 0}
+							</Text>
 						</View>
 					</View>
 					<View style={styles.headerContainer}>

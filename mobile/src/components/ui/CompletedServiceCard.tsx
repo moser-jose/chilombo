@@ -38,6 +38,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 		<TouchableOpacity
 			activeOpacity={0.8}
 			style={[styles.container, style]}
+			testID="touchable-opacity"
 			onPress={() =>
 				router.push({
 					pathname: '/(services)/completed-service-details',
@@ -45,7 +46,10 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 				})
 			}
 		>
-			<View style={[styles.imageContainer, styleContainer]}>
+			<View
+				style={[styles.imageContainer, styleContainer]}
+				testID="image-container"
+			>
 				<FastImage
 					source={{ uri: data.image }}
 					style={styles.image}

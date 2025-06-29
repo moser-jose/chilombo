@@ -13,7 +13,7 @@ export default function Star({ rating, style, textColor = '#fff' }: StarProps) {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
 	return (
-		<View style={[styles.starContainer, style]}>
+		<View testID="star-container" style={[styles.starContainer, style]}>
 			<Ionicons name="star" size={12} color="#FFC107" />
 			<Text style={[styles.starText, { color: textColor }]}>{rating}</Text>
 		</View>
