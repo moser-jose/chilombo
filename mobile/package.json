@@ -16,7 +16,23 @@
 		"format": "yarn prettier --write \"**/*.{ts,tsx,json,md}\""
 	},
 	"jest": {
-		"preset": "jest-expo"
+		"preset": "jest-expo",
+		"setupFiles": [
+			"./jest.setup.js"
+		],
+		"moduleNameMapper": {
+			"^@/src/(.*)$": "<rootDir>/src/$1",
+			"^@/components/(.*)$": "<rootDir>/src/components/$1",
+			"^@/constants/(.*)$": "<rootDir>/src/constants/$1",
+			"^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
+			"^@/types/(.*)$": "<rootDir>/src/types/$1",
+			"^@/utils/(.*)$": "<rootDir>/src/utils/$1",
+			"^@/context/(.*)$": "<rootDir>/src/context/$1",
+			"^@/(.*)$": "<rootDir>/$1"
+		},
+		"transformIgnorePatterns": [
+			"node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-gesture-handler|@react-native-async-storage/async-storage|@react-native-async-storage/async-storage/jest/async-storage-mock)"
+		]
 	},
 	"dependencies": {
 		"@clerk/clerk-expo": "2.8.1",
@@ -60,6 +76,8 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
+		"@testing-library/react-native": "^13.2.0",
+		"@types/jest": "^30.0.0",
 		"@types/react": "~18.3.12",
 		"@typescript-eslint/eslint-plugin": "8.25.0",
 		"@typescript-eslint/parser": "8.25.0",

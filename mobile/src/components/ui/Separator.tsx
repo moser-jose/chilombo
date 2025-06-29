@@ -12,15 +12,16 @@ import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/src/constants/Theme'
 import { Text } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
-type SeparadorProps = {
+type SeparatorProps = {
 	onPress?: () => void
 	text: string
 	more?: boolean
 	style?: StyleProp<ViewStyle>
 }
 
-export const Separador = ({ onPress, text, style, more }: SeparadorProps) => {
+export const Separator = ({ onPress, text, style, more }: SeparatorProps) => {
 	const { theme } = useCustomTheme()
 	const styles = makeStyles(theme)
 	return (

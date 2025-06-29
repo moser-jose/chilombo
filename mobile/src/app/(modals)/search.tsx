@@ -13,7 +13,7 @@ import { router } from 'expo-router'
 import { TextInput } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import CompletedServiceCard from '@/src/components/front/CompletedServiceCard'
+import CompletedServiceCard from '@/src/components/ui/CompletedServiceCard'
 const { width, height } = Dimensions.get('window')
 const services = [
 	{

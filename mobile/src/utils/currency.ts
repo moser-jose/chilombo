@@ -9,11 +9,15 @@ export function formatKwanza(
 	fractionDigits: number = 2,
 ): string {
 	const formatter = new Intl.NumberFormat('pt-AO', {
-		style: 'currency',
-		currency: 'AOA',
 		minimumFractionDigits: fractionDigits,
 		maximumFractionDigits: fractionDigits,
 	})
 
-	return formatter.format(value)
+	let formattedNumber = formatter.format(value).replace(/\u00A0/g, ' ')
+
+	if (value >= 1000) {
+		formattedNumber = formattedNumber.replace(/\s/g, '.')
+	}
+
+	return `${formattedNumber}`
 }

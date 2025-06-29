@@ -5,7 +5,7 @@ import { Stack, useRouter } from 'expo-router'
 import { Text, View, TouchableOpacity } from '@/src/components/Themed'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import StatusCheckout from '@/src/components/front/StatusCheckout'
+import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { TextInput, FileInput } from '@/src/components/Themed'
 import { useStateStore } from '@/src/store/store'
 import { useShallow } from 'zustand/react/shallow'
@@ -19,7 +19,11 @@ interface PaymentMethod {
 const paymentMethods: PaymentMethod[] = [
 	{ id: 'card', name: 'Cartão de Crédito', icon: 'card-outline' },
 	{ id: 'pix', name: 'PIX', icon: 'qr-code-outline' },
-	{ id: 'banc', name: 'Depósito ou Transferência Bancária', icon: 'business-outline' },
+	{
+		id: 'banc',
+		name: 'Depósito ou Transferência Bancária',
+		icon: 'business-outline',
+	},
 	{ id: 'express', name: 'Transferência Express', icon: 'flash-outline' },
 	{ id: 'cash', name: 'Dinheiro', icon: 'cash' },
 ]

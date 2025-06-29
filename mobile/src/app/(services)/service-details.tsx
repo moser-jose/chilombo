@@ -8,20 +8,20 @@ import {
 	TextInput,
 	Pressable,
 } from 'react-native'
-import { TouchableOpacity,Text } from '@/src/components/Themed'
+import { TouchableOpacity, Text } from '@/src/components/Themed'
 import FastImage from 'react-native-fast-image'
 import { Ionicons } from '@expo/vector-icons'
-import PlanCard from '@/src/components/front/PlanCard'
+import PlanCard from '@/src/components/ui/PlanCard'
 import { LinearGradient } from 'react-native-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/modal/ModalMessage'
-import { Separador } from '@/src/components/front/Separador'
-import Star from '@/src/components/front/Star'
+import { Separator } from '@/src/components/ui/Separator'
+import Star from '@/src/components/ui/Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { useCheckout } from '@/src/context/CheckoutContext'
 import { Plan } from '@/src/types/plans'
-import ServicesCompleted from '@/src/components/front/ServicesCompleted'
+import ServicesCompleted from '@/src/components/ui/ServicesCompleted'
 
 const HEADER_HEIGHT = 250
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 70
@@ -896,7 +896,7 @@ export default function ServiceDetailsScreen() {
 								</View>
 							</View>
 						</View>
-						<Separador text="Benefícios" />
+						<Separator text="Benefícios" />
 						<View style={styles.benefitsSection}>
 							{service.benefits
 								.reduce<Array<Array<(typeof service.benefits)[0]>>>(
@@ -965,11 +965,11 @@ export default function ServiceDetailsScreen() {
 							</View>
 						</View>
 
-						<Separador text="Serviços realizados" />
+						<Separator text="Serviços realizados" />
 
 						<ServicesCompleted services={services.slice(0, 2)} />
 
-						<Separador text="Planos disponíveis" />
+						<Separator text="Planos disponíveis" />
 						<View style={styles.periodSelector}>
 							<TouchableOpacity
 								type="tertiary"

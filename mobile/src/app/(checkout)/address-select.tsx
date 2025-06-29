@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/Themed'
-import StatusCheckout from '@/src/components/front/StatusCheckout'
+import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { Address } from '@/types/address'
 
 const addresses: Address[] = [
