@@ -11,7 +11,7 @@ type ServicesCardProps = {
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
-	const { theme, themePreference, effectiveTheme } = useCustomTheme()
+	const { theme, effectiveTheme } = useCustomTheme()
 	const styles = makeStyles(theme as Theme)
 	const handlePress = () => {
 		router.push({

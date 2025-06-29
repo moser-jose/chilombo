@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { ScrollView, StyleSheet, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
@@ -19,7 +19,7 @@ interface PaymentMethod {
 const paymentMethods: PaymentMethod[] = [
 	{ id: 'card', name: 'Cartão de Crédito', icon: 'card-outline' },
 	{ id: 'pix', name: 'PIX', icon: 'qr-code-outline' },
-	{ id: 'banc', name: 'Transferência Bancária', icon: 'business-outline' },
+	{ id: 'banc', name: 'Depósito ou Transferência Bancária', icon: 'business-outline' },
 	{ id: 'express', name: 'Transferência Express', icon: 'flash-outline' },
 	{ id: 'cash', name: 'Dinheiro', icon: 'cash' },
 ]
@@ -44,6 +44,11 @@ export default function PaymentWithFile() {
 			setComprovante: state.setComprovante,
 		})),
 	)
+
+	const selectedMethodFunc = useCallback((method: string) => {
+		setSelectedMethod(method)
+		setComprovante(false)
+	}, [])
 
 	const handlePayment = () => {
 		if (!selectedMethod) {
@@ -152,7 +157,7 @@ export default function PaymentWithFile() {
 									styles.methodCard,
 									selectedMethod === method.id && styles.selectedMethod,
 								]}
-								onPress={() => setSelectedMethod(method.id)}
+								onPress={() => selectedMethodFunc(method.id)}
 							>
 								<Ionicons
 									name={method.icon as any}
@@ -290,10 +295,14 @@ export default function PaymentWithFile() {
 									<Text style={styles.fileInfoTitle}>
 										✅ Comprovante anexado:
 									</Text>
-									<Text style={styles.fileInfoText}>{comprovante.name}</Text>
-									<Text style={styles.fileInfoText}>
-										Tamanho: {(comprovante.size / 1024 / 1024).toFixed(2)} MB
-									</Text>
+									<View style={styles.fileInfoTextContainer}>
+										<Text style={styles.fileInfoText}>
+											{comprovante.name} |{' '}
+										</Text>
+										<Text style={styles.fileInfoText}>
+											Tamanho: {(comprovante.size / 1024 / 1024).toFixed(2)} MB
+										</Text>
+									</View>
 								</View>
 							)}
 
@@ -621,5 +630,10 @@ const useStyles = (theme: Theme) =>
 		},
 		buttonDisabled: {
 			backgroundColor: theme.colors.disabled,
+		},
+		fileInfoTextContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			backgroundColor: 'transparent',
 		},
 	})

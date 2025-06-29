@@ -1,12 +1,8 @@
 import { window } from '../../constants/SizeScreen'
 import * as React from 'react'
 import { View, Animated } from 'react-native'
-import {
-	useSharedValue
-} from 'react-native-reanimated'
-import Carousel, {
-	ICarouselInstance
-} from 'react-native-reanimated-carousel'
+import { useSharedValue } from 'react-native-reanimated'
+import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel'
 import PlanCard from './PlanCard'
 import { useState } from 'react'
 import { useCheckout } from '@/src/context/CheckoutContext'
