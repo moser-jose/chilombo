@@ -78,6 +78,10 @@ Chilombo project mobile app, developed with React Native, Expo, and TypeScript. 
 # Install dependencies
 yarn
 
+cd mobile
+
+yarn run test
+
 # iOS
 yarn expo run:ios
 ```

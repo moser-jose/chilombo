@@ -102,7 +102,7 @@ function Index() {
 	}
 
 	return (
-		<View id="carousel-component">
+		<View testID="carousel-component">
 			<Carousel
 				autoPlayInterval={2000}
 				data={carouselData}
