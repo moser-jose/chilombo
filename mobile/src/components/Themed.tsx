@@ -35,7 +35,7 @@ type TextInputUIProps = TextInputProps & {
 	type: 'email' | 'password' | 'phone' | 'text'
 	placeholder: string
 	isPasswordStrong?: boolean
-	icon?: keyof typeof DefaultIonicons.glyphMap
+	icon?: keyof typeof Ionicons.glyphMap
 	label?: string
 	onChangeText?: (text: string) => void
 	onFocus?: () => void
@@ -48,7 +48,7 @@ type TextInputUIProps = TextInputProps & {
 type FileInputProps = {
 	label?: string
 	placeholder?: string
-	icon?: keyof typeof DefaultIonicons.glyphMap
+	icon?: keyof typeof Ionicons.glyphMap
 	onFileSelect?: (file: {
 		uri: string
 		name: string
@@ -479,7 +479,7 @@ export function FileInput({
 				disabled={disabled || isLoading}
 			>
 				<Ionicons
-					name={icon}
+					name={icon as keyof typeof Ionicons.glyphMap}
 					style={{ marginRight: 8 }}
 					size={20}
 					color={theme.colors.colorIconInput}
