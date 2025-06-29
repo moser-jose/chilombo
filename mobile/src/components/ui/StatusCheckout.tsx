@@ -12,8 +12,10 @@ const NumberIcon = ({
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme)
 	return (
-		<View style={[styles.numberContainer]}>
-			<Text style={[styles.numberText, style]}>{number}</Text>
+		<View testID="number-container" style={[styles.numberContainer]}>
+			<Text testID="number-text" style={[styles.numberText, style]}>
+				{number}
+			</Text>
 		</View>
 	)
 }
@@ -33,9 +35,11 @@ export default function StatusCheckout({
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme)
 	return (
-		<View style={styles.statusContainer}>
+		<View testID="status-container" style={styles.statusContainer}>
 			<NumberIcon number={number} style={styleNumber} />
-			<Text style={[styles.statusText, styleText]}>{status}</Text>
+			<Text testID="status-text" style={[styles.statusText, styleText]}>
+				{status}
+			</Text>
 		</View>
 	)
 }

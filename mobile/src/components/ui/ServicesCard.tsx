@@ -26,12 +26,14 @@ const ServicesCard = ({ data }: ServicesCardProps) => {
 
 	return (
 		<TouchableOpacity
+			testID="service-card"
 			activeOpacity={0.8}
 			style={styles.container}
 			onPress={handlePress}
 		>
-			<View style={styles.containerIcon}>
+			<View testID="icon-container" style={styles.containerIcon}>
 				<Image
+					testID="service-icon"
 					source={effectiveTheme === 'dark' ? data.iconDark : data.icon}
 					style={styles.icon}
 				/>
