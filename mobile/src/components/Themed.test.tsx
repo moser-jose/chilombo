@@ -1,18 +1,11 @@
 import React from 'react'
-import { render, fireEvent, waitFor } from '@testing-library/react-native'
+import { render, fireEvent } from '@testing-library/react-native'
 import {
 	Text,
-	TextInput,
-	FileInput,
-	View,
-	TouchableOpacity,
-	BodyScrollView,
-	ExternalLink,
+	TextInput, View,
+	TouchableOpacity
 } from './Themed'
 import { Theme } from '@/src/types/theme'
-import * as ImagePicker from 'expo-image-picker'
-import * as DocumentPicker from 'expo-document-picker'
-import * as WebBrowser from 'expo-web-browser'
 
 // Mock theme for testing
 const mockTheme: Theme = {

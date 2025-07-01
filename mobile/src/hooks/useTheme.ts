@@ -1,16 +1,8 @@
 import { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
 import { useThemeStore } from '../store/store'
+import { useShallow } from 'zustand/react/shallow'
 
-/**
- * Custom hook that combines Zustand theme store with device theme detection
- *
- * Usage:
- * const { theme, setThemePreference, effectiveTheme } = useTheme()
- *
- * Alternative: Use Zustand store directly
- * const { theme, setThemePreference } = useThemeStore()
- */
 export const useTheme = () => {
 	const deviceTheme = useColorScheme()
 	const {
@@ -21,9 +13,18 @@ export const useTheme = () => {
 		navigationTheme,
 		setThemePreference,
 		updateEffectiveTheme,
-	} = useThemeStore()
+	} = useThemeStore(
+		useShallow(state => ({
+			themePreference: state.themePreference,
+			effectiveTheme: state.effectiveTheme,
+			isSystemTheme: state.isSystemTheme,
+			theme: state.theme,
+			navigationTheme: state.navigationTheme,
+			setThemePreference: state.setThemePreference,
+			updateEffectiveTheme: state.updateEffectiveTheme,
+		})),
+	)
 
-	// Update effective theme when device theme changes (for system preference)
 	useEffect(() => {
 		updateEffectiveTheme(deviceTheme || 'light')
 	}, [deviceTheme, updateEffectiveTheme])
