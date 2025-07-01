@@ -19,9 +19,10 @@ import { Separator } from '@/src/components/ui/Separator'
 import Star from '@/src/components/ui/Star'
 import { useCustomTheme } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
-import { useCheckout } from '@/src/context/CheckoutContext'
+import { useCheckoutStore } from '@/src/store/store'
 import { Plan } from '@/src/types/plans'
 import ServicesCompleted from '@/src/components/ui/ServicesCompleted'
+import { useShallow } from 'zustand/react/shallow'
 
 const HEADER_HEIGHT = 250
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 70
@@ -632,7 +633,7 @@ export default function ServiceDetailsScreen() {
 
 	const serviceId = typeof id === 'string' ? parseInt(id, 10) : 1
 	const service = services.find(s => s.id === serviceId) || services[0]
-	const { setPlan } = useCheckout()
+	const setPlan = useCheckoutStore(useShallow(state => state.setPlan))
 
 	const handlePlanSelection = (plan: Plan) => {
 		setPlan(plan)
