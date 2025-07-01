@@ -32,7 +32,7 @@ import {
 	useAuth,
 } from '@clerk/clerk-expo'
 import { TextInput } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
   WebBrowser.maybeCompleteAuthSession()
@@ -47,7 +47,7 @@ export default function SignIn() {
 	const [errors, setErrors] = useState<ClerkAPIError | null>(null)
 	const { signIn, setActive, isLoaded } = useSignIn()
 	const { signOut } = useAuth()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 	const { width, height } = useWindowDimensions()
 	const [emailAddress, setEmailAddress] = useState('')

@@ -2,9 +2,10 @@ import { Stack } from 'expo-router'
 import { TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
+
 export default function UserLayout() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	return (
 		<Stack
 			screenOptions={{

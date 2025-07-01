@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent, waitFor } from '@testing-library/react-native'
 import { router } from 'expo-router'
 import ServicesCompleted from './ServicesCompleted'
-import { CustomThemeProvider } from '@/src/context/ThemeContext'
+import { Theme } from '@/src/types/theme'
 
 // Mock expo-router
 jest.mock('expo-router', () => ({
@@ -42,6 +42,73 @@ jest.mock('@expo/vector-icons', () => ({
 	Ionicons: 'Ionicons',
 }))
 
+// Mock the useTheme hook
+jest.mock('@/src/hooks/useTheme', () => ({
+	useTheme: () => ({
+		theme: mockTheme,
+	}),
+}))
+
+// Mock theme for testing
+const mockTheme: Theme = {
+	dark: false,
+	colors: {
+		text: '#000000',
+		textMuted: '#666666',
+		background: '#f5f5f5',
+		tint: '#007AFF',
+		tabIconDefault: '#8E8E93',
+		borderInput: '#E5E5EA',
+		tabIconSelected: '#007AFF',
+		ImputBackgroundColors: '#F2F2F7',
+		colorIconInput: '#8E8E93',
+		secondaryMuted: '#C7C7CC',
+		primary: '#007AFF',
+		secondary: '#5856D6',
+		card: '#ffffff',
+		border: '#e0e0e0',
+		notification: '#FF3B30',
+		muted: '#8E8E93',
+		tabBarBackgroundColor: '#ffffff',
+		tabBarActiveTintColor: '#007AFF',
+		modal: '#ffffff',
+		backgroundHeader: '#ffffff',
+		backgroundIcon: '#F2F2F7',
+		backgroundHeaderScreen: '#ffffff',
+		textHeader: '#000000',
+		backgroundIconIndex: '#F2F2F7',
+		buttonHeader: '#007AFF',
+		borderBottomHeader: '#E5E5EA',
+		cancelButton: '#FF3B30',
+		black: '#000000',
+		disabled: '#C7C7CC',
+		error: '#FF3B30',
+	},
+	fonts: {
+		light: { fontFamily: 'System', fontWeight: '300' },
+		regular: { fontFamily: 'System', fontWeight: '400' },
+		medium: { fontFamily: 'System', fontWeight: '500' },
+		semibold: { fontFamily: 'System', fontWeight: '600' },
+		bold: { fontFamily: 'System', fontWeight: '700' },
+		heavy: { fontFamily: 'System', fontWeight: '900' },
+	},
+	size: {
+		xss: 10,
+		xs: 12,
+		xsB: 14,
+		sm: 16,
+		smB: 18,
+		md: 20,
+		base: 22,
+		blg: 24,
+		lg: 26,
+		lgX: 28,
+		xl: 30,
+		xxl: 32,
+		xxxl: 34,
+	},
+}
+
 const mockServices = [
 	{
 		id: 1,
@@ -67,7 +134,7 @@ const mockServices = [
 ]
 
 const renderWithTheme = (component: React.ReactElement) => {
-	return render(<CustomThemeProvider>{component}</CustomThemeProvider>)
+	return render(component)
 }
 
 describe('ServicesCompleted', () => {

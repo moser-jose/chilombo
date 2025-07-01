@@ -14,7 +14,7 @@ import * as Haptics from 'expo-haptics'
 import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo'
 import { TouchableOpacity } from '../Themed'
 import { maskEmail } from '@/src/utils/maskEmail'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 interface ModalSSOProps {
 	openModal: boolean
@@ -48,7 +48,7 @@ export function ModalSSO({ openModal, isDark, emailAddress }: ModalSSOProps) {
 	const [isCodeFiveFocused, setIsCodeFiveFocused] = useState(false)
 	const [isCodeSixFocused, setIsCodeSixFocused] = useState(false)
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 
 	const onVerifyPress = async () => {

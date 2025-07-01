@@ -28,12 +28,12 @@ import { Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
 import { ModalSSO } from '@/src/components/modal/ModalSSO'
 import { TextInput, TouchableOpacity } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 export default function SignUp() {
 	const { isLoaded, signUp } = useSignUp()
 	const router = useRouter()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	const { width, height } = useWindowDimensions()
 	const [firstName, setFirstName] = useState('')
@@ -179,7 +179,7 @@ export default function SignUp() {
 			setPendingVerification(true)
 			setOpenModal(true)
 		} catch (err) {
-			console.log(err)
+			console.error(err)
 			if (isClerkAPIResponseError(err)) setErrors(err.errors)
 		} finally {
 			setIsLoading(false)

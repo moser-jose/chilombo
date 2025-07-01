@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import LinearGradient from 'react-native-linear-gradient'
 import { Ionicons } from '@expo/vector-icons'
 
 export default function ServicesCompleted({ services }: { services: any[] }) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<View

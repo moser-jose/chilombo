@@ -21,7 +21,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { Ionicons } from '@expo/vector-icons'
 import { FontSize } from '../constants/FontSize'
 import { Theme } from '@/src/types/theme'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { useState, useEffect } from 'react'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { useStateStore } from '@/src/store/store'
@@ -68,7 +68,7 @@ type Props = TouchableOpacityProps & {
 }
 
 export function Text(props: TextProps) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const { style, ...otherProps } = props
 	const color = theme.colors.text
 
@@ -94,7 +94,7 @@ export function TextInput({
 		type: string
 	} | null>(null)
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const [showPassword, setShowPassword] = useState(false)
 
 	const styles = makeStyles(theme as Theme)
@@ -298,7 +298,7 @@ export function FileInput({
 			setRemoveFileInput: state.setRemoveFileInput,
 		})),
 	)
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 
 	const requestPermissions = async () => {
@@ -530,7 +530,7 @@ export function FileInput({
 
 export function View(props: ViewProps) {
 	const { style, ...otherProps } = props
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const backgroundColor = theme.colors.background
 
 	return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
@@ -538,7 +538,7 @@ export function View(props: ViewProps) {
 
 export function TouchableOpacity(props: Props) {
 	const { style, type = 'primary', ...otherProps } = props
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<DefaultTouchableOpacity

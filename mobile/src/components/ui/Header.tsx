@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/clerk-expo'
 import FastImage from 'react-native-fast-image'
 import { Link, useRouter } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 type Address = {
@@ -19,7 +19,7 @@ type Address = {
 const Header = () => {
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [address, setAddress] = useState<Address | null>(null)
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	const { user } = useUser()
 	const router = useRouter()

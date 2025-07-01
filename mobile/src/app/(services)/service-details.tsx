@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ModalMessage from '@/src/components/modal/ModalMessage'
 import { Separator } from '@/src/components/ui/Separator'
 import Star from '@/src/components/ui/Star'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import { useCheckoutStore } from '@/src/store/store'
 import { Plan } from '@/src/types/plans'
@@ -627,7 +627,7 @@ export default function ServiceDetailsScreen() {
 	const [showCommentModal, setShowCommentModal] = useState(false)
 	const [commentText, setCommentText] = useState('')
 	const { id, origin } = useLocalSearchParams()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 
 	const styles = useStyles(theme as Theme)
 

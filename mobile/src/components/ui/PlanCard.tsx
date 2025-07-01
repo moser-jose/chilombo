@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { TouchableOpacity } from '@/components/Themed'
 import { Ionicons } from '@expo/vector-icons'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import { formatKwanza } from '@/src/utils/currency'
 type PlanCardProps = {
@@ -21,7 +21,7 @@ export default function PlanCard({
 	tag,
 	onPress,
 }: PlanCardProps) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 	return (
 		<View style={styles.container}>

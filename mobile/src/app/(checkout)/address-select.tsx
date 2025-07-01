@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useCheckoutStore } from '../../store/store'
 import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/Themed'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
@@ -71,7 +71,7 @@ export default function AddressSelect() {
 	const address = useCheckoutStore(useShallow(state => state.address))
 	const setAddress = useCheckoutStore(useShallow(state => state.setAddress))
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme as Theme)
 
 	const handleSelectAddress = (address: Address) => {

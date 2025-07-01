@@ -2,11 +2,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 export default function Services({ services }: { services: any[] }) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<View

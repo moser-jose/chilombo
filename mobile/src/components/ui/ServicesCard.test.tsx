@@ -1,12 +1,81 @@
 import React from 'react'
 import { render, fireEvent, waitFor } from '@/src/test-utils'
 import ServicesCard from './ServicesCard'
+import { Theme } from '@/src/types/theme'
+
+// Mock theme for testing
+const mockTheme: Theme = {
+	dark: false,
+	colors: {
+		text: '#000000',
+		textMuted: '#666666',
+		background: '#FFFFFF',
+		tint: '#007AFF',
+		tabIconDefault: '#8E8E93',
+		tabIconSelected: '#007AFF',
+		primary: '#007AFF',
+		secondary: '#5856D6',
+		secondaryMuted: '#C7C7CC',
+		borderInput: '#E5E5EA',
+		ImputBackgroundColors: '#F2F2F7',
+		colorIconInput: '#8E8E93',
+		card: '#FFFFFF',
+		border: '#E5E5EA',
+		notification: '#FF3B30',
+		muted: '#8E8E93',
+		tabBarBackgroundColor: '#FFFFFF',
+		tabBarActiveTintColor: '#007AFF',
+		modal: '#FFFFFF',
+		backgroundHeader: '#FFFFFF',
+		backgroundIcon: '#F2F2F7',
+		backgroundHeaderScreen: '#FFFFFF',
+		textHeader: '#000000',
+		backgroundIconIndex: '#F2F2F7',
+		buttonHeader: '#007AFF',
+		borderBottomHeader: '#E5E5EA',
+		cancelButton: '#FF3B30',
+		black: '#000000',
+		disabled: '#C7C7CC',
+		error: '#FF3B30',
+	},
+	fonts: {
+		light: { fontFamily: 'System', fontWeight: '300' },
+		regular: { fontFamily: 'System', fontWeight: '400' },
+		medium: { fontFamily: 'System', fontWeight: '500' },
+		semibold: { fontFamily: 'System', fontWeight: '600' },
+		bold: { fontFamily: 'System', fontWeight: '700' },
+		heavy: { fontFamily: 'System', fontWeight: '900' },
+	},
+	size: {
+		xss: 10,
+		xs: 12,
+		xsB: 14,
+		sm: 16,
+		smB: 18,
+		md: 20,
+		base: 22,
+		blg: 24,
+		lg: 26,
+		lgX: 28,
+		xl: 30,
+		xxl: 32,
+		xxxl: 34,
+	},
+}
 
 // Mock expo-router
 jest.mock('expo-router', () => ({
 	router: {
 		push: jest.fn(),
 	},
+}))
+
+// Mock the useTheme hook
+jest.mock('@/src/hooks/useTheme', () => ({
+	useTheme: () => ({
+		theme: mockTheme,
+		effectiveTheme: 'light',
+	}),
 }))
 
 describe('ServicesCard', () => {
@@ -125,8 +194,8 @@ describe('ServicesCard', () => {
 						height: 70,
 						marginBottom: -5,
 						borderWidth: 1,
-						backgroundColor: '#F8F7FB',
-						borderColor: 'rgba(136, 133, 135, 0.31)',
+						backgroundColor: mockTheme.colors.ImputBackgroundColors,
+						borderColor: mockTheme.colors.tint,
 					}),
 				]),
 			)
@@ -142,9 +211,9 @@ describe('ServicesCard', () => {
 				expect.arrayContaining([
 					expect.objectContaining({
 						fontSize: 12, // FontSize.xs
-						fontFamily: 'PoppinsMedium',
+						fontFamily: mockTheme.fonts.medium.fontFamily,
 						textAlign: 'center',
-						color: 'rgba(4, 9, 16, 0.82)',
+						color: mockTheme.colors.text,
 					}),
 				]),
 			)
@@ -169,13 +238,12 @@ describe('ServicesCard', () => {
 
 	describe('Theme Integration', () => {
 		function renderWithDarkTheme(ui: React.ReactElement) {
-			// Forçar o tema escuro via provider
-			const { CustomThemeProvider } = require('@/src/context/ThemeContext')
-			// HACK: Forçar o valor do sistema para dark
-			jest
-				.spyOn(require('react-native'), 'useColorScheme')
-				.mockReturnValue('dark')
-			return render(<CustomThemeProvider>{ui}</CustomThemeProvider>)
+			// Mock dark theme
+			jest.spyOn(require('@/src/hooks/useTheme'), 'useTheme').mockReturnValue({
+				theme: { ...mockTheme, dark: true },
+				effectiveTheme: 'dark',
+			})
+			return render(ui)
 		}
 
 		it('should use light theme icon by default', () => {
@@ -226,3 +294,7 @@ describe('ServicesCard', () => {
 		})
 	})
 })
+
+const renderWithTheme = (ui: React.ReactElement) => {
+	return render(ui)
+}

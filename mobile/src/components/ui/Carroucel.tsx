@@ -10,7 +10,7 @@ import Carousel, {
 	ICarouselInstance,
 	Pagination,
 } from 'react-native-reanimated-carousel'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 
 const carouselData = [
 	{
@@ -59,7 +59,7 @@ const carouselData = [
 function Index() {
 	const progress = useSharedValue<number>(0)
 	const ref = React.useRef<ICarouselInstance>(null)
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 
 	const renderSlide = ({ item }: { item: (typeof carouselData)[0] }) => (
 		<Animated.View

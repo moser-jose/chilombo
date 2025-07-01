@@ -9,14 +9,14 @@ import Colors from '@/src/constants/Theme'
 import { useState } from 'react'
 import ModalMessage from '@/src/components/modal/ModalMessage'
 import Constants from 'expo-constants'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 export default function SettingsScreen() {
 	const { signOut } = useClerk()
 	const [showLogoutModal, setShowLogoutModal] = useState(false)
 	const router = useRouter()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	const handleSignOut = async () => {
 		try {

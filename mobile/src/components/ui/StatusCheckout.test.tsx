@@ -1,8 +1,14 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react-native'
 import StatusCheckout from './StatusCheckout'
-import { CustomThemeProvider } from '@/src/context/ThemeContext'
 import { Theme } from '@/src/types/theme'
+
+// Mock the useTheme hook
+jest.mock('@/src/hooks/useTheme', () => ({
+	useTheme: () => ({
+		theme: mockTheme,
+	}),
+}))
 
 // Mock theme for testing
 const mockTheme: Theme = {
@@ -82,16 +88,8 @@ const mockTheme: Theme = {
 	},
 }
 
-// Mock the useCustomTheme hook
-jest.mock('@/src/context/ThemeContext', () => ({
-	...jest.requireActual('@/src/context/ThemeContext'),
-	useCustomTheme: () => ({
-		theme: mockTheme,
-	}),
-}))
-
 const renderWithTheme = (component: React.ReactElement) => {
-	return render(<CustomThemeProvider>{component}</CustomThemeProvider>)
+	return render(component)
 }
 
 describe('StatusCheckout', () => {

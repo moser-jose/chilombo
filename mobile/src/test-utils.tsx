@@ -1,22 +1,12 @@
-import React, { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react-native'
-import { CustomThemeProvider } from './context/ThemeContext'
+import React from 'react'
+import { render } from '@testing-library/react-native'
 
-interface AllTheProvidersProps {
-	children: React.ReactNode
+export function renderWithProviders(ui: React.ReactElement) {
+	return render(ui)
 }
-
-const AllTheProviders = ({ children }: AllTheProvidersProps) => {
-	return <CustomThemeProvider>{children}</CustomThemeProvider>
-}
-
-const customRender = (
-	ui: ReactElement,
-	options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, { wrapper: AllTheProviders, ...options })
 
 // re-export everything
 export * from '@testing-library/react-native'
 
 // override render method
-export { customRender as render }
+export { renderWithProviders as render }

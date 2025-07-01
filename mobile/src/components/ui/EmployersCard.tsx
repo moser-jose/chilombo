@@ -1,14 +1,8 @@
 /* eslint-disable react-native/no-color-literals */
 import * as React from 'react'
-import {
-	View,
-	Text,
-	Image,
-	StyleSheet,
-	TouchableOpacity
-} from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { FontSize } from '../../constants/FontSize'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 interface EmployerCardProps {
@@ -16,7 +10,7 @@ interface EmployerCardProps {
 }
 
 const EmployerCard: React.FC<EmployerCardProps> = ({ data }) => {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 	const name = `${data.firstname} ${data.lastname}`
 	const image =

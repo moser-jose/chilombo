@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, StyleProp, TextStyle } from 'react-native'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 const NumberIcon = ({
@@ -9,7 +9,7 @@ const NumberIcon = ({
 	number: number
 	style?: StyleProp<TextStyle>
 }) => {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 	return (
 		<View testID="number-container" style={[styles.numberContainer]}>
@@ -32,7 +32,7 @@ export default function StatusCheckout({
 	styleText?: StyleProp<TextStyle>
 	styleNumber?: StyleProp<TextStyle>
 }) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 	return (
 		<View testID="status-container" style={styles.statusContainer}>

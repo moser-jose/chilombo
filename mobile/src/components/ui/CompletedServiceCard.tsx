@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import Star from './Star'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 
 interface CompletedServiceCardProps {
 	data: any
@@ -31,7 +31,7 @@ const CompletedServiceCard: React.FC<CompletedServiceCardProps> = ({
 	styleTitle,
 	origin,
 }) => {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 
 	return (

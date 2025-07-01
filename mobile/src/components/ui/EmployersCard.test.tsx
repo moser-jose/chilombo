@@ -2,8 +2,8 @@ import React from 'react'
 import { render } from '@testing-library/react-native'
 import EmployerCard from './EmployersCard'
 
-jest.mock('@/src/context/ThemeContext', () => ({
-	useCustomTheme: () => ({
+jest.mock('@/src/hooks/useTheme', () => ({
+	useTheme: () => ({
 		theme: {
 			colors: {
 				ImputBackgroundColors: '#ffffff',

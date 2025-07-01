@@ -1,6 +1,7 @@
+import React from 'react'
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 type StarProps = {
@@ -10,7 +11,7 @@ type StarProps = {
 }
 
 export default function Star({ rating, style, textColor = '#fff' }: StarProps) {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<View testID="star-container" style={[styles.starContainer, style]}>

@@ -10,6 +10,7 @@ import { Separator } from '@/src/components/ui/Separator'
 import ServicesCard from '@/src/components/ui/ServicesCard'
 import CompletedServiceCard from '../../components/ui/CompletedServiceCard'
 import { View, Text } from '@/src/components/Themed'
+import { useTheme } from '@/src/hooks/useTheme'
 const users = [
 	{
 		id: 1,
@@ -646,7 +647,6 @@ const services = [
 import Services from '@/src/components/ui/Services'
 import Colors from '@/src/constants/Theme'
 import { Theme } from '@/src/types/theme'
-import { useCustomTheme } from '@/src/context/ThemeContext'
 
 const completedServices = [
 	{
@@ -695,7 +695,7 @@ const completedServices = [
 
 export default function HomeScreen() {
 	const { user } = useUser()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyle(theme as Theme)
 
 	return (

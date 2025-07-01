@@ -19,7 +19,7 @@ import ModalMessage from '@/src/components/modal/ModalMessage'
 import { Separator } from '@/src/components/ui/Separator'
 import Star from '@/src/components/ui/Star'
 import { Theme } from '@/src/types/theme'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import EmployerCard from '@/src/components/ui/EmployersCard'
 
 const { width } = Dimensions.get('window')
@@ -254,7 +254,7 @@ export default function CompletedServiceDetailScreen() {
 	const scrollY = useRef(new Animated.Value(0)).current
 	const insets = useSafeAreaInsets()
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 
 	// Find the service by ID

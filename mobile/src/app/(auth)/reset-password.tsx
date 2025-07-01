@@ -5,18 +5,19 @@ import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { Text, TouchableOpacity } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
 import { router, Stack } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
-import { Theme } from '@/src/types/theme'
+import { useTheme } from '@/src/hooks/useTheme'
 import { ClerkAPIError } from '@clerk/types'
 import { Ionicons } from '@expo/vector-icons'
+import { Theme } from '@/src/types/theme'
+
 export default function ResetPassword() {
 	const { client } = useClerk()
 	const [email, setEmail] = useState('')
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
 	const [pendingVerification, setPendingVerification] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
-	const { theme } = useCustomTheme()
-	const styles = makeStyles(theme as Theme)
+	const { theme } = useTheme()
+	const styles = makeStyles(theme)
 	useEffect(() => {
 		if (pendingVerification) {
 			router.push({

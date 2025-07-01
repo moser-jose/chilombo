@@ -18,7 +18,7 @@ import {
 	Poppins_600SemiBold,
 	Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
-import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Ionicons } from '@expo/vector-icons'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
@@ -66,9 +66,7 @@ export default function RootLayout() {
 
 	return (
 		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
-			<CustomThemeProvider>
-				<RootLayoutNav />
-			</CustomThemeProvider>
+			<RootLayoutNav />
 		</ClerkProvider>
 	)
 }
@@ -76,7 +74,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
 	const { isLoaded, isSignedIn } = useAuth()
 	const router = useRouter()
-	const { navigationTheme } = useCustomTheme()
+	const { navigationTheme } = useTheme()
 	useEffect(() => {
 		if (isLoaded && !isSignedIn) {
 			router.push('/(auth)')

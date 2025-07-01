@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 
 import { Text, View } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 export default function CategoriesScreen() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 	return (
 		<View style={styles.container}>

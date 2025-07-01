@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons'
 import FastImage from 'react-native-fast-image'
 import { router } from 'expo-router'
 import { TextInput } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import CompletedServiceCard from '@/src/components/ui/CompletedServiceCard'
 const { width, height } = Dimensions.get('window')
@@ -713,7 +713,7 @@ const SeparatorList = ({ title, theme }: { title: string; theme: Theme }) => {
 const SearchResultsModal = ({ visible, onClose }: SearchResultsModalProps) => {
 	const [searchTerm, setSearchTerm] = useState('')
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 
 	const styles = useStyles(theme)
 

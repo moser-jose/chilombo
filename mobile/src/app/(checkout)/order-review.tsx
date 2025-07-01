@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { useCheckoutStore} from '../../store/store'
+import { useCheckoutStore } from '../../store/store'
 import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { formatKwanza } from '@/src/utils/currency'
@@ -12,7 +12,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 export default function OrderReview() {
 	const plan = useCheckoutStore(useShallow(state => state.plan))
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme)
 
 	return (

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
 import { Text, View, TouchableOpacity } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { TextInput, FileInput } from '@/src/components/Themed'
@@ -32,7 +32,7 @@ type FileType = 'image' | 'document'
 
 export default function PaymentWithFile() {
 	const router = useRouter()
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = useStyles(theme as Theme)
 
 	const [selectedMethod, setSelectedMethod] = useState<string>('')

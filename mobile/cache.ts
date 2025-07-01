@@ -10,7 +10,7 @@ const createTokenCache = (): TokenCache => {
 					? localStorage.getItem(key)
 					: await SecureStore.getItemAsync(key)
 			} catch (error) {
-				console.log(error)
+				console.error(error)
 			}
 		},
 		saveToken: async (key: string, token: string) => {
@@ -19,7 +19,7 @@ const createTokenCache = (): TokenCache => {
 					? localStorage.setItem(key, token)
 					: await SecureStore.setItemAsync(key, token)
 			} catch (error) {
-				console.log(error)
+				console.error(error)
 			}
 		},
 	}
