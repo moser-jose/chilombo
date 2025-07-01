@@ -1,11 +1,11 @@
 import { ScrollView, StyleSheet } from 'react-native'
 import { Text, View } from '@/src/components/Themed'
 import { Stack } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 export default function PrivacyPolicyScreen() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	const policies = [
 		{

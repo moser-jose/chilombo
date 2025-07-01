@@ -1,7 +1,7 @@
+import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { Modal, View, StyleSheet, Text } from 'react-native'
-import { useCustomTheme } from '@/src/context/ThemeContext'
-import { Theme } from '@/src/types/theme'
+import { useTheme } from '@/src/hooks/useTheme'
 import { TouchableOpacity } from '../Themed'
 
 const ModalMessage = ({
@@ -25,7 +25,7 @@ const ModalMessage = ({
 	modalIcon: keyof typeof Ionicons.glyphMap
 	cancelButton?: boolean
 }) => {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<Modal
@@ -74,7 +74,7 @@ const ModalMessage = ({
 
 export default ModalMessage
 
-const makeStyles = (theme: Theme) =>
+const makeStyles = (theme: any) =>
 	StyleSheet.create({
 		modalOverlay: {
 			flex: 1,

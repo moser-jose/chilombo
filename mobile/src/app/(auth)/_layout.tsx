@@ -1,9 +1,9 @@
 import { Redirect, Stack } from 'expo-router'
 import { useAuth } from '@clerk/clerk-expo'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { View } from '@/src/components/Themed'
 export default function AuthLayout() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const { isLoaded, isSignedIn } = useAuth()
 	if (!isLoaded) return null
 	if (isSignedIn) return <Redirect href="/(main)" />

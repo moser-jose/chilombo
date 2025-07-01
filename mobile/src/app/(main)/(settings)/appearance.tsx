@@ -2,18 +2,18 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 type ThemeOption = 'light' | 'dark' | 'system'
 
 export default function AppearanceScreen() {
 	const router = useRouter()
-	const { themePreference, setThemePreference, theme } = useCustomTheme()
+	const { themePreference, setThemePreference, theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 
-	const handleSelectTheme = async (option: ThemeOption) => {
-		await setThemePreference(option)
+	const handleSelectTheme = (option: ThemeOption) => {
+		setThemePreference(option)
 	}
 
 	const renderThemeOption = (option: ThemeOption, label: string) => {

@@ -1,9 +1,9 @@
 import { Stack } from 'expo-router'
+import { useTheme } from '@/src/hooks/useTheme'
 import { View } from 'react-native'
-import { useCustomTheme } from '@/src/context/ThemeContext'
 
 export default function CheckoutLayout() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	return (
 		<Stack
 			screenOptions={{

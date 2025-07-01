@@ -13,7 +13,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { Link, useRouter } from 'expo-router'
 import CompletedServiceCard from '@/src/components/ui/CompletedServiceCard'
 import { Separator } from '@/src/components/ui/Separator'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import ModalMessage from '@/src/components/modal/ModalMessage'
 import { useState } from 'react'
@@ -68,7 +68,7 @@ export default function UserScreen() {
 	const { signOut } = useClerk()
 	const router = useRouter()
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 
 	const userVerified =
 		user?.phoneNumbers[0]?.verification?.status === 'verified' &&

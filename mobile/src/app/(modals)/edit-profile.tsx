@@ -21,9 +21,9 @@ import NetInfo from '@react-native-community/netinfo'
 import * as ImagePicker from 'expo-image-picker'
 import { TextInput } from '@/src/components/Themed'
 import ModalMessage from '@/src/components/modal/ModalMessage'
-import { useCustomTheme } from '@/src/context/ThemeContext'
-import { Theme } from '@/src/types/theme'
+import { useTheme } from '@/src/hooks/useTheme'
 import { TouchableOpacity } from '@/src/components/Themed'
+import { Theme } from '@/src/types/theme'
 
 export default function EditProfileScreen() {
 	const { user } = useUser()
@@ -39,7 +39,7 @@ export default function EditProfileScreen() {
 	const [updateSave, setUpdateSave] = useState(false)
 	const slideAnim = useRef(new Animated.Value(0)).current
 
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 
 	const styles = makeStyles(theme)
 

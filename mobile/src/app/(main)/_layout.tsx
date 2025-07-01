@@ -9,7 +9,7 @@ import { CategorySVG } from '@/src/components/svg/CategorySVG'
 import { MyServicesSVG } from '@/src/components/svg/MyServices'
 import { useUser } from '@clerk/clerk-expo'
 import { SettingsSVG } from '@/src/components/svg/SettingsSvg'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -24,7 +24,7 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const { user } = useUser()
 
 	if (!user) {

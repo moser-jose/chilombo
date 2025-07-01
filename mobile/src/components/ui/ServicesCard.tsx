@@ -3,7 +3,7 @@ import { FontSize } from '@/src/constants/FontSize'
 import { router } from 'expo-router'
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { Text } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 type ServicesCardProps = {
@@ -11,7 +11,7 @@ type ServicesCardProps = {
 }
 
 const ServicesCard = ({ data }: ServicesCardProps) => {
-	const { theme, effectiveTheme } = useCustomTheme()
+	const { theme, effectiveTheme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 	const handlePress = () => {
 		router.push({

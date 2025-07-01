@@ -10,7 +10,7 @@ import {
 import { isClerkAPIResponseError, useClerk } from '@clerk/clerk-expo'
 import { Text, TouchableOpacity, TextInput } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 import { router, Stack } from 'expo-router'
 import { ClerkAPIError } from '@clerk/types'
@@ -20,7 +20,7 @@ export default function ResetPasswordConfirm() {
 	const [errors, setErrors] = useState<ClerkAPIError[]>([])
 	const [password, setPassword] = useState('')
 	const [passwordConfirm, setPasswordConfirm] = useState('')
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme as Theme)
 
 	const codeOneRef = useRef<DefaultTextInput>(null)

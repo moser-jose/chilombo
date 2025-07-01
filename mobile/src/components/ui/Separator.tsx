@@ -11,7 +11,7 @@ import { FontSize } from '../../constants/FontSize'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@/src/constants/Theme'
 import { Text } from '@/src/components/Themed'
-import { useCustomTheme } from '@/src/context/ThemeContext'
+import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
 type SeparatorProps = {
@@ -22,7 +22,7 @@ type SeparatorProps = {
 }
 
 export const Separator = ({ onPress, text, style, more }: SeparatorProps) => {
-	const { theme } = useCustomTheme()
+	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<View style={[styles.container, style]}>
