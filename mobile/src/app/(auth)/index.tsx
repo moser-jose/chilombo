@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
 	Platform,
 	Image,
@@ -17,7 +17,6 @@ import * as Haptics from 'expo-haptics'
 import * as WebBrowser from 'expo-web-browser'
 import * as AuthSession from 'expo-auth-session'
 import { ClerkAPIError } from '@clerk/types'
-import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser'
 
 import { Text, View, TouchableOpacity } from '@/src/components/Themed'
 import { FontSize } from '@/src/constants/FontSize'
@@ -35,10 +34,22 @@ import { TextInput } from '@/src/components/Themed'
 import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
 
-  WebBrowser.maybeCompleteAuthSession()
+WebBrowser.maybeCompleteAuthSession()
 
 const logoAppLight = Image.resolveAssetSource(logoLight).uri
 const logoAppDark = Image.resolveAssetSource(logoDark).uri
+
+export const useWarmUpBrowser = () => {
+	useEffect(() => {
+		// Preloads the browser for Android devices to reduce authentication load time
+		// See: https://docs.expo.dev/guides/authentication/#improving-user-experience
+		void WebBrowser.warmUpAsync()
+		return () => {
+			// Cleanup: closes browser when component unmounts
+			void WebBrowser.coolDownAsync()
+		}
+	}, [])
+}
 
 export default function SignIn() {
 	useWarmUpBrowser()
@@ -69,51 +80,58 @@ export default function SignIn() {
 		maxHeight: 110,
 	}
 
-	const handleSignSocial = useCallback(async ({ strategy }: { strategy: 'oauth_google' | 'oauth_facebook' | 'oauth_apple' }) => {
-		triggerHapticFeedback()
-		try {
-			const { createdSessionId, setActive, signIn, signUp } =
-				await startSSOFlow({
-					strategy: strategy,
-					redirectUrl: AuthSession.makeRedirectUri(),
-				})
+	const handleSignSocial = useCallback(
+		async ({
+			strategy,
+		}: {
+			strategy: 'oauth_google' | 'oauth_facebook' | 'oauth_apple'
+		}) => {
+			triggerHapticFeedback()
+			try {
+				const { createdSessionId, setActive, signIn, signUp } =
+					await startSSOFlow({
+						strategy: strategy,
+						redirectUrl: AuthSession.makeRedirectUri(),
+					})
 
-			if (createdSessionId) {
-				setActive?.({ session: createdSessionId })
+				if (createdSessionId) {
+					setActive?.({ session: createdSessionId })
 
-				router.replace('/(main)')
-			} else if (signIn) {
-				await signIn.create({
-					identifier: signIn.identifier as string,
-				})
+					router.replace('/(main)')
+				} else if (signIn) {
+					await signIn.create({
+						identifier: signIn.identifier as string,
+					})
 
-				router.replace('/(main)')
-			} else if (signUp) {
-				await signUp.create({})
+					router.replace('/(main)')
+				} else if (signUp) {
+					await signUp.create({})
 
-				router.replace('/(main)')
-			} else {
-				//console.log("No valid authentication state found");
+					router.replace('/(main)')
+				} else {
+					//console.log("No valid authentication state found");
+					setErrors({
+						code: 'verification_incomplete',
+						message: 'Verificação incompleta',
+						longMessage:
+							'O processo de verificação não pôde ser concluído. Por favor, tente novamente.',
+					})
+				}
+			} catch (err) {
+				if (isClerkAPIResponseError(err)) {
+					handleErrors(err.errors[0])
+				}
+
 				setErrors({
 					code: 'verification_incomplete',
-					message: 'Verificação incompleta',
+					message: 'Verification incomplete',
 					longMessage:
-						'O processo de verificação não pôde ser concluído. Por favor, tente novamente.',
+						'O processo de verificação não pôde ser concluído. Por favor, Verifique.',
 				})
 			}
-		} catch (err) {
-			if (isClerkAPIResponseError(err)) {
-				handleErrors(err.errors[0])
-			}
-
-			setErrors({
-				code: 'verification_incomplete',
-				message: 'Verification incomplete',
-				longMessage:
-					'O processo de verificação não pôde ser concluído. Por favor, Verifique.',
-			})
-		}
-	}, [startSSOFlow, router])
+		},
+		[startSSOFlow, router],
+	)
 
 	const onSignInPress = React.useCallback(async () => {
 		if (!isLoaded) return
@@ -293,7 +311,9 @@ export default function SignIn() {
 								>
 									<TouchableOpacity
 										type="secondary"
-										onPress={() => handleSignSocial({ strategy: 'oauth_facebook' })}
+										onPress={() =>
+											handleSignSocial({ strategy: 'oauth_facebook' })
+										}
 										style={{
 											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,
@@ -304,7 +324,9 @@ export default function SignIn() {
 									</TouchableOpacity>
 									<TouchableOpacity
 										type="secondary"
-										onPress={() => handleSignSocial({ strategy: 'oauth_google' })}
+										onPress={() =>
+											handleSignSocial({ strategy: 'oauth_google' })
+										}
 										style={{
 											backgroundColor: theme.colors.backgroundIconIndex,
 											padding: 10,
