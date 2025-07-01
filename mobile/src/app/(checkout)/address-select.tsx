@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { useCheckout } from '../../context/CheckoutContext'
+import { useCheckoutStore } from '../../store/store'
 import { router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useCustomTheme } from '@/src/context/ThemeContext'
@@ -8,6 +8,7 @@ import { Theme } from '@/src/types/theme'
 import { TouchableOpacity } from '@/src/components/Themed'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { Address } from '@/types/address'
+import { useShallow } from 'zustand/react/shallow'
 
 const addresses: Address[] = [
 	{
@@ -67,7 +68,9 @@ zipCode?: string | null */
 //neighborhood, city, state
 
 export default function AddressSelect() {
-	const { address, setAddress } = useCheckout()
+	const address = useCheckoutStore(useShallow(state => state.address))
+	const setAddress = useCheckoutStore(useShallow(state => state.setAddress))
+
 	const { theme } = useCustomTheme()
 	const styles = useStyles(theme as Theme)
 

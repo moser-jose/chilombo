@@ -19,7 +19,6 @@ import {
 	Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
 import { CustomThemeProvider, useCustomTheme } from '@/src/context/ThemeContext'
-import { CheckoutProvider } from '../context/CheckoutContext'
 import { Ionicons } from '@expo/vector-icons'
 
 const clerkPublicKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
@@ -74,24 +73,6 @@ export default function RootLayout() {
 	)
 }
 
-/* function RootLayoutNav() {
-	const { navigationTheme } = useCustomTheme()
-
-	return (
-		<ClerkProvider publishableKey={clerkPublicKey} tokenCache={tokenCache}>
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<ClerkLoaded>
-					<CheckoutProvider>
-						<NavigationThemeProvider value={navigationTheme}>
-							<Slot />
-						</NavigationThemeProvider>
-					</CheckoutProvider>
-				</ClerkLoaded>
-			</GestureHandlerRootView>
-		</ClerkProvider>
-	)
-} */
-
 function RootLayoutNav() {
 	const { isLoaded, isSignedIn } = useAuth()
 	const router = useRouter()
@@ -105,71 +86,66 @@ function RootLayoutNav() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ClerkLoaded>
-				<CheckoutProvider>
-					<NavigationThemeProvider value={navigationTheme}>
-						<Stack>
-							<Stack.Screen
-								name="(modals)/search"
-								options={{
-									presentation: 'modal',
-									title: 'Pesquisar por serviço',
-									headerStyle: {
-										backgroundColor: navigationTheme.colors.background,
-									},
-									headerLeft: () => (
-										<TouchableOpacity onPress={() => router.back()}>
-											<Ionicons
-												name="close-outline"
-												size={28}
-												color={navigationTheme.colors.text}
-											/>
-										</TouchableOpacity>
-									),
-								}}
-							/>
-							<Stack.Screen
-								name="(modals)/edit-profile"
-								options={{
-									presentation: 'modal',
-									title: 'Editar Perfil',
-									headerStyle: {
-										backgroundColor: navigationTheme.colors.background,
-									},
-									headerLeft: () => (
-										<TouchableOpacity onPress={() => router.back()}>
-											<Ionicons
-												name="close-outline"
-												size={28}
-												color={navigationTheme.colors.text}
-											/>
-										</TouchableOpacity>
-									),
-								}}
-							/>
-							<Stack.Screen name="(auth)" options={{ headerShown: false }} />
-							<Stack.Screen name="(main)" options={{ headerShown: false }} />
-							<Stack.Screen name="(user)" options={{ headerShown: false }} />
-							<Stack.Screen
-								name="(services)/service-details"
-								options={{
-									headerShown: false,
-									title: 'Detalhes do Serviço',
-									headerStyle: {
-										backgroundColor: navigationTheme.colors.background,
-									},
-								}}
-							/>
-							<Stack.Screen
-								name="(services)/completed-service-details"
-								options={{ headerShown: false }}
-							/>
-							<Stack.Screen
-								name="(checkout)"
-								options={{ headerShown: false }}
-							/>
-						</Stack>
-					</NavigationThemeProvider>
-				</CheckoutProvider>
+				<NavigationThemeProvider value={navigationTheme}>
+					<Stack>
+						<Stack.Screen
+							name="(modals)/search"
+							options={{
+								presentation: 'modal',
+								title: 'Pesquisar por serviço',
+								headerStyle: {
+									backgroundColor: navigationTheme.colors.background,
+								},
+								headerLeft: () => (
+									<TouchableOpacity onPress={() => router.back()}>
+										<Ionicons
+											name="close-outline"
+											size={28}
+											color={navigationTheme.colors.text}
+										/>
+									</TouchableOpacity>
+								),
+							}}
+						/>
+						<Stack.Screen
+							name="(modals)/edit-profile"
+							options={{
+								presentation: 'modal',
+								title: 'Editar Perfil',
+								headerStyle: {
+									backgroundColor: navigationTheme.colors.background,
+								},
+								headerLeft: () => (
+									<TouchableOpacity onPress={() => router.back()}>
+										<Ionicons
+											name="close-outline"
+											size={28}
+											color={navigationTheme.colors.text}
+										/>
+									</TouchableOpacity>
+								),
+							}}
+						/>
+						<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+						<Stack.Screen name="(main)" options={{ headerShown: false }} />
+						<Stack.Screen name="(user)" options={{ headerShown: false }} />
+						<Stack.Screen
+							name="(services)/service-details"
+							options={{
+								headerShown: false,
+								title: 'Detalhes do Serviço',
+								headerStyle: {
+									backgroundColor: navigationTheme.colors.background,
+								},
+							}}
+						/>
+						<Stack.Screen
+							name="(services)/completed-service-details"
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen name="(checkout)" options={{ headerShown: false }} />
+					</Stack>
+				</NavigationThemeProvider>
 			</ClerkLoaded>
 		</GestureHandlerRootView>
 	)
