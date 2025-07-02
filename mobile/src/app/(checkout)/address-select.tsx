@@ -1,7 +1,15 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import {
+	View,
+	Text,
+	StyleSheet,
+	ScrollView,
+	ActivityIndicator,
+	KeyboardAvoidingView,
+	Platform,
+} from 'react-native'
 import { useCheckoutStore } from '../../store/store'
-import { router, Stack } from 'expo-router'
+import { Link, router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/src/hooks/useTheme'
 import { Theme } from '@/src/types/theme'
@@ -9,31 +17,7 @@ import { TouchableOpacity } from '@/src/components/Themed'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { Address } from '@/types/address'
 import { useShallow } from 'zustand/react/shallow'
-
-const addresses: Address[] = [
-	{
-		id: '2',
-		title: 'Minha casa 1',
-		street: 'Av. Paulista',
-		number: '1000',
-		neighborhood: 'Capango',
-		building_number: '10',
-		apartment: '10',
-		city: 'Huambo',
-		state: 'Huambo',
-	},
-	{
-		id: '1',
-		title: 'Minha casa 2',
-		centrality: 'Centralidade do Lossambo',
-		block: '14',
-		building_number: '9',
-		apartment: '3',
-		neighborhood: 'Lossambo',
-		city: 'Huambo',
-		state: 'Huambo',
-	},
-]
+import { useAddresses } from '@/src/hooks/useAddresses'
 
 /* id: string
 title: string
@@ -70,12 +54,13 @@ zipCode?: string | null */
 export default function AddressSelect() {
 	const address = useCheckoutStore(useShallow(state => state.address))
 	const setAddress = useCheckoutStore(useShallow(state => state.setAddress))
+	const { addresses, isLoading } = useAddresses()
 
 	const { theme } = useTheme()
 	const styles = useStyles(theme as Theme)
 
-	const handleSelectAddress = (address: Address) => {
-		setAddress(address)
+	const handleSelectAddress = (selectedAddress: Address) => {
+		setAddress(selectedAddress)
 	}
 	return (
 		<>
@@ -83,25 +68,47 @@ export default function AddressSelect() {
 				options={{
 					title: 'Endereço',
 					headerLeft: () => (
-						<TouchableOpacity type="tertiary" onPress={() => router.back()}>
+						<TouchableOpacity
+							type="tertiary"
+							onPress={() => router.back()}
+							accessible={true}
+							accessibilityLabel="Voltar"
+							accessibilityHint="Toque para voltar à tela anterior"
+							accessibilityRole="button"
+						>
 							<Ionicons
 								name="chevron-back"
 								size={24}
 								color={theme.colors.text}
+								accessible={false}
 							/>
 						</TouchableOpacity>
 					),
 					headerRight: () => (
-						<TouchableOpacity
-							type="tertiary"
-							onPress={() => router.push('/(checkout)/address-add')}
-						>
-							<Ionicons name="add" size={24} color={theme.colors.text} />
-						</TouchableOpacity>
+						<Link href="/(modals)/address-add" asChild>
+							<TouchableOpacity
+								type="tertiary"
+								accessible={true}
+								accessibilityLabel="Adicionar novo endereço"
+								accessibilityHint="Toque para adicionar um novo endereço"
+								accessibilityRole="button"
+							>
+								<Ionicons
+									name="add"
+									size={24}
+									color={theme.colors.text}
+									accessible={false}
+								/>
+							</TouchableOpacity>
+						</Link>
 					),
 				}}
 			/>
-			<View style={styles.container}>
+			<KeyboardAvoidingView
+				style={styles.container}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+			>
 				<View style={styles.statusContainer}>
 					<StatusCheckout
 						status="Endereço"
@@ -134,78 +141,145 @@ export default function AddressSelect() {
 					/>
 				</View>
 
-				<ScrollView style={styles.addressList}>
-					{addresses.map(addr => (
-						<TouchableOpacity
-							type="tertiary"
-							key={addr.id}
-							style={[
-								styles.addressCard,
-								address?.id === addr.id && styles.selectedAddress,
-							]}
-							onPress={() => handleSelectAddress(addr)}
-						>
-							<View style={styles.addressContent}>
-								<View style={styles.addressHeader}>
-									{address?.id === addr.id && (
-										<Ionicons
-											name="checkmark-circle"
-											size={24}
-											color={theme.colors.primary}
-										/>
-									)}
-								</View>
-								<View>
-									<Text style={styles.addressTitle}>{addr.title}</Text>
-									<View style={{ flexDirection: 'row', gap: 4 }}>
-										{(addr.street || addr.centrality) && (
-											<Text style={styles.addressText}>
-												{(addr.street || addr.centrality) + ' '}
-												{addr.number && addr.number + ', '}
-											</Text>
-										)}
-										{addr.apartment && !addr.centrality && (
-											<Text style={styles.addressText}>
-												{addr.building_number &&
-													'Pd ' + addr.building_number + ', '}
-												{addr.apartment && 'Ap ' + addr.apartment}
-											</Text>
+				<ScrollView
+					style={styles.addressList}
+					keyboardShouldPersistTaps="handled"
+					showsVerticalScrollIndicator={false}
+				>
+					{isLoading ? (
+						<View style={styles.loadingContainer}>
+							<ActivityIndicator size="large" color={theme.colors.primary} />
+							<Text style={styles.loadingText}>Carregando endereços...</Text>
+						</View>
+					) : addresses.length === 0 ? (
+						<View style={styles.emptyContainer}>
+							<Ionicons
+								name="location-outline"
+								size={48}
+								color={theme.colors.border}
+							/>
+							<Text style={styles.emptyText}>Nenhum endereço cadastrado</Text>
+							<Text style={styles.emptySubtext}>
+								Adicione seu primeiro endereço para continuar
+							</Text>
+						</View>
+					) : (
+						addresses.map((addr: Address) => (
+							<TouchableOpacity
+								type="tertiary"
+								key={addr.id}
+								style={[
+									styles.addressCard,
+									address?.id === addr.id && styles.selectedAddress,
+								]}
+								onPress={() => handleSelectAddress(addr)}
+								accessible={true}
+								accessibilityLabel={`Endereço: ${addr.title}`}
+								accessibilityHint={
+									address?.id === addr.id
+										? 'Endereço selecionado. Toque para manter selecionado'
+										: 'Toque para selecionar este endereço'
+								}
+								accessibilityRole="button"
+								accessibilityState={{
+									selected: address?.id === addr.id,
+								}}
+							>
+								<View style={styles.addressContent}>
+									<View style={styles.addressHeader}>
+										{address?.id === addr.id && (
+											<Ionicons
+												name="checkmark-circle"
+												size={24}
+												color={theme.colors.primary}
+											/>
 										)}
 									</View>
+									<View>
+										<Text style={styles.addressTitle}>{addr.title}</Text>
+										<View style={{ flexDirection: 'row', gap: 4 }}>
+											{(addr.street || addr.centrality) && (
+												<Text style={styles.addressText}>
+													{(addr.street || addr.centrality) + ' '}
+													{addr.number && addr.number + ', '}
+												</Text>
+											)}
+											{addr.apartment && !addr.centrality && (
+												<Text style={styles.addressText}>
+													{addr.building_number &&
+														'Pd ' + addr.building_number + ', '}
+													{addr.apartment && 'Ap ' + addr.apartment}
+												</Text>
+											)}
+										</View>
 
-									{addr.block && (
+										{addr.block && (
+											<Text style={styles.addressText}>
+												{'Qdra ' + addr.block + ', '}
+												{'Pd ' + addr.building_number}, {'Ap ' + addr.apartment}
+											</Text>
+										)}
+
 										<Text style={styles.addressText}>
-											{'Qdra ' + addr.block + ', '}
-											{'Pd ' + addr.building_number}, {'Ap ' + addr.apartment}
+											{addr.neighborhood && addr.neighborhood + ', '}
+											{addr.city}, {addr.state}
 										</Text>
-									)}
-
-									<Text style={styles.addressText}>
-										{addr.neighborhood && addr.neighborhood + ', '}
-										{addr.city}, {addr.state}
-									</Text>
+									</View>
 								</View>
-							</View>
-							<TouchableOpacity type="tertiary" style={styles.addressAction}>
-								<Text style={styles.addressActionText}>Editar</Text>
+								<Link
+									href={`/(modals)/address-edit?addressId=${addr.id}`}
+									asChild
+								>
+									<TouchableOpacity
+										type="tertiary"
+										style={styles.addressAction}
+										accessible={true}
+										accessibilityLabel={`Editar endereço: ${addr.title}`}
+										accessibilityHint="Toque para editar este endereço"
+										accessibilityRole="button"
+									>
+										<Text style={styles.addressActionText} accessible={false}>
+											Editar
+										</Text>
+									</TouchableOpacity>
+								</Link>
 							</TouchableOpacity>
-						</TouchableOpacity>
-					))}
+						))
+					)}
 
-					<Text style={styles.infoText}>
-						O botão <Text style={styles.infoTextBold}>+</Text> permite adicionar
-						um novo endereço.
-					</Text>
+					{addresses.length > 0 && (
+						<Text style={styles.infoText}>
+							O botão <Text style={styles.infoTextBold}>+</Text> permite
+							adicionar um novo endereço.
+						</Text>
+					)}
 				</ScrollView>
 
 				<TouchableOpacity
 					style={[styles.button, !address && styles.buttonDisabled]}
 					onPress={() => router.push('/(checkout)/order-review')}
 					disabled={!address}
+					accessible={true}
+					accessibilityLabel={
+						address
+							? `Confirmar endereço: ${address.title}`
+							: 'Botão desabilitado, selecione um endereço primeiro'
+					}
+					accessibilityHint={
+						address
+							? 'Toque para confirmar o endereço selecionado e continuar'
+							: 'Selecione um endereço da lista para habilitar este botão'
+					}
+					accessibilityRole="button"
+					accessibilityState={{
+						disabled: !address,
+					}}
 				>
-					<Text style={styles.buttonText}>Confirmar Endereço</Text>
+					<Text style={styles.buttonText} accessible={false}>
+						Confirmar Endereço
+					</Text>
 				</TouchableOpacity>
-			</View>
+			</KeyboardAvoidingView>
 		</>
 	)
 }
@@ -322,5 +396,38 @@ const useStyles = (theme: Theme) =>
 			fontSize: theme.size.xs,
 			fontFamily: theme.fonts.medium.fontFamily,
 			color: theme.colors.text,
+		},
+		loadingContainer: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			paddingVertical: 40,
+		},
+		loadingText: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginTop: 12,
+		},
+		emptyContainer: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			paddingVertical: 40,
+		},
+		emptyText: {
+			fontSize: theme.size.smB,
+			fontFamily: theme.fonts.bold.fontFamily,
+			color: theme.colors.text,
+			marginTop: 16,
+			textAlign: 'center',
+		},
+		emptySubtext: {
+			fontSize: theme.size.xs,
+			fontFamily: theme.fonts.regular.fontFamily,
+			color: theme.colors.text,
+			marginTop: 8,
+			textAlign: 'center',
+			opacity: 0.7,
 		},
 	})

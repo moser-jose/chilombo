@@ -3,7 +3,7 @@
 # dependencies
 node_modules/
 
-packageUI/
+src/components/packageUI/
 
 # Expo
 .expo/

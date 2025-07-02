@@ -40,6 +40,9 @@ type TextInputUIProps = TextInputProps & {
 	onChangeText?: (text: string) => void
 	onFocus?: () => void
 	onBlur?: () => void
+	onSubmitEditing?: () => void
+	returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send'
+	blurOnSubmit?: boolean
 	errors?: any
 	value: string
 	style?: StyleProp<ViewStyle>
@@ -87,6 +90,9 @@ export function TextInput({
 	onFocus,
 	isPasswordStrong,
 	onBlur,
+	onSubmitEditing,
+	returnKeyType = 'next',
+	blurOnSubmit = false,
 }: TextInputUIProps) {
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<{
@@ -247,6 +253,8 @@ export function TextInput({
 					style={styles.textInput}
 					secureTextEntry={type === 'password' && !showPassword}
 					numberOfLines={1}
+					returnKeyType={returnKeyType}
+					blurOnSubmit={blurOnSubmit}
 					onFocus={() => {
 						setIsInputFocused(true)
 						onFocus?.()
@@ -256,6 +264,7 @@ export function TextInput({
 						onBlur?.()
 					}}
 					onChangeText={handleChangeText}
+					onSubmitEditing={onSubmitEditing}
 					value={value}
 				/>
 				{type === 'password' && (
@@ -536,12 +545,16 @@ export function View(props: ViewProps) {
 	return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />
 }
 
-export function TouchableOpacity(props: Props) {
+export const TouchableOpacity = forwardRef<
+	React.ComponentRef<typeof DefaultTouchableOpacity>,
+	Props
+>((props, ref) => {
 	const { style, type = 'primary', ...otherProps } = props
 	const { theme } = useTheme()
 	const styles = makeStyles(theme)
 	return (
 		<DefaultTouchableOpacity
+			ref={ref}
 			activeOpacity={0.8}
 			style={[
 				type === 'primary'
@@ -554,7 +567,7 @@ export function TouchableOpacity(props: Props) {
 			{...otherProps}
 		/>
 	)
-}
+})
 
 export const BodyScrollView = forwardRef<any, ScrollViewProps>((props, ref) => {
 	return (

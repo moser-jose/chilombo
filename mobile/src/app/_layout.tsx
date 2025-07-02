@@ -124,6 +124,25 @@ function RootLayoutNav() {
 								),
 							}}
 						/>
+						<Stack.Screen
+							name="(modals)/address-add"
+							options={{
+								presentation: 'modal',
+								title: 'Editar Perfil',
+								headerStyle: {
+									backgroundColor: navigationTheme.colors.background,
+								},
+								headerLeft: () => (
+									<TouchableOpacity onPress={() => router.back()}>
+										<Ionicons
+											name="close-outline"
+											size={28}
+											color={navigationTheme.colors.text}
+										/>
+									</TouchableOpacity>
+								),
+							}}
+						/>
 						<Stack.Screen name="(auth)" options={{ headerShown: false }} />
 						<Stack.Screen name="(main)" options={{ headerShown: false }} />
 						<Stack.Screen name="(user)" options={{ headerShown: false }} />
