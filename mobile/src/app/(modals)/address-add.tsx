@@ -9,19 +9,18 @@ import {
 	Alert,
 	KeyboardAvoidingView,
 	Platform,
+	Dimensions,
 } from 'react-native'
 import { useTheme } from '@/src/hooks/useTheme'
 import { TouchableOpacity, TextInput } from '@/src/components/Themed'
 import { Theme } from '@/src/types/theme'
 import { Address } from '@/src/types/address'
-import { useAddresses } from '@/src/hooks/useAddresses'
+import { useAddressesStore } from '@/src/hooks/useAddresses'
 import { useKeyboardNavigation } from '@/src/hooks/useKeyboardNavigation'
-
+import { useShallow } from 'zustand/react/shallow'
+import { useThemeStore } from '@/src/store/store'
+const { height } = Dimensions.get('window')
 export default function AddressAdd() {
-	const { theme } = useTheme()
-	const styles = useStyles(theme as Theme)
-
-	// Estados para os campos do endereço
 	const [title, setTitle] = useState('')
 	const [street, setStreet] = useState('')
 	const [number, setNumber] = useState('')
@@ -34,20 +33,26 @@ export default function AddressAdd() {
 	const [city, setCity] = useState('')
 	const [state, setState] = useState('')
 	const [zipCode, setZipCode] = useState('')
-
-	// Estado para controlar o tipo de endereço
+	const [isLoading, setIsLoading] = useState(false)
 	const [addressType, setAddressType] = useState<'street' | 'centrality'>(
 		'street',
 	)
+	const { theme } = useThemeStore(
+		useShallow(state => ({
+			theme: state.theme,
+		})),
+	)
+
+	const styles = useStyles(theme as Theme)
 
 	// Hook para gerenciar endereços
-	const { addAddress } = useAddresses()
+	const { addAddress } = useAddressesStore(
+		useShallow(state => ({
+			addAddress: state.addAddress,
+		})),
+	)
 
-	// Hook para navegação por teclado
 	const { focusNextInput } = useKeyboardNavigation()
-
-	// Estado para controlar loading
-	const [isLoading, setIsLoading] = useState(false)
 
 	const handleSaveAddress = async () => {
 		// Validação básica
@@ -151,304 +156,302 @@ export default function AddressAdd() {
 					),
 				}}
 			/>
-
 			<View style={styles.container}>
-				<View style={styles.mainContent}>
-					<KeyboardAvoidingView
-						style={styles.keyboardAvoidingView}
-						behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-						keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+				<KeyboardAvoidingView
+					style={styles.keyboardAvoidingView}
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+				>
+					<ScrollView
+						style={styles.scrollView}
+						showsVerticalScrollIndicator={false}
+						keyboardShouldPersistTaps="handled"
+						contentContainerStyle={styles.scrollContent}
+						contentInsetAdjustmentBehavior="automatic"
 					>
-						<ScrollView
-							style={styles.scrollView}
-							showsVerticalScrollIndicator={false}
-							keyboardShouldPersistTaps="handled"
-							contentContainerStyle={styles.scrollContent}
-						>
-							<View style={styles.content}>
-								<Text style={styles.sectionTitle}>Informações Básicas</Text>
+						<View style={styles.content}>
+							<Text style={styles.sectionTitle}>Informações Básicas</Text>
 
-								<TextInput
-									type="text"
-									label="Título do Endereço *"
-									placeholder="Ex: Minha casa, Trabalho"
-									icon="home-outline"
-									value={title}
-									onChangeText={setTitle}
-									onSubmitEditing={() => focusNextInput('title')}
-									returnKeyType="next"
-									style={styles.input}
-								/>
+							<TextInput
+								type="text"
+								label="Título do Endereço *"
+								placeholder="Ex: Minha casa, Trabalho"
+								icon="home-outline"
+								value={title}
+								onChangeText={setTitle}
+								onSubmitEditing={() => focusNextInput('title')}
+								returnKeyType="next"
+								style={styles.input}
+							/>
 
-								<View style={styles.typeSelector}>
-									<Text style={styles.typeLabel}>Tipo de Endereço</Text>
-									<View style={styles.typeButtons}>
-										<TouchableOpacity
-											type="tertiary"
-											style={[
-												styles.typeButton,
-												addressType === 'street' && styles.typeButtonActive,
-											]}
-											onPress={() => setAddressType('street')}
-											accessible={true}
-											accessibilityLabel="Tipo de endereço: Rua ou Avenida"
-											accessibilityHint={
+							<View style={styles.typeSelector}>
+								<Text style={styles.typeLabel}>Tipo de Endereço</Text>
+								<View style={styles.typeButtons}>
+									<TouchableOpacity
+										type="tertiary"
+										style={[
+											styles.typeButton,
+											addressType === 'street' && styles.typeButtonActive,
+										]}
+										onPress={() => setAddressType('street')}
+										accessible={true}
+										accessibilityLabel="Tipo de endereço: Rua ou Avenida"
+										accessibilityHint={
+											addressType === 'street'
+												? 'Selecionado. Toque para manter selecionado'
+												: 'Toque para selecionar endereço por rua ou avenida'
+										}
+										accessibilityRole="radio"
+										accessibilityState={{
+											selected: addressType === 'street',
+										}}
+									>
+										<Ionicons
+											name="map-outline"
+											size={20}
+											color={
 												addressType === 'street'
-													? 'Selecionado. Toque para manter selecionado'
-													: 'Toque para selecionar endereço por rua ou avenida'
+													? theme.colors.primary
+													: theme.colors.text
 											}
-											accessibilityRole="radio"
-											accessibilityState={{
-												selected: addressType === 'street',
-											}}
-										>
-											<Ionicons
-												name="map-outline"
-												size={20}
-												color={
-													addressType === 'street'
-														? theme.colors.primary
-														: theme.colors.text
-												}
-												accessible={false}
-											/>
-											<Text
-												style={[
-													styles.typeButtonText,
-													addressType === 'street' &&
-														styles.typeButtonTextActive,
-												]}
-												accessible={false}
-											>
-												Rua/Avenida
-											</Text>
-										</TouchableOpacity>
-
-										<TouchableOpacity
-											type="tertiary"
+											accessible={false}
+										/>
+										<Text
 											style={[
-												styles.typeButton,
-												addressType === 'centrality' && styles.typeButtonActive,
+												styles.typeButtonText,
+												addressType === 'street' && styles.typeButtonTextActive,
 											]}
-											onPress={() => setAddressType('centrality')}
-											accessible={true}
-											accessibilityLabel="Tipo de endereço: Centralidade"
-											accessibilityHint={
-												addressType === 'centrality'
-													? 'Selecionado. Toque para manter selecionado'
-													: 'Toque para selecionar endereço por centralidade'
-											}
-											accessibilityRole="radio"
-											accessibilityState={{
-												selected: addressType === 'centrality',
-											}}
+											accessible={false}
 										>
-											<Ionicons
-												name="business-outline"
-												size={20}
-												color={
-													addressType === 'centrality'
-														? theme.colors.primary
-														: theme.colors.text
-												}
-												accessible={false}
-											/>
-											<Text
-												style={[
-													styles.typeButtonText,
-													addressType === 'centrality' &&
-														styles.typeButtonTextActive,
-												]}
-												accessible={false}
-											>
-												Centralidade
-											</Text>
-										</TouchableOpacity>
-									</View>
-								</View>
-
-								{addressType === 'street' ? (
-									<>
-										<Text style={styles.sectionTitle}>Endereço por Rua</Text>
-
-										<TextInput
-											type="text"
-											label="Rua/Avenida *"
-											placeholder="Nome da rua ou avenida"
-											icon="map-outline"
-											value={street}
-											onChangeText={setStreet}
-											onSubmitEditing={() => focusNextInput('street')}
-											returnKeyType="next"
-											style={styles.input}
-										/>
-
-										<View style={styles.row}>
-											<View style={styles.halfInput}>
-												<TextInput
-													type="text"
-													label="Número"
-													placeholder="Número"
-													icon="pricetag-outline"
-													value={number}
-													onChangeText={setNumber}
-													onSubmitEditing={() => focusNextInput('number')}
-													returnKeyType="next"
-												/>
-											</View>
-											<View style={styles.halfInput}>
-												<TextInput
-													type="text"
-													label="Prédio"
-													placeholder="Número do prédio"
-													icon="business-outline"
-													value={buildingNumber}
-													onChangeText={setBuildingNumber}
-												/>
-											</View>
-										</View>
-
-										<TextInput
-											type="text"
-											label="Apartamento"
-											placeholder="Número do apartamento"
-											icon="home-outline"
-											value={apartment}
-											onChangeText={setApartment}
-											style={styles.input}
-										/>
-									</>
-								) : (
-									<>
-										<Text style={styles.sectionTitle}>
-											Endereço por Centralidade
+											Rua/Avenida
 										</Text>
+									</TouchableOpacity>
 
-										<TextInput
-											type="text"
-											label="Centralidade *"
-											placeholder="Nome da centralidade"
-											icon="business-outline"
-											value={centrality}
-											onChangeText={setCentrality}
-											style={styles.input}
+									<TouchableOpacity
+										type="tertiary"
+										style={[
+											styles.typeButton,
+											addressType === 'centrality' && styles.typeButtonActive,
+										]}
+										onPress={() => setAddressType('centrality')}
+										accessible={true}
+										accessibilityLabel="Tipo de endereço: Centralidade"
+										accessibilityHint={
+											addressType === 'centrality'
+												? 'Selecionado. Toque para manter selecionado'
+												: 'Toque para selecionar endereço por centralidade'
+										}
+										accessibilityRole="radio"
+										accessibilityState={{
+											selected: addressType === 'centrality',
+										}}
+									>
+										<Ionicons
+											name="business-outline"
+											size={20}
+											color={
+												addressType === 'centrality'
+													? theme.colors.primary
+													: theme.colors.text
+											}
+											accessible={false}
 										/>
-
-										<View style={styles.row}>
-											<View style={styles.halfInput}>
-												<TextInput
-													type="text"
-													label="Quadra"
-													placeholder="Número da quadra"
-													icon="grid-outline"
-													value={block}
-													onChangeText={setBlock}
-												/>
-											</View>
-											<View style={styles.halfInput}>
-												<TextInput
-													type="text"
-													label="Prédio"
-													placeholder="Número do prédio"
-													icon="business-outline"
-													value={buildingNumber}
-													onChangeText={setBuildingNumber}
-												/>
-											</View>
-										</View>
-
-										<TextInput
-											type="text"
-											label="Apartamento"
-											placeholder="Número do apartamento"
-											icon="home-outline"
-											value={apartment}
-											onChangeText={setApartment}
-											style={styles.input}
-										/>
-									</>
-								)}
-
-								<Text style={styles.sectionTitle}>Localização</Text>
-
-								<TextInput
-									type="text"
-									label="Bairro"
-									placeholder="Nome do bairro"
-									icon="location-outline"
-									value={neighborhood}
-									onChangeText={setNeighborhood}
-									onSubmitEditing={() => focusNextInput('neighborhood')}
-									returnKeyType="next"
-									style={styles.input}
-								/>
-
-								<TextInput
-									type="text"
-									label="Comuna"
-									placeholder="Nome da comuna"
-									icon="location-outline"
-									value={commune}
-									onChangeText={setCommune}
-									onSubmitEditing={() => focusNextInput('commune')}
-									returnKeyType="next"
-									style={styles.input}
-								/>
-
-								<View style={styles.row}>
-									<View style={styles.halfInput}>
-										<TextInput
-											type="text"
-											label="Cidade *"
-											placeholder="Nome da cidade"
-											icon="location-outline"
-											value={city}
-											onChangeText={setCity}
-											onSubmitEditing={() => focusNextInput('city')}
-											returnKeyType="next"
-										/>
-									</View>
-									<View style={styles.halfInput}>
-										<TextInput
-											type="text"
-											label="Estado/Província *"
-											placeholder="Estado ou província"
-											icon="location-outline"
-											value={state}
-											onChangeText={setState}
-											onSubmitEditing={() => focusNextInput('state')}
-											returnKeyType="next"
-										/>
-									</View>
-								</View>
-
-								<TextInput
-									type="text"
-									label="Código Postal"
-									placeholder="Código postal (opcional)"
-									icon="mail-outline"
-									value={zipCode}
-									onChangeText={setZipCode}
-									onSubmitEditing={handleSaveAddress}
-									returnKeyType="done"
-									blurOnSubmit={true}
-									style={styles.input}
-								/>
-
-								<View style={styles.infoContainer}>
-									<Ionicons
-										name="information-circle-outline"
-										size={20}
-										color={theme.colors.secondary}
-									/>
-									<Text style={styles.infoText}>
-										Os campos marcados com * são obrigatórios
-									</Text>
+										<Text
+											style={[
+												styles.typeButtonText,
+												addressType === 'centrality' &&
+													styles.typeButtonTextActive,
+											]}
+											accessible={false}
+										>
+											Centralidade
+										</Text>
+									</TouchableOpacity>
 								</View>
 							</View>
-						</ScrollView>
-					</KeyboardAvoidingView>
 
+							{addressType === 'street' ? (
+								<>
+									<Text style={styles.sectionTitle}>Endereço por Rua</Text>
+
+									<TextInput
+										type="text"
+										label="Rua/Avenida *"
+										placeholder="Nome da rua ou avenida"
+										icon="map-outline"
+										value={street}
+										onChangeText={setStreet}
+										onSubmitEditing={() => focusNextInput('street')}
+										returnKeyType="next"
+										style={styles.input}
+									/>
+
+									<View style={styles.row}>
+										<View style={styles.halfInput}>
+											<TextInput
+												type="text"
+												label="Número"
+												placeholder="Número"
+												icon="pricetag-outline"
+												value={number}
+												onChangeText={setNumber}
+												onSubmitEditing={() => focusNextInput('number')}
+												returnKeyType="next"
+											/>
+										</View>
+										<View style={styles.halfInput}>
+											<TextInput
+												type="text"
+												label="Prédio"
+												placeholder="Número do prédio"
+												icon="business-outline"
+												value={buildingNumber}
+												onChangeText={setBuildingNumber}
+											/>
+										</View>
+									</View>
+
+									<TextInput
+										type="text"
+										label="Apartamento"
+										placeholder="Número do apartamento"
+										icon="home-outline"
+										value={apartment}
+										onChangeText={setApartment}
+										style={styles.input}
+									/>
+								</>
+							) : (
+								<>
+									<Text style={styles.sectionTitle}>
+										Endereço por Centralidade
+									</Text>
+
+									<TextInput
+										type="text"
+										label="Centralidade *"
+										placeholder="Nome da centralidade"
+										icon="business-outline"
+										value={centrality}
+										onChangeText={setCentrality}
+										style={styles.input}
+									/>
+
+									<View style={styles.row}>
+										<View style={styles.halfInput}>
+											<TextInput
+												type="text"
+												label="Quadra"
+												placeholder="Número da quadra"
+												icon="grid-outline"
+												value={block}
+												onChangeText={setBlock}
+											/>
+										</View>
+										<View style={styles.halfInput}>
+											<TextInput
+												type="text"
+												label="Prédio"
+												placeholder="Número do prédio"
+												icon="business-outline"
+												value={buildingNumber}
+												onChangeText={setBuildingNumber}
+											/>
+										</View>
+									</View>
+
+									<TextInput
+										type="text"
+										label="Apartamento"
+										placeholder="Número do apartamento"
+										icon="home-outline"
+										value={apartment}
+										onChangeText={setApartment}
+										style={styles.input}
+									/>
+								</>
+							)}
+
+							<Text style={styles.sectionTitle}>Localização</Text>
+
+							<TextInput
+								type="text"
+								label="Bairro"
+								placeholder="Nome do bairro"
+								icon="location-outline"
+								value={neighborhood}
+								onChangeText={setNeighborhood}
+								onSubmitEditing={() => focusNextInput('neighborhood')}
+								returnKeyType="next"
+								style={styles.input}
+							/>
+
+							<TextInput
+								type="text"
+								label="Comuna"
+								placeholder="Nome da comuna"
+								icon="location-outline"
+								value={commune}
+								onChangeText={setCommune}
+								onSubmitEditing={() => focusNextInput('commune')}
+								returnKeyType="next"
+								style={styles.input}
+							/>
+
+							<View style={styles.row}>
+								<View style={styles.halfInput}>
+									<TextInput
+										type="text"
+										label="Cidade *"
+										placeholder="Nome da cidade"
+										icon="location-outline"
+										value={city}
+										onChangeText={setCity}
+										onSubmitEditing={() => focusNextInput('city')}
+										returnKeyType="next"
+									/>
+								</View>
+								<View style={styles.halfInput}>
+									<TextInput
+										type="text"
+										label="Estado/Província *"
+										placeholder="Estado ou província"
+										icon="location-outline"
+										value={state}
+										onChangeText={setState}
+										onSubmitEditing={() => focusNextInput('state')}
+										returnKeyType="next"
+									/>
+								</View>
+							</View>
+
+							<TextInput
+								type="text"
+								label="Código Postal"
+								placeholder="Código postal (opcional)"
+								icon="mail-outline"
+								value={zipCode}
+								onChangeText={setZipCode}
+								onSubmitEditing={handleSaveAddress}
+								returnKeyType="done"
+								blurOnSubmit={true}
+								style={styles.input}
+							/>
+
+							<View style={styles.infoContainer}>
+								<Ionicons
+									name="information-circle-outline"
+									size={20}
+									color={theme.colors.secondary}
+								/>
+								<Text style={styles.infoText}>
+									Os campos marcados com * são obrigatórios
+								</Text>
+							</View>
+						</View>
+					</ScrollView>
+				</KeyboardAvoidingView>
+				<View style={styles.foo}>
 					<View style={styles.footer}>
 						<TouchableOpacity
 							type="primary"
@@ -488,14 +491,17 @@ export default function AddressAdd() {
 										accessible={false}
 									/>
 									<Text style={styles.saveButtonText} accessible={false}>
-										Atualizando...
+										Adicionando...
 									</Text>
 								</>
 							) : (
 								<Text style={styles.saveButtonText} accessible={false}>
-									Atualizar Endereço
+									Adicionar Endereço
 								</Text>
 							)}
+							<Text style={styles.saveButtonText} accessible={false}>
+								Adicionar Endereço
+							</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -508,22 +514,24 @@ const useStyles = (theme: Theme) =>
 	StyleSheet.create({
 		container: {
 			flex: 1,
+			//flexGrow: 1,
 			backgroundColor: theme.colors.background,
 		},
 		mainContent: {
-			flex: 1,
-			display: 'flex',
-			flexDirection: 'column',
+			//flex: 1,
+			//flexGrow: 1,
 		},
 		keyboardAvoidingView: {
 			flex: 1,
+			position: 'relative',
 		},
 		scrollView: {
-			flex: 1,
-			flexGrow: 1,
+			//flex: 1,
+			//flexGrow: 1,
 		},
 		scrollContent: {
-			flexGrow: 1,
+			//flexGrow: 1,
+			//flex: 1,
 		},
 		content: {
 			padding: 16,
@@ -602,16 +610,16 @@ const useStyles = (theme: Theme) =>
 			color: theme.colors.text,
 			flex: 1,
 		},
-		footer: {
-			position: 'absolute',
-			bottom: 68,
-			left: 0,
-			right: 0,
+		foo: {
+			//flex: 1,
+			position: 'relative',
+			height: height - height * 0.8, // Ajusta a altura do footer
 			backgroundColor: theme.colors.background,
 			padding: 16,
 			borderTopWidth: 1,
 			borderTopColor: theme.colors.border,
 		},
+		footer: {},
 		saveButton: {
 			backgroundColor: theme.colors.primary,
 			borderRadius: 12,
