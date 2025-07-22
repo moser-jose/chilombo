@@ -8,7 +8,7 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 } from 'react-native'
-import { useCheckoutStore } from '../../store/store'
+import { useCheckoutStore, useThemeStore } from '../../store/store'
 import { Link, router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useTheme } from '@/src/hooks/useTheme'
@@ -17,7 +17,7 @@ import { TouchableOpacity } from '@/src/components/Themed'
 import StatusCheckout from '@/src/components/ui/StatusCheckout'
 import { Address } from '@/types/address'
 import { useShallow } from 'zustand/react/shallow'
-import { useAddresses } from '@/src/hooks/useAddresses'
+import { useAddressesStore } from '@/src/hooks/useAddresses'
 
 /* id: string
 title: string
@@ -54,14 +54,24 @@ zipCode?: string | null */
 export default function AddressSelect() {
 	const address = useCheckoutStore(useShallow(state => state.address))
 	const setAddress = useCheckoutStore(useShallow(state => state.setAddress))
-	const { addresses, isLoading } = useAddresses()
+	const { addresses, isLoading } = useAddressesStore(
+		useShallow(state => ({
+			addresses: state.addresses,
+			isLoading: state.isLoading,
+		})),
+	)
 
-	const { theme } = useTheme()
+	const { theme } = useThemeStore(useShallow(state => ({
+		theme: state.theme,
+	})))
 	const styles = useStyles(theme as Theme)
 
 	const handleSelectAddress = (selectedAddress: Address) => {
 		setAddress(selectedAddress)
 	}
+
+
+
 	return (
 		<>
 			<Stack.Screen

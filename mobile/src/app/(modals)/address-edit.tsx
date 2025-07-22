@@ -10,18 +10,28 @@ import {
 	KeyboardAvoidingView,
 	Platform,
 } from 'react-native'
-import { useTheme } from '@/src/hooks/useTheme'
 import { TouchableOpacity, TextInput } from '@/src/components/Themed'
 import { Theme } from '@/src/types/theme'
 import { Address } from '@/src/types/address'
-import { useAddresses } from '@/src/hooks/useAddresses'
+import { useAddressesStore } from '@/src/hooks/useAddresses'
+import { useShallow } from 'zustand/react/shallow'
+import { useThemeStore } from '@/src/store/store'
 
 export default function AddressEdit() {
-	const { theme } = useTheme()
+	const { theme } = useThemeStore(
+		useShallow(state => ({
+			theme: state.theme,
+		})),
+	)
 	const styles = useStyles(theme as Theme)
 	const { addressId } = useLocalSearchParams<{ addressId: string }>()
 
-	const { getAddressById, updateAddress } = useAddresses()
+	const { getAddressById, updateAddress } = useAddressesStore(
+		useShallow(state => ({
+			getAddressById: state.getAddressById,
+			updateAddress: state.updateAddress,
+		})),
+	)
 
 	// Estados para os campos do endereço
 	const [title, setTitle] = useState('')
@@ -46,9 +56,13 @@ export default function AddressEdit() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [isInitialLoading, setIsInitialLoading] = useState(true)
 
+	console.log('render')
+
 	// Carregar dados do endereço
 	useEffect(() => {
-		if (addressId) {
+		try {
+			if (addressId) {
+			setIsInitialLoading(true)
 			const address = getAddressById(addressId)
 			if (address) {
 				setTitle(address.title || '')
@@ -72,7 +86,13 @@ export default function AddressEdit() {
 				}
 			}
 		}
-		setIsInitialLoading(false)
+		} catch (error) {
+			console.error('Erro ao carregar endereço:', error)
+		}
+
+		setTimeout(() => {
+			setIsInitialLoading(false)
+		}, 1000)
 	}, [addressId, getAddressById])
 
 	const handleUpdateAddress = async () => {
@@ -152,19 +172,6 @@ export default function AddressEdit() {
 		return basicValidation
 	}
 
-	if (isInitialLoading) {
-		return (
-			<View style={styles.loadingContainer}>
-				<Ionicons
-					name="hourglass-outline"
-					size={48}
-					color={theme.colors.primary}
-				/>
-				<Text style={styles.loadingText}>Carregando endereço...</Text>
-			</View>
-		)
-	}
-
 	return (
 		<>
 			<Stack.Screen
@@ -190,334 +197,346 @@ export default function AddressEdit() {
 				}}
 			/>
 
-			<View style={styles.container}>
-				<KeyboardAvoidingView
-					style={styles.keyboardAvoidingView}
-					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-					keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-				>
-					<ScrollView
-						style={styles.scrollView}
-						showsVerticalScrollIndicator={false}
-						keyboardShouldPersistTaps="handled"
-						contentContainerStyle={styles.scrollContent}
+			{isInitialLoading ? (
+				<View style={styles.loadingContainer}>
+					<Ionicons
+						name="hourglass-outline"
+						size={32}
+						color={theme.colors.primary}
+					/>
+					<Text style={styles.loadingText}>Carregando endereço...</Text>
+				</View>
+			) : (
+				<View style={styles.container}>
+					<KeyboardAvoidingView
+						style={styles.keyboardAvoidingView}
+						behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+						keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
 					>
-						<View style={styles.content}>
-							<Text style={styles.sectionTitle}>Informações Básicas</Text>
+						<ScrollView
+							style={styles.scrollView}
+							showsVerticalScrollIndicator={false}
+							keyboardShouldPersistTaps="handled"
+							contentContainerStyle={styles.scrollContent}
+						>
+							<View style={styles.content}>
+								<Text style={styles.sectionTitle}>Informações Básicas</Text>
 
-							<TextInput
-								type="text"
-								label="Título do Endereço *"
-								placeholder="Ex: Minha casa, Trabalho"
-								icon="home-outline"
-								value={title}
-								onChangeText={setTitle}
-								style={styles.input}
-							/>
+								<TextInput
+									type="text"
+									label="Título do Endereço *"
+									placeholder="Ex: Minha casa, Trabalho"
+									icon="home-outline"
+									value={title}
+									onChangeText={setTitle}
+									style={styles.input}
+								/>
 
-							<View style={styles.typeSelector}>
-								<Text style={styles.typeLabel}>Tipo de Endereço</Text>
-								<View style={styles.typeButtons}>
-									<TouchableOpacity
-										type="tertiary"
-										style={[
-											styles.typeButton,
-											addressType === 'street' && styles.typeButtonActive,
-										]}
-										onPress={() => setAddressType('street')}
-										accessible={true}
-										accessibilityLabel="Tipo de endereço: Rua ou Avenida"
-										accessibilityHint={
-											addressType === 'street'
-												? 'Selecionado. Toque para manter selecionado'
-												: 'Toque para selecionar endereço por rua ou avenida'
-										}
-										accessibilityRole="radio"
-										accessibilityState={{
-											selected: addressType === 'street',
-										}}
-									>
-										<Ionicons
-											name="map-outline"
-											size={20}
-											color={
+								<View style={styles.typeSelector}>
+									<Text style={styles.typeLabel}>Tipo de Endereço</Text>
+									<View style={styles.typeButtons}>
+										<TouchableOpacity
+											type="tertiary"
+											style={[
+												styles.typeButton,
+												addressType === 'street' && styles.typeButtonActive,
+											]}
+											onPress={() => setAddressType('street')}
+											accessible={true}
+											accessibilityLabel="Tipo de endereço: Rua ou Avenida"
+											accessibilityHint={
 												addressType === 'street'
-													? theme.colors.primary
-													: theme.colors.text
+													? 'Selecionado. Toque para manter selecionado'
+													: 'Toque para selecionar endereço por rua ou avenida'
 											}
-											accessible={false}
-										/>
-										<Text
-											style={[
-												styles.typeButtonText,
-												addressType === 'street' && styles.typeButtonTextActive,
-											]}
-											accessible={false}
+											accessibilityRole="radio"
+											accessibilityState={{
+												selected: addressType === 'street',
+											}}
 										>
-											Rua/Avenida
-										</Text>
-									</TouchableOpacity>
+											<Ionicons
+												name="map-outline"
+												size={20}
+												color={
+													addressType === 'street'
+														? theme.colors.primary
+														: theme.colors.text
+												}
+												accessible={false}
+											/>
+											<Text
+												style={[
+													styles.typeButtonText,
+													addressType === 'street' &&
+														styles.typeButtonTextActive,
+												]}
+												accessible={false}
+											>
+												Rua/Avenida
+											</Text>
+										</TouchableOpacity>
 
-									<TouchableOpacity
-										type="tertiary"
-										style={[
-											styles.typeButton,
-											addressType === 'centrality' && styles.typeButtonActive,
-										]}
-										onPress={() => setAddressType('centrality')}
-										accessible={true}
-										accessibilityLabel="Tipo de endereço: Centralidade"
-										accessibilityHint={
-											addressType === 'centrality'
-												? 'Selecionado. Toque para manter selecionado'
-												: 'Toque para selecionar endereço por centralidade'
-										}
-										accessibilityRole="radio"
-										accessibilityState={{
-											selected: addressType === 'centrality',
-										}}
-									>
-										<Ionicons
-											name="business-outline"
-											size={20}
-											color={
-												addressType === 'centrality'
-													? theme.colors.primary
-													: theme.colors.text
-											}
-											accessible={false}
-										/>
-										<Text
+										<TouchableOpacity
+											type="tertiary"
 											style={[
-												styles.typeButtonText,
-												addressType === 'centrality' &&
-													styles.typeButtonTextActive,
+												styles.typeButton,
+												addressType === 'centrality' && styles.typeButtonActive,
 											]}
-											accessible={false}
+											onPress={() => setAddressType('centrality')}
+											accessible={true}
+											accessibilityLabel="Tipo de endereço: Centralidade"
+											accessibilityHint={
+												addressType === 'centrality'
+													? 'Selecionado. Toque para manter selecionado'
+													: 'Toque para selecionar endereço por centralidade'
+											}
+											accessibilityRole="radio"
+											accessibilityState={{
+												selected: addressType === 'centrality',
+											}}
 										>
-											Centralidade
+											<Ionicons
+												name="business-outline"
+												size={20}
+												color={
+													addressType === 'centrality'
+														? theme.colors.primary
+														: theme.colors.text
+												}
+												accessible={false}
+											/>
+											<Text
+												style={[
+													styles.typeButtonText,
+													addressType === 'centrality' &&
+														styles.typeButtonTextActive,
+												]}
+												accessible={false}
+											>
+												Centralidade
+											</Text>
+										</TouchableOpacity>
+									</View>
+								</View>
+
+								{addressType === 'street' ? (
+									<>
+										<Text style={styles.sectionTitle}>Endereço por Rua</Text>
+
+										<TextInput
+											type="text"
+											label="Rua/Avenida *"
+											placeholder="Nome da rua ou avenida"
+											icon="map-outline"
+											value={street}
+											onChangeText={setStreet}
+											style={styles.input}
+										/>
+
+										<View style={styles.row}>
+											<View style={styles.halfInput}>
+												<TextInput
+													type="text"
+													label="Número"
+													placeholder="Número"
+													icon="pricetag-outline"
+													value={number}
+													onChangeText={setNumber}
+												/>
+											</View>
+											<View style={styles.halfInput}>
+												<TextInput
+													type="text"
+													label="Prédio"
+													placeholder="Número do prédio"
+													icon="business-outline"
+													value={buildingNumber}
+													onChangeText={setBuildingNumber}
+												/>
+											</View>
+										</View>
+
+										<TextInput
+											type="text"
+											label="Apartamento"
+											placeholder="Número do apartamento"
+											icon="home-outline"
+											value={apartment}
+											onChangeText={setApartment}
+											style={styles.input}
+										/>
+									</>
+								) : (
+									<>
+										<Text style={styles.sectionTitle}>
+											Endereço por Centralidade
 										</Text>
-									</TouchableOpacity>
+
+										<TextInput
+											type="text"
+											label="Centralidade *"
+											placeholder="Nome da centralidade"
+											icon="business-outline"
+											value={centrality}
+											onChangeText={setCentrality}
+											style={styles.input}
+										/>
+
+										<View style={styles.row}>
+											<View style={styles.halfInput}>
+												<TextInput
+													type="text"
+													label="Quadra"
+													placeholder="Número da quadra"
+													icon="grid-outline"
+													value={block}
+													onChangeText={setBlock}
+												/>
+											</View>
+											<View style={styles.halfInput}>
+												<TextInput
+													type="text"
+													label="Prédio"
+													placeholder="Número do prédio"
+													icon="business-outline"
+													value={buildingNumber}
+													onChangeText={setBuildingNumber}
+												/>
+											</View>
+										</View>
+
+										<TextInput
+											type="text"
+											label="Apartamento"
+											placeholder="Número do apartamento"
+											icon="home-outline"
+											value={apartment}
+											onChangeText={setApartment}
+											style={styles.input}
+										/>
+									</>
+								)}
+
+								<Text style={styles.sectionTitle}>Localização</Text>
+
+								<TextInput
+									type="text"
+									label="Bairro"
+									placeholder="Nome do bairro"
+									icon="location-outline"
+									value={neighborhood}
+									onChangeText={setNeighborhood}
+									style={styles.input}
+								/>
+
+								<TextInput
+									type="text"
+									label="Comuna"
+									placeholder="Nome da comuna"
+									icon="location-outline"
+									value={commune}
+									onChangeText={setCommune}
+									style={styles.input}
+								/>
+
+								<View style={styles.row}>
+									<View style={styles.halfInput}>
+										<TextInput
+											type="text"
+											label="Cidade *"
+											placeholder="Nome da cidade"
+											icon="location-outline"
+											value={city}
+											onChangeText={setCity}
+										/>
+									</View>
+									<View style={styles.halfInput}>
+										<TextInput
+											type="text"
+											label="Estado/Província *"
+											placeholder="Estado ou província"
+											icon="location-outline"
+											value={state}
+											onChangeText={setState}
+										/>
+									</View>
+								</View>
+
+								<TextInput
+									type="text"
+									label="Código Postal"
+									placeholder="Código postal (opcional)"
+									icon="mail-outline"
+									value={zipCode}
+									onChangeText={setZipCode}
+									style={styles.input}
+								/>
+
+								<View style={styles.infoContainer}>
+									<Ionicons
+										name="information-circle-outline"
+										size={20}
+										color={theme.colors.secondary}
+									/>
+									<Text style={styles.infoText}>
+										Os campos marcados com * são obrigatórios
+									</Text>
 								</View>
 							</View>
+						</ScrollView>
+					</KeyboardAvoidingView>
 
-							{addressType === 'street' ? (
+					<View style={styles.footer}>
+						<TouchableOpacity
+							type="primary"
+							style={[
+								styles.saveButton,
+								!isFormValid() && styles.saveButtonDisabled,
+							]}
+							onPress={handleUpdateAddress}
+							disabled={!isFormValid() || isLoading}
+							accessible={true}
+							accessibilityLabel={
+								isLoading
+									? 'Atualizando endereço, aguarde'
+									: isFormValid()
+										? 'Atualizar endereço'
+										: 'Botão desabilitado, preencha os campos obrigatórios'
+							}
+							accessibilityHint={
+								isLoading
+									? 'O endereço está sendo atualizado'
+									: isFormValid()
+										? 'Toque para atualizar o endereço'
+										: 'Preencha todos os campos obrigatórios para habilitar o botão'
+							}
+							accessibilityRole="button"
+							accessibilityState={{
+								disabled: !isFormValid() || isLoading,
+								busy: isLoading,
+							}}
+						>
+							{isLoading ? (
 								<>
-									<Text style={styles.sectionTitle}>Endereço por Rua</Text>
-
-									<TextInput
-										type="text"
-										label="Rua/Avenida *"
-										placeholder="Nome da rua ou avenida"
-										icon="map-outline"
-										value={street}
-										onChangeText={setStreet}
-										style={styles.input}
+									<Ionicons
+										name="hourglass-outline"
+										size={20}
+										color="#fff"
+										accessible={false}
 									/>
-
-									<View style={styles.row}>
-										<View style={styles.halfInput}>
-											<TextInput
-												type="text"
-												label="Número"
-												placeholder="Número"
-												icon="pricetag-outline"
-												value={number}
-												onChangeText={setNumber}
-											/>
-										</View>
-										<View style={styles.halfInput}>
-											<TextInput
-												type="text"
-												label="Prédio"
-												placeholder="Número do prédio"
-												icon="business-outline"
-												value={buildingNumber}
-												onChangeText={setBuildingNumber}
-											/>
-										</View>
-									</View>
-
-									<TextInput
-										type="text"
-										label="Apartamento"
-										placeholder="Número do apartamento"
-										icon="home-outline"
-										value={apartment}
-										onChangeText={setApartment}
-										style={styles.input}
-									/>
+									<Text style={styles.saveButtonText} accessible={false}>
+										Atualizando...
+									</Text>
 								</>
 							) : (
-								<>
-									<Text style={styles.sectionTitle}>
-										Endereço por Centralidade
-									</Text>
-
-									<TextInput
-										type="text"
-										label="Centralidade *"
-										placeholder="Nome da centralidade"
-										icon="business-outline"
-										value={centrality}
-										onChangeText={setCentrality}
-										style={styles.input}
-									/>
-
-									<View style={styles.row}>
-										<View style={styles.halfInput}>
-											<TextInput
-												type="text"
-												label="Quadra"
-												placeholder="Número da quadra"
-												icon="grid-outline"
-												value={block}
-												onChangeText={setBlock}
-											/>
-										</View>
-										<View style={styles.halfInput}>
-											<TextInput
-												type="text"
-												label="Prédio"
-												placeholder="Número do prédio"
-												icon="business-outline"
-												value={buildingNumber}
-												onChangeText={setBuildingNumber}
-											/>
-										</View>
-									</View>
-
-									<TextInput
-										type="text"
-										label="Apartamento"
-										placeholder="Número do apartamento"
-										icon="home-outline"
-										value={apartment}
-										onChangeText={setApartment}
-										style={styles.input}
-									/>
-								</>
-							)}
-
-							<Text style={styles.sectionTitle}>Localização</Text>
-
-							<TextInput
-								type="text"
-								label="Bairro"
-								placeholder="Nome do bairro"
-								icon="location-outline"
-								value={neighborhood}
-								onChangeText={setNeighborhood}
-								style={styles.input}
-							/>
-
-							<TextInput
-								type="text"
-								label="Comuna"
-								placeholder="Nome da comuna"
-								icon="location-outline"
-								value={commune}
-								onChangeText={setCommune}
-								style={styles.input}
-							/>
-
-							<View style={styles.row}>
-								<View style={styles.halfInput}>
-									<TextInput
-										type="text"
-										label="Cidade *"
-										placeholder="Nome da cidade"
-										icon="location-outline"
-										value={city}
-										onChangeText={setCity}
-									/>
-								</View>
-								<View style={styles.halfInput}>
-									<TextInput
-										type="text"
-										label="Estado/Província *"
-										placeholder="Estado ou província"
-										icon="location-outline"
-										value={state}
-										onChangeText={setState}
-									/>
-								</View>
-							</View>
-
-							<TextInput
-								type="text"
-								label="Código Postal"
-								placeholder="Código postal (opcional)"
-								icon="mail-outline"
-								value={zipCode}
-								onChangeText={setZipCode}
-								style={styles.input}
-							/>
-
-							<View style={styles.infoContainer}>
-								<Ionicons
-									name="information-circle-outline"
-									size={20}
-									color={theme.colors.secondary}
-								/>
-								<Text style={styles.infoText}>
-									Os campos marcados com * são obrigatórios
-								</Text>
-							</View>
-						</View>
-					</ScrollView>
-				</KeyboardAvoidingView>
-
-				<View style={styles.footer}>
-					<TouchableOpacity
-						type="primary"
-						style={[
-							styles.saveButton,
-							!isFormValid() && styles.saveButtonDisabled,
-						]}
-						onPress={handleUpdateAddress}
-						disabled={!isFormValid() || isLoading}
-						accessible={true}
-						accessibilityLabel={
-							isLoading
-								? 'Atualizando endereço, aguarde'
-								: isFormValid()
-									? 'Atualizar endereço'
-									: 'Botão desabilitado, preencha os campos obrigatórios'
-						}
-						accessibilityHint={
-							isLoading
-								? 'O endereço está sendo atualizado'
-								: isFormValid()
-									? 'Toque para atualizar o endereço'
-									: 'Preencha todos os campos obrigatórios para habilitar o botão'
-						}
-						accessibilityRole="button"
-						accessibilityState={{
-							disabled: !isFormValid() || isLoading,
-							busy: isLoading,
-						}}
-					>
-						{isLoading ? (
-							<>
-								<Ionicons
-									name="hourglass-outline"
-									size={20}
-									color="#fff"
-									accessible={false}
-								/>
 								<Text style={styles.saveButtonText} accessible={false}>
-									Atualizando...
+									Atualizar Endereço
 								</Text>
-							</>
-						) : (
-							<Text style={styles.saveButtonText} accessible={false}>
-								Atualizar Endereço
-							</Text>
-						)}
-					</TouchableOpacity>
+							)}
+						</TouchableOpacity>
+					</View>
 				</View>
-			</View>
+			)}
 		</>
 	)
 }
@@ -623,6 +642,7 @@ const useStyles = (theme: Theme) =>
 			padding: 16,
 			borderTopWidth: 1,
 			borderTopColor: theme.colors.border,
+			zIndex: 1000,
 		},
 		saveButton: {
 			backgroundColor: theme.colors.primary,
